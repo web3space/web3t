@@ -1,6 +1,24 @@
-# web3t
+
+![Logo](http://res.cloudinary.com/nixar-work/image/upload/v1534729062/Screen_Shot_2018-08-20_at_04.36.54.png)
+
+# WEB3t
 
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
+
+#### Example
+----
+
+```Javascript 
+web3t.use(` mainnet `);  
+
+//web3t.use(` testnet `);
+
+web3t. eth .sendTransaction({ to, amount }, cb)
+
+web3t. btc .sendTransaction({ to, amount }, cb)
+
+web3t. zec .sendTransaction({ to, amount }, cb)
+```
 
 #### Simple Summary
 ----
