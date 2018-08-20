@@ -1,4 +1,4 @@
-# Coins
+# web3t
 
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
 
