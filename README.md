@@ -1,7 +1,8 @@
 
-![Logo](http://res.cloudinary.com/nixar-work/image/upload/v1534729062/Screen_Shot_2018-08-20_at_04.36.54.png)
+<p align="center">
+  <img src="http://res.cloudinary.com/nixar-work/image/upload/v1534729062/Screen_Shot_2018-08-20_at_04.36.54.png">
+</p>
 
-# WEB3t
 
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
 
