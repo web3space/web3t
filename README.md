@@ -10,6 +10,7 @@ Unified Open Source Coin Registry (Same interface for all possible coins, tokens
 
 ```
 npm i web3t
+rm -rf ./node_modules/bitcore-message/node_modules
 ```
 
 
