@@ -2,8 +2,9 @@ require! {
     \require-ls
     \./load-providers.ls
     \./load-coins.ls
+    \./build-api.ls
 }
-    
+
 module.exports = (mode, cb)->
     err, coins <- load-coins mode
     return cb err if err?

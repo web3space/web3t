@@ -1,7 +1,7 @@
 require! {
-    \./eth.ls
-    \./insight.ls
-    \./xem.ls
+    \./providers/eth.ls
+    \./providers/insight.ls
+    \./providers/xem.ls
 }
 
 module.exports = (query, cb)->

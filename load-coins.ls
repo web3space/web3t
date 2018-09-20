@@ -1,9 +1,9 @@
 require! {
-    \./btc-coin.ls : btc
-    \./dash-coin.ls : dash
-    \./eth-coin.ls : eth
-    \./ltc-coin.ls : ltc
-    \./xem-coin.ls : xem
+    \./plugins/btc-coin.ls : btc
+    \./plugins/dash-coin.ls : dash
+    \./plugins/eth-coin.ls : eth
+    \./plugins/ltc-coin.ls : ltc
+    \./plugins/xem-coin.ls : xem
 }
 module.exports = (query, cb)->
     cb null, {btc, dash, eth, ltc, xem}

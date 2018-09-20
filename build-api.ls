@@ -1,5 +1,5 @@
 require! {
-    \prelude-ls : { obj-to-pairs }
+    \prelude-ls : { obj-to-pairs, pairs-to-obj }
 }
 
 #{ calc-fee, get-keys, push-tx, get-balance, get-transactions, create-transaction } = provider
@@ -40,7 +40,7 @@ build-pair = ([name, api], providers, mode, cb)->
     return cb null, {} if api.enabled isnt yes or api.type isnt \coin
     network = api[mode]
     return cb "Network #{mode} not found for #{mode}" if not network?
-    provider = providers[name]
+    provider = providers[network.api.provider]
     return cb "Provider not found for #{name}" if not provider?
     send-transaction = build-send-transaction { network, provider }
     create-sender = build-create-sender { network, provider }
@@ -50,16 +50,18 @@ build-pair = ([name, api], providers, mode, cb)->
     cb null, { send-transaction, create-sender, calc-fee, get-balance, get-history }
         
 build-pairs = ([pair, ...rest], providers, mode, cb)->
-    return cb null, {} if not pair?
+    return cb null, [] if not pair?
     err, item <- build-pair pair, providers, mode
     return cb err if err?
     err, rest <- build-pairs rest, providers, mode
     return cb err if err?
-    cb null, { item, ...rest }
-
+    cb null, ([[pair.0, item]] ++ rest)
+    
 build-api = (coins, providers, mode, cb)->
     pairs = 
         coins |> obj-to-pairs
-    build-pairs pairs, providers, mode, cb
-    
+    err, items <- build-pairs pairs, providers, mode
+    return cb err if err?
+    result = pairs-to-obj items
+    cb null, result
 module.exports = build-api
