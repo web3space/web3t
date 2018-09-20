@@ -1,4 +1,5 @@
 require! {
+    \require-ls
     \./load-providers.ls
     \./load-coins.ls
 }
