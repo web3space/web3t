@@ -20,7 +20,22 @@ interface TransactionRequest {
     data: number;
 }
 
+interface KeyRequest {
+    network: Network;
+    mnemonic: string;
+    index: number;
+}
+
+interface Keys {
+    publicKey: String;
+    privateKey: String;
+}
+
 interface Protocol {
+    //Generate Keys
+    getKeys(request: KeyRequest, callback: Function): Keys;
+    //Calculate fee based on bites or amount
+    calcFee(tx: TransactionRequest): number;
     //Get Current Balance from FullNode
     getBalance(request: BalanceRequest, callback: Function): void;
     //Notify FullNode about new signed transaction
