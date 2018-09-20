@@ -4,7 +4,8 @@
   "description": "Unified Open Source Coin Registry (Same interface for all possible coins, tokens)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "rm -rf ./node_modules/bitcore-message/node_modules"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "ethereumjs-util": "^5.2.0",
     "moment": "^2.22.2",
     "nem-sdk": "^1.6.7",
+    "postinstall": "^0.4.2",
     "prelude-ls": "^1.1.2",
     "qs": "^6.5.2",
     "require-ls": "0.0.8",
