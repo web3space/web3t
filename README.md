@@ -24,17 +24,17 @@ function testnet(err, web3t) {
 
   // Standard
   
-  web3t.eth.sendTransaction({ to, amount }, cb)
+  web3t.eth.sendTransaction({ to, amount }, cb);
 
-  web3t.btc.sendTransaction({ to, amount }, cb)
+  web3t.btc.sendTransaction({ to, amount }, cb);
 
-  web3t.zec.sendTransaction({ to, amount }, cb)
+  web3t.zec.sendTransaction({ to, amount }, cb);
 
-  web3t.[YOUR_COIN].sendTransaction({ to, amount }, cb)
+  web3t.[YOUR_COIN].sendTransaction({ to, amount }, cb);
   
   // Functions
   
-  web3t.[YOUR_COIN].createSender({ mnemonic, index }, cb) // => { address, privateKey }
+  web3t.[YOUR_COIN].createSender({ mnemonic, index }, cb); // => { address, privateKey }
   
   web3t.[YOUR_COIN].getBalance({ sender }, cb); // => balance
   
