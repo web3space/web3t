@@ -6,7 +6,7 @@
 
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
 
-#### Install 
+#### Install
 
 ```
 npm i web3t
@@ -47,6 +47,13 @@ function testnet(err, web3t) {
 });
 
 buildWeb3t("testnet", testnet);
+
+
+
+function mainnet(err, web3t) {
+  
+}
+
 buildWeb3t("mainnet", mainnet);
 
 ```
