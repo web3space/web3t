@@ -10,16 +10,36 @@ Unified Open Source Coin Registry (Same interface for all possible coins, tokens
 ----
 
 ```Javascript 
-web3t.use('mainnet'); # or 'testnet'  
 
+var build-web3t = require('web3t')
 
-web3t.eth.sendTransaction({ to, amount }, cb)
+#testnet | mainnet
+build-web3t("testnet", function(err, web3t) {
 
-web3t.btc.sendTransaction({ to, amount }, cb)
+  
+  web3t.eth.sendTransaction({ to, amount }, cb)
 
-web3t.zec.sendTransaction({ to, amount }, cb)
+  web3t.btc.sendTransaction({ to, amount }, cb)
 
-web3t.[YOUR_COIN].sendTransaction({ to, amount }, cb)
+  web3t.zec.sendTransaction({ to, amount }, cb)
+
+  web3t.[YOUR_COIN].sendTransaction({ to, amount }, cb)
+  
+  //
+  
+  web3t.[YOUR_COIN].createSender({ mnemonic, index }, cb) // => { address, privateKey }
+  
+  web3t.[YOUR_COIN].getBalance({ sender }, cb); // => balance
+  
+  web3t.[YOUR_COIN].getHistory({ sender }, cb); // => array of txs
+  
+  web3t.[YOUR_COIN].calcFee({ sender, recepient, amount, data}, cb); // => fee
+  
+  web3t.[YOUR_COIN].createTransaction({ sender, recepient, amount, data}, cb); // => tx
+  
+
+})
+
 ```
 
 #### Simple Summary
