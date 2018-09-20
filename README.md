@@ -11,9 +11,9 @@ Unified Open Source Coin Registry (Same interface for all possible coins, tokens
 
 ```Javascript 
 
-var build-web3t = require('web3t')
+var buildWeb3t = require('web3t')
 
-build-web3t("testnet", function(err, web3t) {
+buildWeb3t("testnet", function(err, web3t) {
 
   // Standard
   
