@@ -13,9 +13,9 @@ Unified Open Source Coin Registry (Same interface for all possible coins, tokens
 
 var build-web3t = require('web3t')
 
-#testnet | mainnet
 build-web3t("testnet", function(err, web3t) {
 
+  // Standard
   
   web3t.eth.sendTransaction({ to, amount }, cb)
 
@@ -25,7 +25,7 @@ build-web3t("testnet", function(err, web3t) {
 
   web3t.[YOUR_COIN].sendTransaction({ to, amount }, cb)
   
-  //
+  // Functions
   
   web3t.[YOUR_COIN].createSender({ mnemonic, index }, cb) // => { address, privateKey }
   
