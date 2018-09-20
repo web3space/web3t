@@ -6,14 +6,21 @@
 
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
 
+#### Install 
+
+```
+npm i web3t
+```
+
+
 #### Example
 ----
 
 ```Javascript 
 
-var buildWeb3t = require('web3t')
+var buildWeb3t = require('web3t');
 
-buildWeb3t("testnet", function(err, web3t) {
+function testnet(err, web3t) {
 
   // Standard
   
@@ -37,8 +44,10 @@ buildWeb3t("testnet", function(err, web3t) {
   
   web3t.[YOUR_COIN].createTransaction({ sender, recepient, amount, data}, cb); // => tx
   
+});
 
-})
+buildWeb3t("testnet", testnet);
+buildWeb3t("mainnet", mainnet);
 
 ```
 
