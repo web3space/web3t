@@ -27,6 +27,13 @@ rm -rf ./node_modules/bitcore-message/node_modules
 * XRP (Ripple)
 * [ANY_COIN]
 
+#### Build Testnet
+
+```Javascript
+
+var buildWeb3t = require('web3t');
+
+```
 
 #### Build Testnet
 
