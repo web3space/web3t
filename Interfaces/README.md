@@ -9,14 +9,14 @@ The concept includes 2 types of entities:
 
 Most heavy code. Everything which implements the communication with protocol
 
-For example, `bitcore`, providers functionality for bitcoin and all his forks
+For example `bitcore` provides functionality for bitcoin and all his forks
 
 
 #### 2. Plugins
 
-Configurations, which can be pluged-in on the fly.
+Configurations which can be pluged-in on the fly.
 
-Plugins should have corresponding `provider`
+Plugins should have a corresponding `provider`
 
 ## Interface
 
