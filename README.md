@@ -67,7 +67,6 @@ function testnet(err, web3t) {
 ```
 
 #### Calc Fee 
-
 ```Javascript   
   
   web3t.[YOUR_COIN].calcFee({ sender, recepient, amount, data}, cb); // => fee
@@ -76,33 +75,35 @@ function testnet(err, web3t) {
 
 #### Create and Send Transaction
 ```Javascript   
+
   web3t.[YOUR_COIN].createTransaction({ sender, recepient, amount, data}, cb); // => tx
-});
 
 ```
 
 #### Create and Sign Transaction
 ```Javascript   
+
   web3t.[YOUR_COIN].signTransaction({ sender, recepient, amount, data}, cb); // => rawtx
-});
 
 ```
 
 #### Broadcast the Signed Transaction
 ```Javascript   
+
   web3t.[YOUR_COIN].pushTransaction(rawtx, cb); // => rawtx
-});
 
 ```
 
 #### Build Testnet
 ```Javascript 
+});
+
 buildWeb3t("testnet", testnet);
 
 ```
 
 
-### Build Mainnet
+#### Build Mainnet
 ```Javascript 
 function mainnet(err, web3t) {
     ... 
