@@ -27,7 +27,7 @@ rm -rf ./node_modules/bitcore-message/node_modules
 * XRP (Ripple)
 * [ANY_COIN]
 
-#### Build Testnet
+#### Init Builder
 
 ```Javascript
 
