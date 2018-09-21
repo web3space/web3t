@@ -6,6 +6,10 @@
 
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
 
+#### Demo
+
+[WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
+
 #### Install
 
 ```
@@ -112,6 +116,11 @@ function mainnet(err, web3t) {
 buildWeb3t("mainnet", mainnet);
 
 ```
+
+#### Compatibility
+
+`sendTransaction` and `getBalance` are compatible with `web3 wallet` (https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
+
 
 #### How to Contibute
 
