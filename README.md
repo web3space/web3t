@@ -21,6 +21,7 @@ rm -rf ./node_modules/bitcore-message/node_modules
 * DASH 
 * XEM (NEM)
 * XRP (Ripple)
+* [YOUR_COIN]
 
 
 #### Example
