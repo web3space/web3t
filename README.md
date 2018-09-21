@@ -34,7 +34,7 @@ rm -rf ./node_modules/bitcore-message/node_modules
 function testnet(err, web3t) {
     ... 
 
-});
+}
 
 buildWeb3t("testnet", testnet);
 
