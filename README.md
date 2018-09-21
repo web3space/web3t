@@ -13,6 +13,15 @@ npm i web3t
 rm -rf ./node_modules/bitcore-message/node_modules
 ```
 
+#### Supports
+
+* BTC (Bitcoin)
+* LTC (Litecoin)
+* ETH (Ethereum)
+* DASH 
+* XEM (NEM)
+* XRP (Ripple)
+
 
 #### Example
 ----
@@ -57,6 +66,14 @@ function mainnet(err, web3t) {
 buildWeb3t("mainnet", mainnet);
 
 ```
+
+#### How to Contibute
+
+1. Please modify only `plugins`, `providers`, `package.json`
+2. `plugin` should consists only network information and implements `Interfaces/coin-interface.ts`
+3. `provider` should implements `Interfaces/protocol-interface.ts`
+4. Send a pull request
+5. Any question `a.stegno@gmail.com`
 
 #### Simple Summary
 ----
