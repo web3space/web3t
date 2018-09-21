@@ -46,7 +46,7 @@ export calcFee = ({tx, network} , cb)-->
 
 #### 2. Plugins
 
-```
+```Javascript
 export type = 'coin'
 
 //put network specific configuration here
