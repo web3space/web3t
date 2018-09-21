@@ -169,7 +169,7 @@ Push the signed transaction (hex) into blockchain
 
 #### Compatibility
 
-`sendTransaction` and `getBalance` are compatible with  [https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm](Web3 Wallet)
+`sendTransaction` and `getBalance` are compatible with [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
 
 
 #### How to Contibute
