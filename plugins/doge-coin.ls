@@ -5,7 +5,7 @@ export mainnet =
     mask: 'L000000000000000000000000000000000'
     api: 
         provider: \insight
-        url: \https://insight.litecore.io
+        url: \https://dogechain.info
         decimal: 8
     message-prefix: '\x19Litecoin Signed Message:\n'
     bip32:

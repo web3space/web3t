@@ -5,4 +5,4 @@ require! {
 
 err, web3t <- build-web3t \testnet
 
-console.log err, Object.keys(web3t.btc)
+console.log err, Object.keys(web3t)
