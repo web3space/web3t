@@ -75,6 +75,7 @@ web3t.[ANY_COIN].sendTransaction({ to, amount }, cb);
 ```
 
 #### Create Sender
+You can create a lot of addresses by providing different index
 
 ```Javascript
 
