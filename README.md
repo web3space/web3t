@@ -43,25 +43,69 @@ function testnet(err, web3t) {
 
   web3t.[YOUR_COIN].sendTransaction({ to, amount }, cb);
   
-  // Functions
-  
+```
+
+#### Create Sender
+```Javascript
+
   web3t.[YOUR_COIN].createSender({ mnemonic, index }, cb); // => { address, privateKey }
   
+```
+
+#### Get Balance
+```Javascript  
+
   web3t.[YOUR_COIN].getBalance({ sender }, cb); // => balance
+  
+```
+
+#### Get History of Transactions
+```Javascript 
   
   web3t.[YOUR_COIN].getHistory({ sender }, cb); // => array of txs
   
+```
+
+#### Calc Fee 
+
+```Javascript   
+  
   web3t.[YOUR_COIN].calcFee({ sender, recepient, amount, data}, cb); // => fee
   
+```
+
+#### Create and Send Transaction
+```Javascript   
   web3t.[YOUR_COIN].createTransaction({ sender, recepient, amount, data}, cb); // => tx
-  
 });
 
+```
+
+#### Create and Sign Transaction
+```Javascript   
+  web3t.[YOUR_COIN].signTransaction({ sender, recepient, amount, data}, cb); // => rawtx
+});
+
+```
+
+#### Broadcast the Signed Transaction
+```Javascript   
+  web3t.[YOUR_COIN].pushTransaction(rawtx, cb); // => rawtx
+});
+
+```
+
+#### Build Testnet
+```Javascript 
 buildWeb3t("testnet", testnet);
 
+```
 
+
+### Build Mainnet
+```Javascript 
 function mainnet(err, web3t) {
-  
+    ... 
 }
 
 buildWeb3t("mainnet", mainnet);
