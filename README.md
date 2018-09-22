@@ -64,7 +64,7 @@ buildWeb3t("mainnet", mainnet);
 #### Example
 ----
 
-```Javascript 
+```Javascript
 
 web3t.eth.sendTransaction({ to, amount }, cb);
 
@@ -76,7 +76,7 @@ web3t.[ANY_COIN].sendTransaction({ to, amount }, cb);
   
 ```
 
-#### Create Sender
+#### Create Account
 You can create a lot of addresses by providing different index
 
 ```Javascript
@@ -85,12 +85,12 @@ var cb => (err, { address, privateKey, publicKey }) {
   
 }
 
-web3t.[ANY_COIN].createSender({ mnemonic, index }, cb);
+web3t.[ANY_COIN].createAccount({ mnemonic, index }, cb);
   
 ```
 
 #### Get Balance
-Get Balance by sender object ({ address, privateKey })
+Get Balance by account object ({ address, privateKey })
 Usually it does not need the private key but coins like monero needs decrypt data to read the balance
 
 ```Javascript  
@@ -99,7 +99,7 @@ Usually it does not need the private key but coins like monero needs decrypt dat
   
   }
 
-  web3t.[ANY_COIN].getBalance({ sender }, cb);
+  web3t.[ANY_COIN].getBalance({ account }, cb);
   
 ```
 
@@ -112,7 +112,7 @@ List of all transactions. Same result structure for all coins
   
   }
   
-  web3t.[ANY_COIN].getHistory({ sender }, cb);
+  web3t.[ANY_COIN].getHistory({ account }, cb);
   
 ```
 
@@ -125,7 +125,7 @@ You need to define the default fee in `plugin` but for NEM, Monero and other coi
   
   }
   
-  web3t.[ANY_COIN].calcFee({ sender, recepient, amount, data}, cb); // => fee
+  web3t.[ANY_COIN].calcFee({ account, recepient, amount, data}, cb); // => fee
   
 ```
 
@@ -138,7 +138,7 @@ This transaction consists of `create`, `sign`, `push` transaction
   
   }
 
-  web3t.[ANY_COIN].createTransaction({ sender, recepient, amount, data}, cb); // => tx
+  web3t.[ANY_COIN].createTransaction({ account, recepient, amount, data}, cb); // => tx
 
 ```
 
@@ -151,7 +151,7 @@ In some cases you need to have the hex of transaction before for some reason bef
   
   }
 
-  web3t.[ANY_COIN].signTransaction({ sender, recepient, amount, data}, cb); // => rawtx
+  web3t.[ANY_COIN].signTransaction({ account, recepient, amount, data}, cb); // => rawtx
 
 ```
 

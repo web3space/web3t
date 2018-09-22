@@ -61,13 +61,13 @@ export get-transactions = ({ address, network }, cb)->
     txs = 
         res.transactions |> map transform-tx
     cb null, txs
-export create-transaction = ({ network, sender, recepient, amount, amount-fee, data} , cb)-->
+export create-transaction = ({ network, account, recepient, amount, amount-fee, data} , cb)-->
     tx_json =
-        Account: sender.address
+        Account: account.address
         Destination: recepient
         Amount: big(amount).mul(10^6).to-fixed!
         TransactionType: \Payment
-    secret = sender.private-key
+    secret = account.private-key
     data =
         method: \sign
         params: [{ secret, tx_json }]

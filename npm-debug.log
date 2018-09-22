@@ -1,0 +1,108 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'publish' ]
+2 info using npm@3.5.2
+3 info using node@v6.11.4
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/var/www/ethnamed/web3t',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /root/.npm/web3t/0.0.3/package.tgz not in flight; packing
+9 info lifecycle web3t@0.0.3~prepublish: web3t@0.0.3
+10 silly lifecycle web3t@0.0.3~prepublish: no script for prepublish, continuing
+11 verbose tar pack [ '/root/.npm/web3t/0.0.3/package.tgz',
+11 verbose tar pack   '/var/www/ethnamed/web3t' ]
+12 verbose tarball /root/.npm/web3t/0.0.3/package.tgz
+13 verbose folder /var/www/ethnamed/web3t
+14 verbose addLocalTarball adding from inside cache /root/.npm/web3t/0.0.3/package.tgz
+15 silly cache afterAdd web3t@0.0.3
+16 verbose afterAdd /root/.npm/web3t/0.0.3/package/package.json not in flight; writing
+17 verbose afterAdd /root/.npm/web3t/0.0.3/package/package.json written
+18 silly publish { name: 'web3t',
+18 silly publish   version: '0.0.3',
+18 silly publish   description: 'Unified Open Source Coin Registry (Same interface for all possible coins, tokens)',
+18 silly publish   main: 'index.js',
+18 silly publish   scripts:
+18 silly publish    { test: 'echo "Error: no test specified" && exit 1',
+18 silly publish      postinstall: 'rm -rf ./node_modules/bitcore-message/node_modules' },
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/ethnamed/web3t.git' },
+18 silly publish   keywords: [ 'cryptp', 'standard', 'ethnamed' ],
+18 silly publish   author: { name: 'Ethnamed Project' },
+18 silly publish   license: 'ISC',
+18 silly publish   bugs: { url: 'https://github.com/ethnamed/web3t/issues' },
+18 silly publish   homepage: 'https://github.com/ethnamed/web3t#readme',
+18 silly publish   dependencies:
+18 silly publish    { 'bitcoinjs-lib': '^4.0.2',
+18 silly publish      'blockstarter-ripple': '0.0.4',
+18 silly publish      'ethereumjs-tx': '^1.3.7',
+18 silly publish      'ethereumjs-util': '^5.2.0',
+18 silly publish      moment: '^2.22.2',
+18 silly publish      'nem-sdk': '^1.6.7',
+18 silly publish      postinstall: '^0.4.2',
+18 silly publish      'prelude-ls': '^1.1.2',
+18 silly publish      qs: '^6.5.2',
+18 silly publish      'require-ls': '0.0.8',
+18 silly publish      superagent: '^4.0.0-beta.5',
+18 silly publish      web3: '^1.0.0-beta.36',
+18 silly publish      whitebox: '^0.1.59' },
+18 silly publish   readme: '\n<p align="center">\n  <img src="http://res.cloudinary.com/nixar-work/image/upload/v1534729062/Screen_Shot_2018-08-20_at_04.36.54.png">\n</p>\n\n\nUnified Open Source Coin Registry (Same interface for all possible coins, tokens)\n\n#### Demo\n\n[WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)\n\n#### Install\n\n```\nnpm i web3t\nrm -rf ./node_modules/bitcore-message/node_modules\n```\n\n#### Supports\n\n* BTC (Bitcoin)\n* LTC (Litecoin)\n* ETH (Ethereum)\n* DASH \n* XEM (NEM)\n* XRP (Ripple)\n* [ANY_COIN]\n\n#### Init Builder\n\n```Javascript\n\nvar buildWeb3t = require(\'web3t\');\n\n```\n\n#### Build Testnet\n\n```Javascript \nfunction testnet(err, web3t) {\n    ... \n\n}\n\nbuildWeb3t("testnet", testnet);\n\n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/yw5lj63igd4r)\n\n\n#### Build Mainnet\n\n```Javascript \nfunction mainnet(err, web3t) {\n    ... \n}\n\nbuildWeb3t("mainnet", mainnet);\n\n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n#### Example\n----\n\n```Javascript \n\nweb3t.eth.sendTransaction({ to, amount }, cb);\n\nweb3t.btc.sendTransaction({ to, amount }, cb);\n\nweb3t.zec.sendTransaction({ to, amount }, cb);\n\nweb3t.[ANY_COIN].sendTransaction({ to, amount }, cb);\n  \n```\n\n#### Create Sender\nYou can create a lot of addresses by providing different index\n\n```Javascript\n\nvar cb => (err, { address, privateKey, publicKey }) {\n  \n}\n\nweb3t.[ANY_COIN].createSender({ mnemonic, index }, cb);\n  \n```\n\n#### Get Balance\nGet Balance by sender object ({ address, privateKey })\nUsually it does not need the private key but coins like monero needs decrypt data to read the balance\n\n```Javascript  \n\n  var cb => (err, balance) {\n  \n  }\n\n  web3t.[ANY_COIN].getBalance({ sender }, cb);\n  \n```\n\n#### Get History of Transactions\nList of all transactions. Same result structure for all coins\n\n```Javascript \n  \n  var cb => (err, transactions) {\n  \n  }\n  \n  web3t.[ANY_COIN].getHistory({ sender }, cb);\n  \n```\n\n#### Calc Fee \nYou need to define the default fee in `plugin` but for NEM, Monero and other coins you need to calculate the fee\n\n```Javascript   \n  \n  var cb => (err, amountFee) {\n  \n  }\n  \n  web3t.[ANY_COIN].calcFee({ sender, recepient, amount, data}, cb); // => fee\n  \n```\n\n#### Create and Send Transaction\nThis transaction consists of `create`, `sign`, `push` transaction\n\n```Javascript   \n\n  var cb => (err, receipt) {\n  \n  }\n\n  web3t.[ANY_COIN].createTransaction({ sender, recepient, amount, data}, cb); // => tx\n\n```\n\n#### Create and Sign Transaction\nIn some cases you need to have the hex of transaction before for some reason before you push it\n\n```Javascript   \n\n  var cb => (err, rawtx) {\n  \n  }\n\n  web3t.[ANY_COIN].signTransaction({ sender, recepient, amount, data}, cb); // => rawtx\n\n```\n\n#### Broadcast the Signed Transaction\nPush the signed transaction (hex) into blockchain\n\n```Javascript   \n\n  var cb => (err, receipt) {\n  \n  }\n\n  web3t.[ANY_COIN].pushTransaction(rawtx, cb); // => rawtx\n\n```\n\n\n\n#### Compatibility\n\n`sendTransaction` and `getBalance` are compatible with [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)\n\n\n#### How to Contibute\n\n1. Please modify only `plugins`, `providers`, `package.json`\n2. `plugin` should consists only network information and implements `Interfaces/coin-interface.ts`\n3. `provider` should implements `Interfaces/protocol-interface.ts`\n4. Send a pull request\n5. Any question `a.stegno@gmail.com`\n\n#### Simple Summary\n----\n\nThe management of different coins should be similar, so that there is no need for each to develop a new infrastructure, and connect it to the existing one\n\n\n#### Abstract\n\n----\n\nStandard of Coin/Token Common Interface\n\n#### Motivation\n----\n\nThe same type will help to quickly create a list of supported crypto currency for exchanges, multicurrency wallets and help new projects get the existing infrastructure instantly and effortlessly\n\n\n#### Copyright\n----\n\nCopyright and related rights waived via CC0.\n',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: '5308a31697a120ebe302368cdbcfe3d8f9db8b29',
+18 silly publish   _id: 'web3t@0.0.3',
+18 silly publish   _shasum: '54e9a3efd945a9746af8ea5969ca1ddc2112dcf1',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name web3t
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/web3t
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /root/.npm/web3t/0.0.3/package.tgz
+26 verbose request uri https://registry.npmjs.org/web3t
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 9:58:07 AM
+29 verbose request using bearer token for auth
+30 verbose request id 2df2c81265150a2f
+31 http request PUT https://registry.npmjs.org/web3t
+32 http 403 https://registry.npmjs.org/web3t
+33 verbose headers { date: 'Sat, 22 Sep 2018 09:58:07 GMT',
+33 verbose headers   'content-type': 'application/json',
+33 verbose headers   'transfer-encoding': 'chunked',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'set-cookie': [ '__cfduid=de480998c4cf27bd35abf1ea615d16f361537610287; expires=Sun, 22-Sep-19 09:58:07 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+33 verbose headers   'cf-ray': '45e3e9482cf82531-ORD',
+33 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+33 verbose headers   vary: 'Accept-Encoding',
+33 verbose headers   server: 'cloudflare',
+33 verbose headers   'content-encoding': 'gzip' }
+34 verbose request invalidating /root/.npm/registry.npmjs.org/web3t on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: You cannot publish over the previously published versions: 0.0.3. : web3t
+36 verbose stack     at makeError (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at /usr/share/npm/node_modules/npm-registry-client/lib/request.js:178:7
+36 verbose stack     at Gunzip.onEnd (zlib.js:227:5)
+36 verbose stack     at emitNone (events.js:91:20)
+36 verbose stack     at Gunzip.emit (events.js:185:7)
+36 verbose stack     at endReadableNT (_stream_readable.js:974:12)
+36 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:80:11)
+36 verbose stack     at process._tickCallback (internal/process/next_tick.js:104:9)
+37 verbose statusCode 403
+38 verbose pkgid web3t
+39 verbose cwd /var/www/ethnamed/web3t
+40 error Linux 4.15.18-3-pve
+41 error argv "/usr/bin/node" "/usr/bin/npm" "publish"
+42 error node v6.11.4
+43 error npm  v3.5.2
+44 error code E403
+45 error You cannot publish over the previously published versions: 0.0.3. : web3t
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]

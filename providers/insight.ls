@@ -33,8 +33,8 @@ get-outputs = ({ network, address} , cb)-->
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
-export create-transaction = ({ network, sender, recepient, amount, amount-fee}, cb)->
-    err, outputs <- get-outputs { network, sender.address}
+export create-transaction = ({ network, account, recepient, amount, amount-fee}, cb)->
+    err, outputs <- get-outputs { network, account.address}
     return cb err if err?
     return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0
     is-no-value =
@@ -51,12 +51,12 @@ export create-transaction = ({ network, sender, recepient, amount, amount-fee}, 
     tx = new BitcoinLib.TransactionBuilder network
     rest = total `minus` value `minus` fee
     tx.add-output recepient, +value
-    tx.add-output sender.address, +rest
+    tx.add-output account.address, +rest
     #console.log {value, rest}
     apply = (output, i)->
         tx.add-input output.txid, output.vout
     sign = (output, i)->
-        key = BitcoinLib.ECPair.fromWIF(sender.private-key, network)
+        key = BitcoinLib.ECPair.fromWIF(account.private-key, network)
         tx.sign i, key  
     outputs.for-each apply
     outputs.for-each sign

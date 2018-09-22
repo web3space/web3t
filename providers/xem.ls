@@ -34,9 +34,9 @@ export get-transactions = ({ network, address }, cb)->
         result.transfers
             |> map transform-transfer network
     cb null, txs
-export create-transaction = ({ network, sender, recepient, amount, amount-fee, data, message-type} , cb)-->
-    return cb "Params are required" if not network? or not sender? or not recepient? or not amount-fee?
-    common = nem.model.objects.create(\common) "", sender.private-key
+export create-transaction = ({ network, account, recepient, amount, amount-fee, data, message-type} , cb)-->
+    return cb "Params are required" if not network? or not account? or not recepient? or not amount-fee?
+    common = nem.model.objects.create(\common) "", account.private-key
     transfer-transaction = nem.model.objects.get \transferTransaction
     transfer-transaction.amount = amount
     transfer-transaction.message = data ? ""
@@ -45,7 +45,7 @@ export create-transaction = ({ network, sender, recepient, amount, amount-fee, d
     transfer-transaction.multisig-account = ""
     transfer-transaction.message-type = message-type ? 0
     transaction-entity = nem.model.transactions.prepare(\transferTransaction)(common, transfer-transaction, network.id)
-    kp = nem.crypto.key-pair.create nem.utils.helpers.fix-private-key sender.private-key
+    kp = nem.crypto.key-pair.create nem.utils.helpers.fix-private-key account.private-key
     serialized = nem.utils.serialization.serialize-transaction transaction-entity
     signature = kp.sign serialized
     result =

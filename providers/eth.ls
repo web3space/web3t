@@ -48,11 +48,11 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-export create-transaction = ({ network, sender, recepient, amount, amount-fee, data} , cb)-->
+export create-transaction = ({ network, account, recepient, amount, amount-fee, data} , cb)-->
     web3 = get-web3 network
     dec = get-dec network
-    private-key = new Buffer sender.private-key.replace(/^0x/,''), \hex
-    err, nonce <- web3.eth.get-transaction-count sender.address, \pending
+    private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
+    err, nonce <- web3.eth.get-transaction-count account.address, \pending
     to-wei = -> it `times` dec
     value = to-wei amount
     err, gas-price <- web3.eth.get-gas-price
@@ -67,7 +67,7 @@ export create-transaction = ({ network, sender, recepient, amount, amount-fee, d
         value: to-hex value
         gas: to-hex gas-estimate
         to: recepient
-        from: sender.address
+        from: account.address
         data: data
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
