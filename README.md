@@ -88,6 +88,8 @@ var cb => (err, { address, privateKey, publicKey }) {
 web3t.[ANY_COIN].createAccount({ mnemonic, index }, cb);
   
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
+
 
 #### Get Balance
 Get Balance by account object ({ address, privateKey })
@@ -102,6 +104,8 @@ Usually it does not need the private key but coins like monero needs decrypt dat
   web3t.[ANY_COIN].getBalance({ account }, cb);
   
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
+
 
 #### Get History of Transactions
 List of all transactions. Same result structure for all coins
@@ -115,6 +119,8 @@ List of all transactions. Same result structure for all coins
   web3t.[ANY_COIN].getHistory({ account }, cb);
   
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
+
 
 #### Calc Fee 
 You need to define the default fee in `plugin` but for NEM, Monero and other coins you need to calculate the fee
@@ -128,6 +134,8 @@ You need to define the default fee in `plugin` but for NEM, Monero and other coi
   web3t.[ANY_COIN].calcFee({ account, recepient, amount, data}, cb); // => fee
   
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
+
 
 #### Create and Send Transaction
 This transaction consists of `create`, `sign`, `push` transaction
@@ -141,6 +149,8 @@ This transaction consists of `create`, `sign`, `push` transaction
   web3t.[ANY_COIN].createTransaction({ account, recepient, amount, data}, cb); // => tx
 
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
+
 
 #### Create and Sign Transaction
 In some cases you need to have the hex of transaction before for some reason before you push it
@@ -154,6 +164,8 @@ In some cases you need to have the hex of transaction before for some reason bef
   web3t.[ANY_COIN].signTransaction({ account, recepient, amount, data}, cb); // => rawtx
 
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
+
 
 #### Broadcast the Signed Transaction
 Push the signed transaction (hex) into blockchain
@@ -167,6 +179,7 @@ Push the signed transaction (hex) into blockchain
   web3t.[ANY_COIN].pushTransaction(rawtx, cb); // => rawtx
 
 ```
+[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
 
 
 
