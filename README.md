@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="http://res.cloudinary.com/nixar-work/image/upload/v1534729062/Screen_Shot_2018-08-20_at_04.36.54.png">
+  <img src="https://res.cloudinary.com/nixar-work/image/upload/v1537612969/Screen_Shot_2018-09-22_at_13.41.49.png">
 </p>
 
 
