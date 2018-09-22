@@ -7,17 +7,20 @@
 Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
 
 #### Demo
+----
 
 [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
 
 #### Install
+----
 
 ```
 npm i web3t
 rm -rf ./node_modules/bitcore-message/node_modules
 ```
 
-#### Supports
+#### Support
+----
 
 * BTC (Bitcoin)
 * LTC (Litecoin)
@@ -28,6 +31,7 @@ rm -rf ./node_modules/bitcore-message/node_modules
 * [ANY_COIN]
 
 #### Init Builder
+----
 
 ```Javascript
 
@@ -36,6 +40,7 @@ var buildWeb3t = require('web3t');
 ```
 
 #### Build Testnet
+----
 
 ```Javascript 
 function testnet(err, web3t) {
@@ -50,6 +55,7 @@ buildWeb3t("testnet", testnet);
 
 
 #### Build Mainnet
+----
 
 ```Javascript 
 function mainnet(err, web3t) {
@@ -77,6 +83,7 @@ web3t.[ANY_COIN].sendTransaction({ to, amount }, cb);
 ```
 
 #### Create Account
+----
 You can create a lot of addresses by providing different index
 
 ```Javascript
@@ -92,6 +99,7 @@ web3t.[ANY_COIN].createAccount({ mnemonic, index }, cb);
 
 
 #### Get Balance
+----
 Get Balance by account object ({ address, privateKey })
 Usually it does not need the private key but coins like monero needs decrypt data to read the balance
 
@@ -108,6 +116,7 @@ Usually it does not need the private key but coins like monero needs decrypt dat
 
 
 #### Get History of Transactions
+----
 List of all transactions. Same result structure for all coins
 
 ```Javascript 
@@ -123,6 +132,7 @@ List of all transactions. Same result structure for all coins
 
 
 #### Calc Fee 
+----
 You need to define the default fee in `plugin` but for NEM, Monero and other coins you need to calculate the fee
 
 ```Javascript   
@@ -138,6 +148,7 @@ You need to define the default fee in `plugin` but for NEM, Monero and other coi
 
 
 #### Create and Send Transaction
+----
 This transaction consists of `create`, `sign`, `push` transaction
 
 ```Javascript   
@@ -153,6 +164,7 @@ This transaction consists of `create`, `sign`, `push` transaction
 
 
 #### Create and Sign Transaction
+----
 In some cases you need to have the hex of transaction before for some reason before you push it
 
 ```Javascript   
@@ -168,6 +180,7 @@ In some cases you need to have the hex of transaction before for some reason bef
 
 
 #### Broadcast the Signed Transaction
+----
 Push the signed transaction (hex) into blockchain
 
 ```Javascript   
@@ -184,11 +197,16 @@ Push the signed transaction (hex) into blockchain
 
 
 #### Compatibility
+----
 
 `sendTransaction` and `getBalance` are compatible with [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
 
 
 #### How to Contibute
+----
+
+You can find issues but we improve it daily.
+Please do not judge but help.
 
 1. Please modify only `plugins`, `providers`, `package.json`
 2. `plugin` should consists only network information and implements `Interfaces/coin-interface.ts`
@@ -203,7 +221,6 @@ The management of different coins should be similar, so that there is no need fo
 
 
 #### Abstract
-
 ----
 
 Standard of Coin/Token Common Interface
