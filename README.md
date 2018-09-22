@@ -46,7 +46,7 @@ function testnet(err, web3t) {
 buildWeb3t("testnet", testnet);
 
 ```
-(https://runkit.com/embed/yw5lj63igd4r)[Try it online]
+[Try it online](https://runkit.com/embed/yw5lj63igd4r)
 
 
 #### Build Mainnet
@@ -59,6 +59,7 @@ function mainnet(err, web3t) {
 buildWeb3t("mainnet", mainnet);
 
 ```
+[Try it online](https://runkit.com/embed/myx74ap01ge6)
 
 #### Example
 ----
