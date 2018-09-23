@@ -82,6 +82,20 @@ web3t.[ANY_COIN].sendTransaction({ to, amount }, cb);
   
 ```
 
+#### Send All Funds
+----
+Simplified Method to Send All Funds. Wrapper on `sendTransaction`
+
+```Javascript
+
+var cb => (err, tx) {
+  
+}
+
+web3t.[ANY_COIN].sendAllFunds({ to, data }, cb);
+  
+```
+
 #### Create Account
 ----
 You can create a lot of addresses by providing different index
@@ -141,7 +155,7 @@ You need to define the default fee in `plugin` but for NEM, Monero and other coi
   
   }
   
-  web3t.[ANY_COIN].calcFee({ account, recepient, amount, data}, cb); // => fee
+  web3t.[ANY_COIN].calcFee({ account, to, amount, data}, cb); // => fee
   
 ```
 [![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
@@ -157,7 +171,7 @@ This transaction consists of `create`, `sign`, `push` transaction
   
   }
 
-  web3t.[ANY_COIN].createTransaction({ account, recepient, amount, data}, cb); // => tx
+  web3t.[ANY_COIN].createTransaction({ account, to, amount, data}, cb); // => tx
 
 ```
 [![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
@@ -173,7 +187,7 @@ In some cases you need to have the hex of transaction before for some reason bef
   
   }
 
-  web3t.[ANY_COIN].signTransaction({ account, recepient, amount, data}, cb); // => rawtx
+  web3t.[ANY_COIN].signTransaction({ account, to, amount, data}, cb); // => rawtx
 
 ```
 [![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)

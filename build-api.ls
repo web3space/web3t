@@ -1,38 +1,53 @@
 require! {
     \prelude-ls : { obj-to-pairs, pairs-to-obj }
+    \./math.ls : { minus }
 }
 
 #{ calc-fee, get-keys, push-tx, get-balance, get-transactions, create-transaction } = provider
     
-build-calc-fee = ({network, provider})-> ({ sender, recepient, amount, data}, cb)->
+build-calc-fee = ({network, provider})-> ({ account, to, amount, data}, cb)->
     cb null, network.tx-fee
     
-build-send-transaction = ({network, provider})-> ({ sender, recepient, amount, data}, cb)->
+build-send-transaction = ({network, provider})-> ({ account, to, amount, data}, cb)->
     { create-transaction, push-tx } = provider
     calc-fee = build-calc-fee { network, provider }
-    err, amount-fee <- calc-fee { sender, recepient, amount, data}
+    err, amount-fee <- calc-fee { account, to, amount, data}
     return cb err if err?
-    err, rawtx <- create-transaction { sender, recepient, amount, data, network, amount-fee }
+    err, rawtx <- create-transaction { account, recepient: to, amount, data, network, amount-fee }
     return cb err if err?
     err, data <- push-tx { network, rawtx }
     return cb err if err?
     cb null, data
 
-build-create-sender = ({network, provider})-> ({ mnemonic, index }, cb)->
+
+build-get-balance = ({network, provider})-> ({ account }, cb)->
+    { get-balance } = provider
+    err, data <- get-balance { account.address, network }
+    return cb err if err?
+    cb null, data
+
+build-send-all-funds = ({ network, provider })-> ({ account, to, data}, cb)->
+    send-transaction = build-send-transaction { network, provider }
+    get-balance = build-get-balance { network, provider }
+    calc-fee = build-calc-fee { network, provider }
+    err, amount <- get-balance { account }
+    return cb err if err?
+    err, fee <- calc-fee { account, to, amount, data}
+    return cb err if err?
+    all = amount `minus` fee
+    send-transaction { account, to, amount: all, data }, cb
+
+build-create-account = ({network, provider})-> ({ mnemonic, index }, cb)->
     { get-keys } = provider
     err, data <- get-keys { mnemonic, index, network }
     return cb err if err?
     cb null, data
 
-build-get-balance = ({network, provider})-> ({ sender }, cb)->
-    { get-balance } = provider
-    err, data <- get-balance { sender.address, network }
-    return cb err if err?
-    cb null, data
 
-build-get-history = ({network, provider})-> ({ sender }, cb)->
+
+build-get-history = ({network, provider})-> ({ account }, cb)->
     { get-transactions } = provider
-    err, data <- get-transactions { sender.address, network }
+    err, data <- get-transactions { account.address, network }
     return cb err if err?
     cb null, data
 
@@ -43,11 +58,12 @@ build-pair = ([name, api], providers, mode, cb)->
     provider = providers[network.api.provider]
     return cb "Provider not found for #{name}" if not provider?
     send-transaction = build-send-transaction { network, provider }
-    create-sender = build-create-sender { network, provider }
+    create-account = build-create-account { network, provider }
     calc-fee = build-calc-fee { network, provider }
     get-balance = build-get-balance { network, provider }
     get-history = build-get-history { network, provider }
-    cb null, { send-transaction, create-sender, calc-fee, get-balance, get-history }
+    send-all-funds = build-send-all-funds { network, provider }
+    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds }
         
 build-pairs = ([pair, ...rest], providers, mode, cb)->
     return cb null, [] if not pair?
