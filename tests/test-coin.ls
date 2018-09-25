@@ -1,4 +1,7 @@
-mnemonic = "almost barely slush obey punch ice genius inflict update word engage mercy stadium rotate cable"
+require! {
+    \./test-coin-non-zero.ls
+    \./mnemonic.ls
+}
 index = 0
 module.exports = (coin, cb)->
     err, account <- coin.create-account { mnemonic, index }
@@ -10,4 +13,6 @@ module.exports = (coin, cb)->
     return cb "Balance is wrong" if not balance?
     return cb "Balance should be a string" if balance.to-string!.match(/^[0-9]+$/).length isnt balance.to-string!
     return cb null if +balance is 0
+    err <- test-coin-non-zero coin
+    return cb err if err?
     cb null

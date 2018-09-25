@@ -19,6 +19,15 @@ npm i web3t
 rm -rf ./node_modules/bitcore-message/node_modules
 ```
 
+#### Benefits
+----
+
+* Web3t is open source free covered by test library available for everyone and can be used to build an exchange, wallet and other crypto systems.
+* Opened Standard. Everyone can contribute to add his coin.
+* Used by [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
+* Partially Compatible with [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)
+* Compatible with MetaMask Web3 Standard for Ethereum
+
 #### Support
 ----
 
