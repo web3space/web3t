@@ -7,4 +7,4 @@ require! {
     \./plugins/xrp-coin.ls : xrp
 }
 module.exports = (query, cb)->
-    cb null, { btc, dash, eth, ltc, xem , xrp}
+    cb null, { btc, dash, eth, ltc, xem }

@@ -1,1 +1,1 @@
-module.exports = <[ btc dash eth ltc xem xrp ]>
+module.exports = <[ btc dash eth ltc xem ]>

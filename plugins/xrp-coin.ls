@@ -18,6 +18,6 @@ export testnet =
         decimal: 8
     topup: \https://testnet.manu.backend.hamburg/faucet
 export type = \coin
-export enabled = yes
+export enabled = no
 export token = \xrp
 export image = \./res/xrp-ethnamed.png
