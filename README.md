@@ -4,7 +4,7 @@
 </p>
 
 
-Unified Open Source Coin Registry (Same interface for all possible coins, tokens)
+Implementation of web3 protocol
 
 #### Demo
 ----
@@ -248,13 +248,21 @@ The management of different coins should be similar, so that there is no need fo
 #### Abstract
 ----
 
-Standard of Coin/Token Common Interface
+Web 3.0 is an inclusive set of protocols to provide building blocks for application makers. These building blocks take the place of traditional web technologies like HTTP, AJAX and MySQL, but present a whole new way of creating applications. These technologies give the user strong and verifiable guarantees about the information they are receiving, what information they are giving away, and what they are paying and what they are receiving in return. By empowering users to act for themselves within low-barrier markets, we can ensure censorship and monopolization have fewer places to hide. Consider Web 3.0 to be an executable Magna Carta — “the foundation of the freedom of the individual against the arbitrary authority of the despot.”
+
+Please read more here [article](https://medium.com/@gavofyork/why-we-need-web-3-0-5da4f2bf95ab)
 
 #### Motivation
 ----
 
-The same type will help to quickly create a list of supported crypto currency for exchanges, multicurrency wallets and help new projects get the existing infrastructure instantly and effortlessly
+There was already implemented solution Web 3.0 in Metamask Wallet and used by dozen of dapps.
+It is great. But it is available only for ETH.
+We would like to extend the same protocol for other coins
+It will help to 
 
+* connect different coins to existent web 2.0
+* quickly create a list of supported crypto currency for exchanges, multicurrency wallets and help new projects get the existing infrastructure instantly and effortlessly
+* develop the cross-chain interface
 
 #### Copyright
 ----
