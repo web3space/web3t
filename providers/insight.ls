@@ -87,7 +87,7 @@ transform-tx = (net, t)-->
     { network, tx, amount, fee, time, url, to }
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <-! get "#{network.api.url}/api/txs/?address=#{address}" .end
+    err, data <- get "#{network.api.url}/api/txs/?address=#{address}" .end
     return cb err if err?   
     err, result <- json-parse data.text
     return cb err if err?
