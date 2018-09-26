@@ -6,5 +6,5 @@ require! {
     \./plugins/xem-coin.ls : xem
     \./plugins/xrp-coin.ls : xrp
 }
-module.exports = (query, cb)->
+module.exports = (config, cb)->
     cb null, { btc, dash, eth, ltc, xem }

@@ -1,6 +1,7 @@
 require! {
     \prelude-ls : { obj-to-pairs, pairs-to-obj }
     \./math.ls : { minus }
+    \./config-parser.ls
 }
 
 #{ calc-fee, get-keys, push-tx, get-balance, get-transactions, create-transaction } = provider
@@ -51,8 +52,10 @@ build-get-history = ({network, provider})-> ({ account }, cb)->
     return cb err if err?
     cb null, data
 
-build-pair = ([name, api], providers, mode, cb)->
+build-pair = ([name, api], providers, config, cb)->
     return cb null, {} if api.enabled isnt yes or api.type isnt \coin
+    { get-mode-for } = config-parser config
+    mode = get-mode-for name
     network = api[mode]
     return cb "Network #{mode} not found for #{mode}" if not network?
     provider = providers[network.api.provider]
@@ -65,18 +68,18 @@ build-pair = ([name, api], providers, mode, cb)->
     send-all-funds = build-send-all-funds { network, provider }
     cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds }
         
-build-pairs = ([pair, ...rest], providers, mode, cb)->
+build-pairs = ([pair, ...rest], providers, config, cb)->
     return cb null, [] if not pair?
-    err, item <- build-pair pair, providers, mode
+    err, item <- build-pair pair, providers, config
     return cb err if err?
-    err, rest <- build-pairs rest, providers, mode
+    err, rest <- build-pairs rest, providers, config
     return cb err if err?
     cb null, ([[pair.0, item]] ++ rest)
     
-build-api = (coins, providers, mode, cb)->
+build-api = (coins, providers, config, cb)->
     pairs = 
         coins |> obj-to-pairs
-    err, items <- build-pairs pairs, providers, mode
+    err, items <- build-pairs pairs, providers, config
     return cb err if err?
     result = pairs-to-obj items
     cb null, result

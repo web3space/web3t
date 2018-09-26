@@ -5,5 +5,5 @@ require! {
     \./providers/ripple.ls
 }
 
-module.exports = (query, cb)->
+module.exports = (config, cb)->
    cb null, { eth, insight, xem, ripple }

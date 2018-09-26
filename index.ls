@@ -4,13 +4,12 @@ require! {
     \./load-coins.ls
     \./build-api.ls
 }
-
-module.exports = (mode, cb)->
-    err, coins <- load-coins mode
+module.exports = (config, cb)->
+    err, coins <- load-coins config
     return cb err if err?
-    err, providers <- load-providers mode
+    err, providers <- load-providers config
     return cb err if err?
-    err, api <- build-api coins, providers, mode
+    err, api <- build-api coins, providers, config
     return cb err if err?
     cb null, api
     

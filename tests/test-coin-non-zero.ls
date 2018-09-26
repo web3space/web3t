@@ -1,13 +1,11 @@
 require! {
     \./mnemonic.ls
 }
-
 module.exports = (coin, cb)->
-    err, account <- coin.create-account { mnemonic, index }
+    { create-account, get-balance } = coin
+    err, account <- create-account { mnemonic, index }
     return cb err if err?
-    err, balance <- coin.get-balance { account }
+    err, balance <- get-balance { account }
     return cb err if err?
-    return cb "Balance is Zero" if +balance is 0
+    return cb "Balance is zero" if +balance is 0
     cb null
-    
-    

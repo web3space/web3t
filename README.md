@@ -49,6 +49,8 @@ var buildWeb3t = require('web3t');
 ```
 
 #### Build Testnet
+Just pass the `testnet` word into constructor.
+
 ----
 
 ```Javascript 
@@ -60,6 +62,19 @@ function testnet(err, web3t) {
 buildWeb3t("testnet", testnet);
 
 ```
+
+There are other advanced possible ways to build the web3 object for case when you need to define special testnet
+
+```Javascript 
+function testnet(err, web3t) {
+    ... 
+
+}
+
+buildWeb3t("testnet, ropsten for eth", testnet);
+
+```
+
 [![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/yw5lj63igd4r)
 
 
