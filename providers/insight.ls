@@ -1,6 +1,5 @@
 require! {
     \moment
-    \whitebox
     \prelude-ls : { map, foldl, any, each, find, sum, filter }
     \superagent : { get, post } 
     \../math.ls : { plus, minus, div, times }

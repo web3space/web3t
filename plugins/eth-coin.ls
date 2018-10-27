@@ -23,7 +23,7 @@ export ethnamed =
         web3Provider : \http://ethnamed.io:9000
         url : \http://ethnamed.io:8000
         apiUrl : \http://ethnamed.io:8000/api
-export testnet =
+export ropsten =
     decimals: 18
     tx-fee: \0.0084
     message-prefix: 'Ethereum'
@@ -33,6 +33,7 @@ export testnet =
         web3Provider : current.web3Provider
         url : current.etherscanBaseUrl
         apiUrl : current.apiUrl
+export testnet = ropsten
 export type = \coin    
 export enabled = yes
 export token = \eth

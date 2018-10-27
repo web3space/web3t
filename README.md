@@ -63,7 +63,7 @@ buildWeb3t("testnet", testnet);
 
 ```
 
-There are other advanced possible ways to build the web3 object for case when you need to define special testnet
+There are other advanced possible ways to build the web3 object for case when you need to define a special testnet. It is useful for case when you have a lot of faucets of special testnet and write unit tests.
 
 ```Javascript 
 function testnet(err, web3t) {

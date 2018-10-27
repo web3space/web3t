@@ -34,7 +34,7 @@ export get-transactions = ({ network, address }, cb)->
         result.transfers
             |> map transform-transfer network
     cb null, txs
-export create-transaction = ({ network, account, recepient, amount, amount-fee, data, message-type} , cb)-->
+export create-transaction = ({ network, account, to, amount, amount-fee, data, message-type} , cb)-->
     return cb "Params are required" if not network? or not account? or not recepient? or not amount-fee?
     common = nem.model.objects.create(\common) "", account.private-key
     transfer-transaction = nem.model.objects.get \transferTransaction

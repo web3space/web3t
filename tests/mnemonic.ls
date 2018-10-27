@@ -1,1 +1,1 @@
-module.exports = "almost barely slush obey punch ice genius inflict update word engage mercy stadium rotate cable"
+module.exports = "xmr bch btg ltc eth eos xem ada dash btc zec bcn"

@@ -10,7 +10,7 @@ parse-mapping-string = (config)->
     return {} if not all.length is 1
     all 
         |> tail
-        |> map (.split ' for ')
+        |> map split ' for '
         |> map -> [it.1, it.0]
         |> pairs-to-obj
 get-mapping = (config)->

@@ -7,7 +7,7 @@ export calc-fee = ({ network, tx }, cb)->
     cb null
 export get-keys = ({ network, mnemonic, index }, cb)->
     cb "Not implemented"
-export create-transaction = ({ account, recepient, amount, amount-fee } , cb)-->
+export create-transaction = ({ sender, recepient, amount, amount-fee } , cb)-->
     cb "Not implemented"
 export push-tx = ({ network, rawtx } , cb)-->
     cb "Not implemented"
