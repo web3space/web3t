@@ -91,6 +91,25 @@ buildWeb3t("mainnet", mainnet);
 ```
 [![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)
 
+
+#### Advanced Builder
+----
+
+```Javascript 
+function mainnet(err, web3t) {
+    ... 
+}
+
+var config = {
+   mode: "mainnet"
+   plugins: {},
+   providers: {}
+}
+
+buildWeb3t(config, mainnet);
+
+```
+
 #### Example
 ----
 

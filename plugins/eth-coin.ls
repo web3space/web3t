@@ -1,5 +1,5 @@
 require! {
-    \../../config.json : { eth-net },
+    \../../config.json : { eth-net }
     \../../blockchain/config.json
 }
 current = config[eth-net]

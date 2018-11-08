@@ -3,12 +3,12 @@ require! {
 }
 get-mode = (config)->
     return config.split(\,).0 if typeof! config is \String
-    return config.mode if typeof! config is \Object
+    return get-mode config.mode if typeof! config is \Object
     \testnet
 parse-mapping-string = (config)->
     all = config.split(\,).map(-> it.trim!)
     return {} if not all.length is 1
-    all 
+    all
         |> tail
         |> map split ' for '
         |> map -> [it.1, it.0]

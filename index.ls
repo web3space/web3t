@@ -4,6 +4,7 @@ require! {
     \./load-coins.ls
     \./build-api.ls
 }
+
 module.exports = (config, cb)->
     err, coins <- load-coins config
     return cb err if err?
