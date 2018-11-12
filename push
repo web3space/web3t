@@ -1,0 +1,5 @@
+lsc -c server.ls
+git add .
+git commit -m "update"
+git push
+npm publish

@@ -1,6 +1,6 @@
 {
   "name": "web3t",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Unified Open Source Coin Registry (Same interface for all possible coins, tokens)",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/ethnamed/web3t.git"
   },
   "keywords": [
-    "cryptp",
+    "crypto",
     "standard",
     "ethnamed"
   ],

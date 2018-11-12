@@ -1,8 +1,3 @@
-require! {
-    \../../config.json : { eth-net }
-    \../../blockchain/config.json
-}
-current = config[eth-net]
 export mainnet =
     decimals: 18
     tx-fee: \0.0084
@@ -30,9 +25,9 @@ export ropsten =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \eth
-        web3Provider : current.web3Provider
-        url : current.etherscanBaseUrl
-        apiUrl : current.apiUrl
+        web3Provider : "https://ropsten.infura.io/UoCkF4efTrbEGU8Qpcs0"
+        url : "https://ropsten.etherscan.io"
+        apiUrl : "http://api-ropsten.etherscan.io/api"
 export testnet = ropsten
 export type = \coin    
 export enabled = yes
