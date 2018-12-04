@@ -5,9 +5,13 @@ require! {
 }
 
 #{ calc-fee, get-keys, push-tx, get-balance, get-transactions, create-transaction } = provider
-    
-build-calc-fee = ({network, provider})-> ({ account, to, amount, data}, cb)->
-    cb null, network.tx-fee
+
+build-calc-fee = ({ network, provider })-> (tx, cb)->
+    return cb null, network.tx-fee if typeof! provider.calc-fee isnt \Function
+    err, tx-fee <- provider.calc-fee { network, tx }
+    return cb err if err?
+    return cb null, network.tx-fee if not tx-fee?
+    cb null, tx-fee
     
 build-send-transaction = ({network, provider})-> ({ account, to, amount, data}, cb)->
     { create-transaction, push-tx } = provider

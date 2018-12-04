@@ -59,6 +59,7 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
     err, gas-price <- web3.eth.get-gas-price
     #gas-price = to-wei \0.000000004
     #console.log { gas-price } 
+    #calc-fee { network }
     gas-estimate = to-wei(amount-fee) `div` gas-price
     #send = (value `plus` gas-price `plus` gas-estimate) `div` dec
     #console.log { value, amount }
