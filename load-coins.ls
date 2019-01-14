@@ -10,7 +10,7 @@ require! {
 only-coins = (plugins)->
     plugins
         |> obj-to-pairs
-        |> filter (.type is \coin)
+        |> filter (.1?type is \coin)
         |> pairs-to-obj
 extend-coins = (coins, config)->
     return if typeof! config.plugins isnt \Object

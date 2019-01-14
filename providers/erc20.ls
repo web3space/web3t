@@ -8,6 +8,7 @@ require! {
     \ethereumjs-util : { BN }
     \../json-parse.ls
     \whitebox : { get-fullpair-by-index }
+    \../deadline.ls
 }
 abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
 get-contract-instance = (web3, addr)->
@@ -22,6 +23,7 @@ to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
     { url } = network.api
+    dec = get-dec network
     network = \eth 
     tx = t.hash
     amount = t.value `div` dec
@@ -38,7 +40,7 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
-    err, resp <- get "#{api-url}?#{query}" .timeout { deadline: 2000 } .end
+    err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse resp.text
     return cb err if err?
@@ -52,26 +54,27 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-export create-transaction = ({ network, sender, recepient, amount, amount-fee} , cb)-->
+export create-transaction = ({ network, account, recepient, amount, amount-fee} , cb)-->
     web3 = get-web3 network
     dec = get-dec network
-    private-key = new Buffer sender.private-key.replace(/^0x/,''), \hex
-    err, nonce <- web3.eth.get-transaction-count sender.address, \pending
+    private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
+    err, nonce <- web3.eth.get-transaction-count account.address, \pending
     contract = get-contract-instance web3, network.address
+    console.log \here, contract.transfer
     to-wei = -> it `times` dec
     value = to-wei amount
     err, gas-price <- web3.eth.get-gas-price
     gas-estimate = to-wei(amount-fee) `div` gas-price
     data = 
         | contract.methods? => contract.methods.transfer(recepient, value).encodeABI!
-        | _ => contract.methods.transfer.get-data recepient, value
+        | _ => contract.transfer.get-data recepient, value
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
         value: to-hex value
         gas: to-hex gas-estimate
-        to: recepient
-        from: sender.address
+        to: network.address
+        from: account.address
         data: data
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
@@ -87,8 +90,8 @@ export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
     contract = get-contract-instance web3, network.address
     balance-of =
-        | contract.methods? => contract.methods.balance-of(address).call
-        | _ => (cb)-> contract.balance-of address, cb
+        | contract.methods? => (address, cb)-> contract.methods.balance-of(address).call cb
+        | _ => (address, cb)-> contract.balance-of address, cb
     err, number <- balance-of address
     return cb err if err?
     dec = get-dec network
