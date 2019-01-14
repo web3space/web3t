@@ -60,6 +60,7 @@ build-pair = ([name, api], providers, config, cb)->
     return cb null, {} if api.enabled isnt yes or api.type isnt \coin
     { get-mode-for } = config-parser config
     mode = get-mode-for name
+    #console.log mode if name is \eth
     network = api[mode]
     return cb "Network #{mode} not found for #{mode}" if not network?
     provider = providers[network.api.provider]

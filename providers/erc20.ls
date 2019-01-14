@@ -60,7 +60,6 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee} 
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     contract = get-contract-instance web3, network.address
-    console.log \here, contract.transfer
     to-wei = -> it `times` dec
     value = to-wei amount
     err, gas-price <- web3.eth.get-gas-price

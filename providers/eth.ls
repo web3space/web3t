@@ -82,6 +82,7 @@ export push-tx = ({ network, rawtx } , cb)-->
     err, txid <- web3.eth.send-signed-transaction rawtx
     cb err, txid
 export get-balance = ({ network, address} , cb)->
+    #console.log { network }
     web3 = get-web3 network
     err, number <- web3.eth.get-balance address
     return cb err if err?
