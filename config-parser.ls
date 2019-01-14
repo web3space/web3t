@@ -6,7 +6,6 @@ get-mode = (config)->
     return get-mode config.mode if typeof! config is \Object
     \testnet
 parse-mapping-string = (config)->
-    console.log { config }
     all = config.split(\,).map(-> it.trim!)
     return {} if not all.length is 1
     all
