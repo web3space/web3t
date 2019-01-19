@@ -12,7 +12,7 @@
 
 * Get Balance
 
-  Get Balance requires account object ({ address }) to check the it in blockchain via public node
+  Get Balance requires account object ({ address }) to check it in blockchain via public node
   
 * Send Transactions
 

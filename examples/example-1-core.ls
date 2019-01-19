@@ -11,6 +11,6 @@ mode = \testnet
 plugins = { sprkl, rem, stt, xem }
 
 export init-web3t = (cb)->
-    web3t-builder { mode, plugins }, cb
+    web3t-builder({ mode, plugins }, cb)
     
 export mnemonic = "some unique pharses should be here"
