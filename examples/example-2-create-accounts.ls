@@ -1,5 +1,5 @@
 require! {
-    \./example-1-core.ls : { init, mnemonic }
+    \./example-1-core.ls : { init-web3t, mnemonic }
 }
 
 ## Core
