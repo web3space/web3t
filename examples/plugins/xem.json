@@ -1,0 +1,35 @@
+{
+    "mainnet": {
+        "decimals": 6,
+        "txFee": "0.05",
+        "id": 104,
+        "prefix": "68",
+        "char": "N",
+        "api": {
+            "provider": "xem",
+            "nodeAddress": "http://hugealice3.nem.ninja",
+            "nodePort": 7890,
+            "url": "http://chain.nem.ninja/#",
+            "apiUrl": "http://chain.nem.ninja/api3"
+        }
+    },
+    "testnet": {
+        "decimals": 6,
+        "txFee": "0.05",
+        "id": -104,
+        "prefix": "98",
+        "char": "T",
+        "api": {
+            "provider": "xem",
+            "nodeAddress": "http://23.228.67.85",
+            "nodePort": 7890,
+            "url": "http://bob.nem.ninja:8765/#",
+            "apiUrl": "http://bob.nem.ninja:8765/api3"
+        }
+    },
+    "type": "coin",
+    "enabled": true,
+    "token": "xem",
+    "image": "./res/nem-ethnamed.png",
+    "usdInfo": "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM&tsyms=USD).XEM.USD"
+}

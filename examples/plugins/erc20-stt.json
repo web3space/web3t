@@ -1,0 +1,33 @@
+{
+    "usdInfo": "url(http://209.126.79.30:3333/rate).STT.USD",
+    "image": "https://res.cloudinary.com/dfbhd7liw/image/upload/v1547131066/coin.png",
+    "token": "stt",
+    "enabled": true,
+    "type": "coin",
+    "testnet": {
+        "decimals": 18,
+        "txFee": "0.0030",
+        "address": "0x9d10ff02163ecf1f5bf01e4596fc3dca579f2617",
+        "messagePrefix": "Ethereum",
+        "mask": "0x0000000000000000000000000000000000000000",
+        "api": {
+            "provider": "erc20",
+            "web3Provider":"https://ropsten.infura.io/UoCkF4efTrbEGU8Qpcs0",
+            "url":"https://ropsten.etherscan.io",
+            "apiUrl":"http://api-ropsten.etherscan.io/api"
+        }
+    },
+    "mainnet": {
+        "decimals": 18,
+        "txFee": "0.0030",
+        "messagePrefix": "Ethereum",
+        "address": "0x0bbb5a54767166b21e4a74d30500248a05ed985f",
+        "mask": "0x0000000000000000000000000000000000000000",
+        "api": {
+            "provider": "erc20",
+            "web3Provider": "https://mainnet.infura.io/UoCkF4efTrbEGU8Qpcs0",
+            "url": "https://etherscan.io",
+            "apiUrl": "https://api.etherscan.io/api"
+        }
+    }
+}

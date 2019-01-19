@@ -1,13 +1,13 @@
 {
-   "usdInfo":1,
-   "image":"./res/sparkle-ethnamed.png",
+   "usdInfo":"url(http://sparklemobile.io:2000/rate).SPRKL.USD",
+   "image":"https://res.cloudinary.com/nixar-work/image/upload/v1545329215/sparkle-ethnamed.png",
    "token":"sprkl",
    "enabled":true,
    "type":"coin",
    "testnet":{
       "decimals":18,
       "txFee":"0.0020",
-      "address":"0x57BC203385A221942449c4bB1dBc0D775c8B5A02",
+      "address":"0x2AE67539e628a36cfEc0F8D720489d490b525637",
       "messagePrefix":"Ethereum",
       "mask":"0x0000000000000000000000000000000000000000",
       "api":{

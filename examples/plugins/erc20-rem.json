@@ -1,0 +1,33 @@
+{
+    "usdInfo": "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=REM&tsyms=USD).REM.USD",
+    "image": "https://res.cloudinary.com/nixar-work/image/upload/v1547598371/logo_icon_white.png",
+    "token": "rem",
+    "enabled": true,
+    "type": "coin",
+    "testnet": {
+        "decimals": 4,
+        "txFee": "0.0030",
+        "address": "0xe639041fd04a0e767870b18cb341f1cd2bec296f",
+        "messagePrefix": "Ethereum",
+        "mask": "0x0000000000000000000000000000000000000000",
+        "api": {
+            "provider": "erc20",
+            "web3Provider":"https://ropsten.infura.io/UoCkF4efTrbEGU8Qpcs0",
+            "url":"https://ropsten.etherscan.io",
+            "apiUrl":"http://api-ropsten.etherscan.io/api"
+        }
+    },
+    "mainnet": {
+        "decimals": 4,
+        "txFee": "0.0030",
+        "messagePrefix": "Ethereum",
+        "address": "0x83984d6142934bb535793a82adb0a46ef0f66b6d",
+        "mask": "0x0000000000000000000000000000000000000000",
+        "api": {
+            "provider": "erc20",
+            "web3Provider": "https://mainnet.infura.io/UoCkF4efTrbEGU8Qpcs0",
+            "url": "https://etherscan.io",
+            "apiUrl": "https://api.etherscan.io/api"
+        }
+    }
+}
