@@ -5,16 +5,16 @@
   loadProviders = require('./load-providers.ls');
   loadCoins = require('./load-coins.ls');
   buildApi = require('./build-api.ls');
-  module.exports = function(mode, cb){
-    return loadCoins(mode, function(err, coins){
+  module.exports = function(config, cb){
+    return loadCoins(config, function(err, coins){
       if (err != null) {
         return cb(err);
       }
-      return loadProviders(mode, function(err, providers){
+      return loadProviders(config, function(err, providers){
         if (err != null) {
           return cb(err);
         }
-        return buildApi(coins, providers, mode, function(err, api){
+        return buildApi(coins, providers, config, function(err, api){
           if (err != null) {
             return cb(err);
           }

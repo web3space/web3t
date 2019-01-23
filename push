@@ -1,4 +1,4 @@
-lsc -c server.ls
+lsc -c index.ls
 git add .
 git commit -m "update"
 git push
