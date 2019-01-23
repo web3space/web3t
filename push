@@ -1,5 +1,5 @@
 lsc -c index.ls
 git add .
-git commit -m "update"
+git commit -m "update npm"
 git push
 npm publish
