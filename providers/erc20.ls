@@ -40,7 +40,7 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
-    err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
+    err, resp <- get "#{api-url}?#{query}" .timeout { deadline: 20000 } .end
     return cb err if err?
     err, result <- json-parse resp.text
     return cb err if err?

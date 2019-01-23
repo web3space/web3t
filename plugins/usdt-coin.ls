@@ -39,4 +39,4 @@ export testnet =
 export type = \coin
 export enabled = yes
 export token = \usdt
-export image = \./res/usdt-ethnamed.png
+export image = \https://res.cloudinary.com/nixar-work/image/upload/v1547940263/download.png

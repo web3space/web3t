@@ -9,6 +9,7 @@ require! {
     \../json-parse.ls
     \whitebox : { get-fullpair-by-index }
 }
+# https://api.omniexplorer.info/#request-v1-address-addr
 export calc-fee = ({ network, tx }, cb)->
     cb null
 export get-keys = ({ network, mnemonic, index }, cb)->
