@@ -4,7 +4,7 @@ require! {
 }
 math = ($)-> (x, y)->
     try 
-        new bignumber(x)[$](y).to-string!
+        new bignumber(x)[$](y).to-fixed!
     catch err
         throw "#{x} #{$} #{y} = #{err}"
 module.exports =

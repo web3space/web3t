@@ -17,9 +17,9 @@ export ethnamed =
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \erc20
-        web3Provider : \http://ethnamed.io:9000
-        url : \http://ethnamed.io:8000
-        apiUrl : \http://ethnamed.io:8000/api
+        web3Provider : \http://web3.space/ganache
+        url : \https://web3.space/explorer
+        apiUrl : \https://web3.space/explorer/api
 export ropsten =
     decimals: 18
     tx-fee: \0.0014

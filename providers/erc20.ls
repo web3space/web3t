@@ -31,6 +31,8 @@ transform-tx = (network, t)-->
     url = "#{url}/tx/#{tx}"
     fee = t.cumulative-gas-used `times` t.gas-price `div` dec
     { network, tx, amount, fee, time, url, t.from, t.to }
+up = (s)->
+    (s ? "").to-upper-case!
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
     module = \account
@@ -40,13 +42,15 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
-    err, resp <- get "#{api-url}?#{query}" .timeout { deadline: 20000 } .end
+    err, resp <- get "#{api-url}?#{query}" .timeout { deadline: 50000 } .end
     return cb err if err?
     err, result <- json-parse resp.text
     return cb err if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs = 
-        result.result |> map transform-tx network
+        result.result
+            |> filter -> up(it.contract-address) is up(network.address)
+            |> map transform-tx network
     cb null, txs
 get-web3 = (network)->
     { web3-provider } = network.api
