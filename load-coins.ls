@@ -5,6 +5,7 @@ require! {
     \./plugins/ltc-coin.ls : ltc
     \./plugins/xem-coin.ls : xem
     \./plugins/xrp-coin.ls : xrp
+    \./plugins/usdt-coin.ls : usdt
     \prelude-ls : { obj-to-pairs, pairs-to-obj, filter }
 }
 only-coins = (plugins)->
