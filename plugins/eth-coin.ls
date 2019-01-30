@@ -1,6 +1,9 @@
 export mainnet =
     decimals: 18
     tx-fee: \0.0014
+    tx-fee-options :
+        fast  : \0.0014
+        cheap : \0.000063
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     api:
@@ -11,6 +14,9 @@ export mainnet =
 export ethnamed =
     decimals: 18
     tx-fee: \0.0014
+    tx-fee-options :
+        fast  : \0.0014
+        cheap : \0.000063
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     api:
@@ -21,6 +27,9 @@ export ethnamed =
 export ropsten =
     decimals: 18
     tx-fee: \0.0014
+    tx-fee-options :
+        fast  : \0.0014
+        cheap : \0.000063
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     api:

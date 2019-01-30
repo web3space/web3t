@@ -58,7 +58,12 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-export create-transaction = ({ network, account, recepient, amount, amount-fee} , cb)-->
+
+calc-gas-price = ({ web3, fee-type }, cb)->
+    return cb null, \3000000000 if fee-type is \cheap
+    web3.eth.get-gas-price cb
+
+export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type } , cb)-->
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -66,12 +71,12 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee} 
     contract = get-contract-instance web3, network.address
     to-wei = -> it `times` dec
     value = to-wei amount
-    err, gas-price <- web3.eth.get-gas-price
+    err, gas-price <- calc-gas-price { web3, fee-type }
+    return cb err if err?
     gas-estimate = to-wei(amount-fee) `div` gas-price
-    data = 
+    data =
         | contract.methods? => contract.methods.transfer(recepient, value).encodeABI!
         | _ => contract.transfer.get-data recepient, value
-    #console.log { data, recepient, value }
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price

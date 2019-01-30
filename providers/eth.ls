@@ -49,19 +49,22 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-export create-transaction = ({ network, account, recepient, amount, amount-fee, data} , cb)-->
+calc-gas-price = ({ web3, fee-type }, cb)->
+    return cb null, \3000000000 if fee-type is \cheap
+    web3.eth.get-gas-price cb
+export create-transaction = ({ network, account, recepient, amount, amount-fee, data, fee-type } , cb)-->
     web3 = get-web3 network
     dec = get-dec network
-    
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     to-wei = -> it `times` dec
     value = to-wei amount
-    err, gas-price <- web3.eth.get-gas-price
+    err, gas-price <- calc-gas-price { web3, fee-type }
     #gas-price = to-wei \0.000000004
     #console.log { gas-price } 
     #calc-fee { network }
     gas-estimate = to-wei(amount-fee) `div` gas-price
+    #throw gas-estimate
     #send = (value `plus` gas-price `plus` gas-estimate) `div` dec
     #console.log { value, amount }
     tx = new Tx do
