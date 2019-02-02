@@ -17,6 +17,6 @@ extend-coins = (coins, config)->
     return if typeof! config.plugins isnt \Object
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
-    def = { btc, dash, eth, ltc, xem }
+    def = { btc, dash, eth, ltc, xem, usdt }
     extend-coins def, config
     cb null, def

@@ -4,6 +4,7 @@ require! {
     \./test-coins.ls
     \./check-config.ls
 }
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 main = (network, cb)->
     err <- check-config
     return cb err if err?

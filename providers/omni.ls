@@ -1,8 +1,8 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each }
+    \prelude-ls : { filter, map, foldl, each, find }
     \../math.ls : { plus, minus, times, div }
-    \superagent : { get }
+    \superagent : { get, post }
     \web3 : \Web3
     \ethereumjs-tx : \Tx
     \ethereumjs-util : { BN }
@@ -139,9 +139,10 @@ export get-balance = ({ network, address} , cb)->
     err, data <- post("#{api-url}/v1/address/addr/", req).type('form').end
     return cb err if err?
     return cb "expected object" if typeof! data isnt \Object
-    return cb "expected balance array" if data.body.balance isnt \Array
+    return cb "expected balance array. got #{data.text}" if typeof! data.body.balance isnt \Array
     balance =
         data.body.balance |> find (.id is network.propertyid)
+    #console.log { balance, network.propertyid }
     return cb null, "0" if not balance?
     dec = get-dec network
     value = balance.value `div` dec
