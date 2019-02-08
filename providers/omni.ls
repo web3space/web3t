@@ -1,13 +1,11 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each, find }
+    \prelude-ls : { filter, map, foldl, each, find, sum }
     \../math.ls : { plus, minus, times, div }
     \superagent : { get, post }
-    \web3 : \Web3
-    \ethereumjs-tx : \Tx
-    \ethereumjs-util : { BN }
     \../json-parse.ls
     \whitebox : { get-fullpair-by-index }
+    \bitcoinjs-lib : BitcoinLib
 }
 # https://api.omniexplorer.info/#request-v1-address-addr
 export calc-fee = ({ network, tx }, cb)->
@@ -15,8 +13,6 @@ export calc-fee = ({ network, tx }, cb)->
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
     cb null, result
-to-hex = ->
-    new BN(it)
 #const simple_send = [
 #    "6f6d6e69", // omni
 #    "0000",     // version
@@ -25,7 +21,6 @@ to-hex = ->
 #  ].join('')
 #
 #  const data = Buffer.from(simple_send, "hex")
-
 #  const omniOutput = bitcoin.script.compile([
 #    bitcoin.opcodes.OP_RETURN,
 #    // payload for OMNI PROTOCOL:
@@ -46,22 +41,43 @@ to-hex = ->
 #        |> each add-value network
 #        |> map extend { network, address }
 #        |> -> cb null, it
-extend = (str, fixed)->
+extend-num = (str, fixed)->
     return str if str.length >= fixed
-    extend "0#{str}"
+    extend-num "0#{str}", fixed
+extend = (add, json)--> json <<< add
 to-hex = (num, fixed)->
     n = (+num).to-string 16
-    extend n, min
+    extend-num n, fixed
+get-api-url = (network)->
+    api-name = network.api.api-name ? \api
+    "#{network.api.api-url-btc}/#{api-name}"
+add-value = (network, it)-->
+    dec = get-dec network
+    it.value =
+        | it.satoshis? => it.satoshis
+        | it.amount? => it.amount `times` dec
+        | _ => 0
+get-outputs = ({ network, address} , cb)-->
+    { url } = network.api
+    body <- get "#{get-api-url network}/addr/#{address}/utxo" .then
+    err, result <- json-parse body.text
+    return cb err if err?
+    return cb "Result is not an array" if typeof! result isnt \Array
+    result
+        |> each add-value network
+        |> map extend { network, address }
+        |> -> cb null, it
 export create-transaction = ({ network, account, recepient, amount, amount-fee}, cb)->
-    #err, outputs <- get-outputs { network, account.address }
-    #return cb err if err?
-    #return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0
-    #is-no-value =
-    #    outputs |> find (-> !it.value?)
-    #return cb 'Each output should have a value' if is-no-value
+    err, outputs <- get-outputs { network, account.address }
+    return cb err if err?
+    return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0
+    is-no-value =
+        outputs |> find (-> !it.value?)
+    return cb 'Each output should have a value' if is-no-value
     dec = get-dec network
     value = amount `times` dec
     fee = amount-fee `times` dec
+    dust = 546
     total = 
         outputs
             |> map (.value)
@@ -73,20 +89,27 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee},
         * to-hex 0, 4
         * to-hex network.propertyid, 12
         * to-hex value, 16
+    #console.log to-hex(0, 4)
+    #console.log to-hex(network.propertyid, 12)
+    #console.log to-hex(value, 16)
+    #return
     data = Buffer.from simple_send.join(''), \hex
-    omni-output = BitcoinLib.script.compile [bitcoin.opcodes.OP_RETURN, data]
-    rest = total `minus` value `minus` fee
-    tx.add-output recepient, +value
+    omni-output = BitcoinLib.script.compile [BitcoinLib.opcodes.OP_RETURN, data]
+    #rest = total `minus` value `minus` fee
+    rest = total `minus` fee `plus` dust
+    #console.log { rest, total, value, fee, dust }
+    tx.add-output recepient, dust
     tx.add-output omni-output, 0
     tx.add-output account.address, +rest
-    #apply = (output, i)->
-    #    tx.add-input output.txid, output.vout
+    apply = (output, i)->
+        tx.add-input output.txid, output.vout, 0xfffffffe
     sign = (output, i)->
         key = BitcoinLib.ECPair.fromWIF account.private-key, network
         tx.sign i, key  
-    #outputs.for-each apply
+    outputs.for-each apply
     outputs.for-each sign
     rawtx = tx.build!.to-hex!
+    #console.log 5
     cb null, { rawtx }
 transform-tx = ({ network, address }, t)-->
     { url } = network.api
@@ -113,7 +136,7 @@ export get-transactions = ({ network, address }, cb)->
     return cb "expected object" if typeof! data isnt \Object
     return cb "expected array" if data.body.transactions isnt \Array
     txs =
-         data.body.transactions
+        data.body.transactions
             |> filter (.propertyid is network.propertyid)
             |> map transform-tx { network, address }
     cb null, txs
@@ -123,15 +146,19 @@ get-dec = (network)->
 export check-decoded-data = (decoded-data, data)->
     cb null, ''
 export push-tx = ({ network, rawtx } , cb)-->
-    { api-url } = network.api
-    req =
-        signed-transaction : rawtx
-    err, data <- post("#{api-url}/v1/transaction/pushtx/", req).type('form').end
+    err, res <- post "#{get-api-url network}/tx/send", { rawtx } .end
     return cb err if err?
-    return cb "expected object" if typeof! data isnt \Object
-    return cb "status isnt OK" if data.body.status isnt 'ok'
-    return cb "not pusshed" if data.body.pusshed isnt 'pushed'
-    cb null, data.body.tx
+    cb null, res.body
+#export push-tx = ({ network, rawtx } , cb)-->
+#    { api-url } = network.api
+#    req =
+#        signed-transaction : rawtx
+#    err, data <- post("#{api-url}/v1/transaction/pushtx/", req).type('form').end
+#    return cb err if err?
+#    return cb "expected object" if typeof! data isnt \Object
+#    return cb "status isnt OK" if data.body.status isnt \ok
+#    return cb "not pushed" if data.body.pushed isnt \Success
+#    cb null, data.body.tx
 export get-balance = ({ network, address} , cb)->
     { api-url } = network.api
     req =

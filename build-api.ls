@@ -46,16 +46,16 @@ build-get-balance = ({network, provider})-> ({ account }, cb)->
     return cb err if err?
     cb null, data
 
-build-send-all-funds = ({ network, provider })-> ({ account, to, data}, cb)->
+build-send-all-funds = ({ network, provider })-> ({ account, to, data, fee-type}, cb)->
     send-transaction = build-send-transaction { network, provider }
     get-balance = build-get-balance { network, provider }
     calc-fee = build-calc-fee { network, provider }
     err, amount <- get-balance { account }
     return cb err if err?
-    err, fee <- calc-fee { account, to, amount, data }
+    err, fee <- calc-fee { account, to, amount, data, fee-type }
     return cb err if err?
     all = amount `minus` fee
-    send-transaction { account, to, amount: all, data }, cb
+    send-transaction { account, to, amount: all, data, fee-type }, cb
 
 build-create-account = ({network, provider})-> ({ mnemonic, index }, cb)->
     { get-keys } = provider
