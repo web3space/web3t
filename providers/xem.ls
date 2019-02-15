@@ -4,6 +4,7 @@ require! {
     \../json-parse.ls
     \prelude-ls : { filter, map, head }
     \../math.ls : { minus, div }
+    \../deadline.ls
 }
 export calc-fee = ({ network, tx }, cb)->
     cb null
@@ -21,12 +22,12 @@ transform-transfer = (network, tx)-->
     url = "#{network.api.url}/transfer/#{tx.id}"
     { network, tx: tx.id, amount, fee, time, url, from, to }
 export get-transactions = ({ network, address }, cb)->
-    err, data <- get "#{network.api.api-url}/account?address=#{address}" .end
+    err, data <- get "#{network.api.api-url}/account?address=#{address}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse data.text
     return cb null, [] if not result.raw?
     return cb err if err?
-    err, data <- get "#{network.api.api-url}/account_transactions?id=#{result.raw.id}&iid=0" .end
+    err, data <- get "#{network.api.api-url}/account_transactions?id=#{result.raw.id}&iid=0" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse data.text
     return cb err if err?
@@ -34,7 +35,7 @@ export get-transactions = ({ network, address }, cb)->
         result.transfers
             |> map transform-transfer network
     cb null, txs
-export create-transaction = ({ network, account, to, amount, amount-fee, data, message-type} , cb)-->
+export create-transaction = ({ network, account, recepient, amount, amount-fee, data, message-type, fee-type} , cb)-->
     return cb "Params are required" if not network? or not account? or not recepient? or not amount-fee?
     common = nem.model.objects.create(\common) "", account.private-key
     transfer-transaction = nem.model.objects.get \transferTransaction
@@ -62,7 +63,7 @@ export push-tx = ({ network, rawtx } , cb)-->
         cb res
     nem.com.requests.transaction.announce endpoint, rawtx .then success, failed
 export get-balance = ({ network, address } , cb)->
-    err, data <- get "#{network.api.api-url}/account?address=#{address}" .end
+    err, data <- get "#{network.api.api-url}/account?address=#{address}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse data.text
     return cb err if err?

@@ -5,7 +5,7 @@ export mainnet =
     mask: 'L000000000000000000000000000000000'
     api: 
         provider: \insight
-        url: \https://dogechain.info
+        url: \https://insight.litecore.io
         decimal: 8
     message-prefix: '\x19Litecoin Signed Message:\n'
     bip32:
@@ -33,3 +33,4 @@ export type = \coin
 export enabled = no
 export token = \doge
 export image = \./res/doge-ethnamed.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=DOGE&tsyms=USD).DOGE.USD"

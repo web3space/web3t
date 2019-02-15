@@ -1,6 +1,9 @@
 export mainnet =
     decimals: 8
     tx-fee: \0.0000004
+    tx-fee-options: 
+        fast: \0.000001
+        cheap: \0.0000004
     mask: '1000000000000000000000000000000000'
     api: 
         provider: \insight
@@ -31,7 +34,9 @@ export testnet =
     pubKeyHash: 0x6f
     scriptHash: 0xc4
     wif: 0xef
+export color = \#4650E7
 export type = \coin
 export enabled = yes
 export token = \btc
 export image = \./res/btc-ethnamed.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).BTC.USD"

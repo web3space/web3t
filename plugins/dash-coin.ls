@@ -2,6 +2,9 @@
 export mainnet =
     decimals: 8
     tx-fee: \0.0001
+    tx-fee-options:
+        fast: \0.0001
+        cheap: \0.0000004
     mask: 'X000000000000000000000000000000000'
     api: 
         provider: \insight
@@ -19,6 +22,9 @@ export testnet =
     incorrect: yes
     decimals: 8
     tx-fee: \0.0001
+    tx-fee-options:
+        fast: \0.0001
+        cheap: \0.0000004
     mask: 'y000000000000000000000000000000000'
     topup: \https://test.faucet.dashninja.pl/
     api: 
@@ -33,7 +39,9 @@ export testnet =
     script-hash: 0x13
     wif: 0xef
     dust-threshold: 5460
+export color = \#649BF6
 export type = \coin   
 export enabled = yes 
 export token = \dash
 export image = \./res/dash-ethnamed.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).DASH.USD"

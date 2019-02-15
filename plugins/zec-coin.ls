@@ -29,7 +29,8 @@ export testnet =
     pubKeyHash: 0x1d25
     scriptHash: 0x1cba
     wif: 0xef
-export type = \coin    
+export type = \coin
 export enabled = no
 export token = \zec
 export image = \./res/zcash_icon.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=ZEC&tsyms=USD).ZEC.USD"

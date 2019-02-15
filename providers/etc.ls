@@ -51,24 +51,15 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ web3, fee-type }, cb)->
-    return cb null, \3000000000 if fee-type is \cheap
-    web3.eth.get-gas-price cb
-export create-transaction = ({ network, account, recepient, amount, amount-fee, data, fee-type} , cb)-->
+export create-transaction = ({ network, account, recepient, amount, amount-fee, data} , cb)-->
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     to-wei = -> it `times` dec
-    to-eth -> it `div` dec
     value = to-wei amount
-    err, gas-price <- calc-gas-price { web3, fee-type }
-    return cb err if err?
+    err, gas-price <- web3.eth.get-gas-price
     gas-estimate = to-wei(amount-fee) `div` gas-price
-    err, balance <- web3.eth.get-balance account.address
-    return cb err if err?
-    balance-eth = to-eth balance
-    return cb "Balance is not enough to send tx" if +balance-eth < +(amount `plus` amount-fee)
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -91,6 +82,7 @@ export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
     err, number <- web3.eth.get-balance address
     return cb err if err?
+    #return cb number if number.length > 100
     dec = get-dec network
     balance = number `div` dec
     cb null, balance

@@ -42,13 +42,13 @@ export get-transactions = ({ network, address }, cb)->
     sort = \asc
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
-    err, resp <- get "#{api-url}?#{query}" .timeout { deadline: 50000 } .end
+    err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
     return cb err if err?
     err, result <- json-parse resp.text
     return cb err if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs = 
-        result.result
+        result.result 
             |> filter -> up(it.contract-address) is up(network.address)
             |> map transform-tx network
     cb null, txs
@@ -58,23 +58,28 @@ get-web3 = (network)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-
 calc-gas-price = ({ web3, fee-type }, cb)->
     return cb null, \3000000000 if fee-type is \cheap
     web3.eth.get-gas-price cb
-
-export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type } , cb)-->
+export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type} , cb)-->
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     contract = get-contract-instance web3, network.address
     to-wei = -> it `times` dec
+    to-wei-eth = -> it `times` (10^18)
+    to-eth -> it `div` (10^18)
     value = to-wei amount
     err, gas-price <- calc-gas-price { web3, fee-type }
     return cb err if err?
-    gas-estimate = to-wei(amount-fee) `div` gas-price
-    data =
+    gas-estimate = to-wei-eth(amount-fee) `div` gas-price
+    return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
+    err, balance <- web3.eth.get-balance account.address
+    return cb err if err?
+    balance-eth = to-eth balance
+    return cb "Balance is not enough to send tx" if +balance-eth < +amount-fee
+    data = 
         | contract.methods? => contract.methods.transfer(recepient, value).encodeABI!
         | _ => contract.transfer.get-data recepient, value
     tx = new Tx do

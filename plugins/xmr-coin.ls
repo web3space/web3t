@@ -16,3 +16,4 @@ export type = \coin
 export enabled = no
 export token = \xmr
 export image = \./res/xml-ethnamed.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=XMR&tsyms=USD).XMR.USD"

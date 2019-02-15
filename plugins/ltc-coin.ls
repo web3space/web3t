@@ -1,6 +1,9 @@
 export mainnet = 
     decimals: 8
     tx-fee: \0.0001
+    tx-fee-options: 
+        fast: \0.0001
+        cheap: \0.000014
     mask: 'L000000000000000000000000000000000'
     api: 
         provider: \insight
@@ -16,6 +19,9 @@ export mainnet =
 export testnet = 
     decimals: 8
     tx-fee: \0.0001
+    tx-fee-options: 
+        fast: \0.0001
+        cheap: \0.000014
     topup: \https://litecoin-faucet.com/
     mask: 'n000000000000000000000000000000000'
     api: 
@@ -29,7 +35,9 @@ export testnet =
     pub-key-hash: 0x6f
     script-hash: 0xc4
     wif: 0xef
+export color = \#a04b55
 export type = \coin    
 export enabled = yes
 export token = \ltc
 export image = \./res/litecoin-ethnamed.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).LTC.USD"

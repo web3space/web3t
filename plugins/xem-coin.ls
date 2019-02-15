@@ -31,3 +31,4 @@ export type = \coin
 export enabled = yes
 export token = \xem
 export image = \./res/nem-ethnamed.png
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).XEM.USD"

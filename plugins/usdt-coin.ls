@@ -1,6 +1,9 @@
 export mainnet =
     decimals: 8
-    tx-fee: \0.00005546
+    tx-fee: \0.0001
+    tx-fee-options: 
+        fast: \0.0001
+        cheap: \0.00005546
     tx-fee-in: \btc
     mask: '1000000000000000000000000000000000'
     api: 
@@ -19,7 +22,10 @@ export mainnet =
     scriptHash: 0x05
     wif: 0x80
 export testnet =
-    tx-fee: 0.0001
+    tx-fee: \0.0001
+    tx-fee-options: 
+        fast: \0.0001
+        cheap: \0.00005546
     tx-fee-in: \btc
     disabled: yes
     decimals: 8

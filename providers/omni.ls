@@ -67,7 +67,7 @@ get-outputs = ({ network, address} , cb)-->
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
-export create-transaction = ({ network, account, recepient, amount, amount-fee}, cb)->
+export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type}, cb)->
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
     return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0
@@ -83,21 +83,16 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee},
             |> map (.value)
             |> sum
     return cb 'Total is NaN' if isNaN total
+    return cb "Balance is not enough to send tx" if +(total `minus` fee) < 0
     tx = new BitcoinLib.TransactionBuilder network
     simple_send =
         * "6f6d6e69" # omni
         * to-hex 0, 4
         * to-hex network.propertyid, 12
         * to-hex value, 16
-    #console.log to-hex(0, 4)
-    #console.log to-hex(network.propertyid, 12)
-    #console.log to-hex(value, 16)
-    #return
     data = Buffer.from simple_send.join(''), \hex
     omni-output = BitcoinLib.script.compile [BitcoinLib.opcodes.OP_RETURN, data]
-    #rest = total `minus` value `minus` fee
     rest = total `minus` fee `plus` dust
-    #console.log { rest, total, value, fee, dust }
     tx.add-output recepient, dust
     tx.add-output omni-output, 0
     tx.add-output account.address, +rest
