@@ -54,7 +54,7 @@ get-dec = (network)->
 calc-gas-price = ({ web3, fee-type }, cb)->
     return cb null, \3000000000 if fee-type is \cheap
     web3.eth.get-gas-price cb
-export create-transaction = ({ network, account, recepient, amount, amount-fee, data, fee-type} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type} , cb)-->
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -74,7 +74,7 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
         gas-price: to-hex gas-price
         value: to-hex value
         gas: to-hex gas-estimate
-        to: recepient
+        to: recipient
         from: account.address
         data: data ? ""
     tx.sign private-key
@@ -87,6 +87,8 @@ export push-tx = ({ network, rawtx } , cb)-->
     web3 = get-web3 network
     err, txid <- web3.eth.send-signed-transaction rawtx
     cb err, txid
+export check-tx-status = ({ network, tx }, cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
     err, number <- web3.eth.get-balance address

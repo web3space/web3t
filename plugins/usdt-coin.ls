@@ -12,7 +12,7 @@ export mainnet =
         provider: \omni
         url: \https://omniexplorer.info
         decimal: 8
-    propertyid: '31'
+    propertyid: 31
     message-prefix: '\x18Bitcoin Signed Message:\n'
     bech32: 'bc'
     bip32:
@@ -37,7 +37,7 @@ export testnet =
         api-url-btc: \https://testnet.blockexplorer.com
         decimal: 8
     messagePrefix: '\x18Bitcoin Signed Message:\n'
-    propertyid: '31'
+    propertyid: 31
     bech32: 'tb'
     bip32:
         public: 0x043587cf

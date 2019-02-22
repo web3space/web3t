@@ -3,7 +3,7 @@ require! {
     \superagent : { get }
     \../json-parse.ls
     \prelude-ls : { filter, map, head }
-    \../math.ls : { minus, div }
+    \../math.ls : { minus, div, plus }
     \../deadline.ls
 }
 export calc-fee = ({ network, tx }, cb)->
@@ -35,13 +35,17 @@ export get-transactions = ({ network, address }, cb)->
         result.transfers
             |> map transform-transfer network
     cb null, txs
-export create-transaction = ({ network, account, recepient, amount, amount-fee, data, message-type, fee-type} , cb)-->
-    return cb "Params are required" if not network? or not account? or not recepient? or not amount-fee?
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, message-type, fee-type, tx-type} , cb)-->
+    return cb "Params are required" if not network? or not account? or not recipient? or not amount-fee?
+    err, xem-balance <- get-balance { network, account.address }
+    return cb err if err?
+    return cb "Balance is not enough to send this amount" if +xem-balance < +(amount `plus` amount-fee)
+    #return cb "Balance is not enough to send tx" if +balance-eth < +(amount `plus` amount-fee)
     common = nem.model.objects.create(\common) "", account.private-key
     transfer-transaction = nem.model.objects.get \transferTransaction
     transfer-transaction.amount = amount
     transfer-transaction.message = data ? ""
-    transfer-transaction.recipient = recepient
+    transfer-transaction.recipient = recipient
     transfer-transaction.is-multisig = no 
     transfer-transaction.multisig-account = ""
     transfer-transaction.message-type = message-type ? 0
@@ -62,6 +66,8 @@ export push-tx = ({ network, rawtx } , cb)-->
     failed = (res)->
         cb res
     nem.com.requests.transaction.announce endpoint, rawtx .then success, failed
+export check-tx-status = ({ network, tx }, cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address } , cb)->
     err, data <- get "#{network.api.api-url}/account?address=#{address}" .timeout { deadline } .end
     return cb err if err?

@@ -67,7 +67,7 @@ get-outputs = ({ network, address} , cb)-->
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
-export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type}, cb)->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type}, cb)->
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
     return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0
@@ -84,6 +84,9 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
             |> sum
     return cb 'Total is NaN' if isNaN total
     return cb "Balance is not enough to send tx" if +(total `minus` fee) < 0
+    err, omni-balance <- get-balance { network, account.address }
+    return cb err if err?
+    return cb "Balance is not enough to send this amount" if +omni-balance < +amount
     tx = new BitcoinLib.TransactionBuilder network
     simple_send =
         * "6f6d6e69" # omni
@@ -93,7 +96,7 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
     data = Buffer.from simple_send.join(''), \hex
     omni-output = BitcoinLib.script.compile [BitcoinLib.opcodes.OP_RETURN, data]
     rest = total `minus` fee `plus` dust
-    tx.add-output recepient, dust
+    tx.add-output recipient, dust
     tx.add-output omni-output, 0
     tx.add-output account.address, +rest
     apply = (output, i)->
@@ -111,10 +114,10 @@ transform-tx = ({ network, address }, t)-->
     network = \usdt 
     dec = get-dec network
     tx = t.txid
-    amount = t.amount `div` dec
+    amount = t.amount
     time = t.blocktime
     url = "#{url}/tx/#{tx}"
-    fee = t.fee `div` dec
+    fee = t.fee
     from = 
         | t.ismine is yes => address
         | _ => t.sendingaddress
@@ -129,7 +132,7 @@ export get-transactions = ({ network, address }, cb)->
     err, data <- post("#{api-url}/v1/address/addr/details/", req).type('form').end
     return cb err if err?
     return cb "expected object" if typeof! data isnt \Object
-    return cb "expected array" if data.body.transactions isnt \Array
+    return cb "expected array" if typeof! data.body?transactions isnt \Array
     txs =
         data.body.transactions
             |> filter (.propertyid is network.propertyid)
@@ -143,7 +146,7 @@ export check-decoded-data = (decoded-data, data)->
 export push-tx = ({ network, rawtx } , cb)-->
     err, res <- post "#{get-api-url network}/tx/send", { rawtx } .end
     return cb err if err?
-    cb null, res.body
+    cb null, res.body?txid
 #export push-tx = ({ network, rawtx } , cb)-->
 #    { api-url } = network.api
 #    req =
@@ -154,6 +157,8 @@ export push-tx = ({ network, rawtx } , cb)-->
 #    return cb "status isnt OK" if data.body.status isnt \ok
 #    return cb "not pushed" if data.body.pushed isnt \Success
 #    cb null, data.body.tx
+export check-tx-status = ({ network, tx }, cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address} , cb)->
     { api-url } = network.api
     req =

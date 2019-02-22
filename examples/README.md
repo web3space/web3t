@@ -16,7 +16,7 @@
   
 * Send Transactions
 
-  Requires account object, recepient (to) and amount
+  Requires account object, recipient (to) and amount
   
 ## Examples written on [Livscript](livescript.net) Language. This language compiles into Javascript.
    

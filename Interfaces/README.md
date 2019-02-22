@@ -36,7 +36,7 @@ export getBalance = ( {address, network} , cb)=>
 export getTransactions = ({ address, network }, cb)=>
     cb(null, ...); //Get array or transactions
     
-export createTransaction = ({account, recepient, amount, amount-fee, data} , cb)-->
+export createTransaction = ({account, recipient, amount, amount-fee, data} , cb)-->
     cb(null, ...); //Get signed transaction (hex)
 
 export calcFee = ({tx, network} , cb)-->

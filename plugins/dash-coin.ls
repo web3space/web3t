@@ -5,10 +5,13 @@ export mainnet =
     tx-fee-options:
         fast: \0.0001
         cheap: \0.0000004
+        instant-per-input: \0.001
+        private-per-input: \0.05
     mask: 'X000000000000000000000000000000000'
     api: 
         provider: \insight
         url: \https://insight.dash.org
+        mixing-info: "url(https://mydashwallet.org/GeneratePrivateSendAddress?toAddress=:address)"
         decimal: 8
     message-prefix: '\x19DarkCoin Signed Message:\n'
     bip32:
@@ -39,6 +42,7 @@ export testnet =
     script-hash: 0x13
     wif: 0xef
     dust-threshold: 5460
+export tx-types = <[ regular instant private ]>
 export color = \#649BF6
 export type = \coin   
 export enabled = yes 

@@ -8,7 +8,32 @@ require! {
     \whitebox : { get-fullpair-by-index }
     \../deadline.ls
 }
-export calc-fee = ({ network, tx }, cb)->
+#0.25m + 0.05m * numberOfInputs
+#private send https://github.com/DeltaEngine/MyDashWallet/blob/master/Node/DashNode.cs#L18
+calc-fee-private = ({ network, tx, tx-type, account, fee-type }, cb)->
+    return cb "address cannot be empty" if (account?address ? "") is ""
+    o = network?tx-fee-options
+    tx-fee = o?[fee-type] ? network.tx-fee ? 0
+    err, outputs <- get-outputs { network, account.address }
+    return cb err if err?
+    number-of-inputs = if outputs.length > 0 then outputs.length else 1
+    fee =
+        (tx-fee `times` 2) `plus` (number-of-inputs `times` o.private-per-input)
+    cb null, fee
+calc-fee-instantx = ({ network, tx, tx-type, account, fee-type }, cb)->
+    return cb "address cannot be empty" if (account?address ? "") is ""
+    o = network?tx-fee-options
+    tx-fee = o?[fee-type] ? network.tx-fee ? 0
+    err, outputs <- get-outputs { network, account.address }
+    return cb err if err?
+    number-of-inputs = if outputs.length > 0 then outputs.length else 1
+    fee =
+        (number-of-inputs `times` o.instant-per-input)
+    cb null, fee
+export calc-fee = (config, cb)->
+    { network, tx, tx-type, account } = config
+    return calc-fee-private config, cb if tx-type is \private
+    return calc-fee-instantx config, cb if tx-type is \instant
     cb null
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
@@ -33,7 +58,46 @@ get-outputs = ({ network, address} , cb)-->
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
-export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type}, cb)->
+parse-rate-string = (usd-info)->
+    [_, url, extract] = usd-info.match(/url\(([^)]+)\)(.+)?/)
+    { url, extract }
+extract-val = (data, [head, ...tail])->
+    return data if not head?
+    extract-val data[head], tail
+parse-result = (text, extract, cb)->
+    return cb null, text if (extract ? "") is ""
+    err, model <- json-parse text
+    return cb err if err?
+    result = extract-val model, extract
+    cb null, result
+get-deposit-address = ({ amount, recipient, network }, cb)->
+    { mixing-info } = network?api ? {}
+    return cb "Mixing Pool is not connected" if typeof! mixing-info isnt \String
+    { url, extract } = parse-rate-string mixing-info
+    err, data <- get url .end
+    return cb err if err?
+    cb null, parse-result(data.text, extract)
+add-outputs-private = (config, cb)->
+    { tx-type, rest, total, value, fee, tx, recipient, network } = config
+    return add-outputs-private config, cb if tx-type is \private
+    o = network?tx-fee-options
+    rest = total `minus` value `minus` fee
+    fee2 = o?[fee-type] ? network.tx-fee ? 0
+    amount = value `plus` fee `minus` fee2
+    err, address <- get-deposit-address { recipient, amount, network }
+    return cb err if err?
+    tx.add-output address, +value
+    tx.add-output account.address, +rest
+    cb null
+add-outputs = (config, cb)->
+    { tx-type, rest, total, value, fee, tx, recipient } = config
+    return add-outputs-private config, cb if tx-type is \private
+    rest = total `minus` value `minus` fee
+    tx.add-output recipient, +value
+    tx.add-output account.address, +rest
+    cb null
+#recipient
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type}, cb)->
     err, outputs <- get-outputs { network, account.address}
     return cb err if err?
     return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0
@@ -47,13 +111,11 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
         outputs 
             |> map (.value)
             |> sum
-    return cb "Balance is not enough to send tx" if +(total `minus` fee) < 0
+    return cb "Balance is not enough to send tx" if +((total `minus` fee) `minus` value) < 0
     return cb 'Total is NaN' if isNaN total
     tx = new BitcoinLib.TransactionBuilder network
-    rest = total `minus` value `minus` fee
-    tx.add-output recepient, +value
-    tx.add-output account.address, +rest
-    #console.log {value, rest}
+    err <- add-outputs { tx-type, rest, total, value, fee, tx, recipient, network }
+    return cb err if err?
     apply = (output, i)->
         tx.add-input output.txid, output.vout
     sign = (output, i)->
@@ -63,10 +125,13 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
     outputs.for-each sign
     rawtx = tx.build!.to-hex!
     cb null, { rawtx }
-export push-tx = ({ network, rawtx } , cb)-->
-    err, res <- post "#{get-api-url network}/tx/send", { rawtx } .end
+export push-tx = ({ network, rawtx, tx-type } , cb)-->
+    send-type =
+        | tx-type is \instant => \sendix
+        | _ => \send
+    err, res <- post "#{get-api-url network}/tx/#{send-type}", { rawtx } .end
     return cb err if err?
-    cb null, res.body
+    cb null, res.body?txid
 export get-balance = ({ address, network } , cb)->
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/addr/#{address}/balance" .timeout { deadline } .end
@@ -122,6 +187,8 @@ transform-tx = (config, t)-->
 get-api-url = (network)->
     api-name = network.api.api-name ? \api
     "#{network.api.url}/#{api-name}"
+export check-tx-status = ({ network, tx }, cb)->
+    cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/txs/?address=#{address}" .timeout { deadline: 5000 } .end

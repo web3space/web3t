@@ -1,0 +1,120 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.4
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/var/www/ethnamed/web3t',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /root/.npm/w3w/0.1.0/package.tgz not in flight; packing
+9 verbose correctMkdir /root/.npm correctMkdir not in flight; initializing
+10 info lifecycle w3w@0.1.0~prepublish: w3w@0.1.0
+11 silly lifecycle w3w@0.1.0~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/root/.npm/w3w/0.1.0/package.tgz',
+12 verbose tar pack   '/var/www/ethnamed/web3t' ]
+13 verbose tarball /root/.npm/w3w/0.1.0/package.tgz
+14 verbose folder /var/www/ethnamed/web3t
+15 verbose addLocalTarball adding from inside cache /root/.npm/w3w/0.1.0/package.tgz
+16 verbose correctMkdir /root/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd w3w@0.1.0
+18 verbose afterAdd /root/.npm/w3w/0.1.0/package/package.json not in flight; writing
+19 verbose correctMkdir /root/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /root/.npm/w3w/0.1.0/package/package.json written
+21 silly publish { name: 'w3w',
+21 silly publish   version: '0.1.0',
+21 silly publish   description: 'Unified Open Source Coin Registry (Same interface for all possible coins, tokens)',
+21 silly publish   main: 'index.js',
+21 silly publish   scripts:
+21 silly publish    { test: 'echo "Error: no test specified" && exit 1',
+21 silly publish      postinstall: 'rm -rf ./node_modules/bitcore-message/node_modules' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/ethnamed/web3t.git' },
+21 silly publish   keywords: [ 'crypto', 'standard', 'ethnamed' ],
+21 silly publish   author: { name: 'Ethnamed Project' },
+21 silly publish   license: 'ISC',
+21 silly publish   bugs: { url: 'https://github.com/ethnamed/web3t/issues' },
+21 silly publish   homepage: 'https://github.com/ethnamed/web3t#readme',
+21 silly publish   dependencies:
+21 silly publish    { 'bitcoinjs-lib': '^4.0.2',
+21 silly publish      'blockstarter-ripple': '0.0.4',
+21 silly publish      'ethereumjs-tx': '^1.3.7',
+21 silly publish      'ethereumjs-util': '^5.2.0',
+21 silly publish      moment: '^2.22.2',
+21 silly publish      'nem-sdk': '^1.6.7',
+21 silly publish      postinstall: '^0.4.2',
+21 silly publish      'prelude-ls': '^1.1.2',
+21 silly publish      qs: '^6.5.2',
+21 silly publish      'require-ls': '0.0.8',
+21 silly publish      superagent: '^4.0.0-beta.5',
+21 silly publish      web3: '^1.0.0-beta.36',
+21 silly publish      whitebox: '^0.1.60' },
+21 silly publish   readme: '\n<p align="center">\n  <img src="https://res.cloudinary.com/nixar-work/image/upload/v1537612969/Screen_Shot_2018-09-22_at_13.41.49.png">\n</p>\n\n\nImplementation of web3 protocol\n\n#### Demo\n----\n\n[WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)\n\n#### Install\n----\n\n```\nnpm i web3t\nrm -rf ./node_modules/bitcore-message/node_modules\n```\n\n#### Benefits\n----\n\n* Web3t is open source free covered by test library available for everyone and can be used to build an exchange, wallet and other crypto systems.\n* Opened Standard. Everyone can contribute to add his coin.\n* Used by [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)\n* Partially Compatible with [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)\n* Compatible with MetaMask Web3 Standard for Ethereum\n\n#### Support\n----\n\n* BTC (Bitcoin)\n* LTC (Litecoin)\n* ETH (Ethereum)\n* DASH \n* XEM (NEM)\n* XRP (Ripple)\n* [ANY_COIN]\n\n#### Init Builder\n----\n\n```Javascript\n\nvar buildWeb3t = require(\'web3t\');\n\n```\n\n#### Build Testnet\nJust pass the `testnet` word into constructor.\n\n----\n\n```Javascript \nfunction testnet(err, web3t) {\n    ... \n\n}\n\nbuildWeb3t("testnet", testnet);\n\n```\n\nThere are other advanced possible ways to build the web3 object for case when you need to define a special testnet. It is useful for case when you have a lot of faucets of special testnet and write unit tests.\n\n```Javascript \nfunction testnet(err, web3t) {\n    ... \n\n}\n\nbuildWeb3t("testnet, ropsten for eth", testnet);\n\n```\n\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/yw5lj63igd4r)\n\n\n#### Build Mainnet\n----\n\n```Javascript \nfunction mainnet(err, web3t) {\n    ... \n}\n\nbuildWeb3t("mainnet", mainnet);\n\n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Advanced Builder\n----\n\n```Javascript \nfunction mainnet(err, web3t) {\n    ... \n}\n\nvar config = {\n   mode: "mainnet"\n   plugins: {},\n   providers: {}\n}\n\nbuildWeb3t(config, mainnet);\n\n```\n\n#### Example\n----\n\n```Javascript\n\nweb3t.eth.sendTransaction({ to, amount }, cb);\n\nweb3t.btc.sendTransaction({ to, amount }, cb);\n\nweb3t.zec.sendTransaction({ to, amount }, cb);\n\nweb3t.[ANY_COIN].sendTransaction({ to, amount }, cb);\n  \n```\n\n#### Send All Funds\n----\nSimplified Method to Send All Funds. Wrapper on `sendTransaction`\n\n```Javascript\n\nvar cb => (err, tx) {\n  \n}\n\nweb3t.[ANY_COIN].sendAllFunds({ to, data }, cb);\n  \n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Create Account\n----\nYou can create a lot of addresses by providing different index\n\n```Javascript\n\nvar cb => (err, { address, privateKey, publicKey }) {\n  \n}\n\nweb3t.[ANY_COIN].createAccount({ mnemonic, index }, cb);\n  \n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Get Balance\n----\nGet Balance by account object ({ address, privateKey })\nUsually it does not need the private key but coins like monero needs decrypt data to read the balance\n\n```Javascript  \n\n  var cb => (err, balance) {\n  \n  }\n\n  web3t.[ANY_COIN].getBalance({ account }, cb);\n  \n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Get History of Transactions\n----\nList of all transactions. Same result structure for all coins\n\n```Javascript \n  \n  var cb => (err, transactions) {\n  \n  }\n  \n  web3t.[ANY_COIN].getHistory({ account }, cb);\n  \n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Calc Fee \n----\nYou need to define the default fee in `plugin` but for NEM, Monero and other coins you need to calculate the fee\n\n```Javascript   \n  \n  var cb => (err, amountFee) {\n  \n  }\n  \n  web3t.[ANY_COIN].calcFee({ account, to, amount, data}, cb); // => fee\n  \n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Create and Send Transaction\n----\nThis transaction consists of `create`, `sign`, `push` transaction\n\n```Javascript   \n\n  var cb => (err, receipt) {\n  \n  }\n\n  web3t.[ANY_COIN].createTransaction({ account, to, amount, data}, cb); // => tx\n\n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Create and Sign Transaction\n----\nIn some cases you need to have the hex of transaction before for some reason before you push it\n\n```Javascript   \n\n  var cb => (err, rawtx) {\n  \n  }\n\n  web3t.[ANY_COIN].signTransaction({ account, to, amount, data}, cb); // => rawtx\n\n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n#### Broadcast the Signed Transaction\n----\nPush the signed transaction (hex) into blockchain\n\n```Javascript   \n\n  var cb => (err, receipt) {\n  \n  }\n\n  web3t.[ANY_COIN].pushTransaction(rawtx, cb); // => rawtx\n\n```\n[![button](https://res.cloudinary.com/nixar-work/image/upload/v1537609862/button_run-it.png)](https://runkit.com/embed/myx74ap01ge6)\n\n\n\n#### Compatibility\n----\n\n`sendTransaction` and `getBalance` are compatible with [WEB3 Wallet](https://chrome.google.com/webstore/detail/web3-wallet/ifagkkjladbaocinenklelnaailedikm)\n\n\n#### How to Contibute\n----\n\nYou can find issues but we improve it daily.\nPlease do not judge but help.\n\n1. Please modify only `plugins`, `providers`, `package.json`\n2. `plugin` should consists only network information and implements `Interfaces/coin-interface.ts`\n3. `provider` should implements `Interfaces/protocol-interface.ts`\n4. Send a pull request\n5. Any question `a.stegno@gmail.com`\n\n#### Simple Summary\n----\n\nThe management of different coins should be similar, so that there is no need for each to develop a new infrastructure, and connect it to the existing one\n\n\n#### Abstract\n----\n\nWeb 3.0 is an inclusive set of protocols to provide building blocks for application makers. These building blocks take the place of traditional web technologies like HTTP, AJAX and MySQL, but present a whole new way of creating applications. These technologies give the user strong and verifiable guarantees about the information they are receiving, what information they are giving away, and what they are paying and what they are receiving in return. By empowering users to act for themselves within low-barrier markets, we can ensure censorship and monopolization have fewer places to hide. Consider Web 3.0 to be an executable Magna Carta — “the foundation of the freedom of the individual against the arbitrary authority of the despot.”\n\nPlease read more here [article](https://medium.com/@gavofyork/why-we-need-web-3-0-5da4f2bf95ab)\n\n#### Motivation\n----\n\nThere was already implemented solution Web 3.0 in Metamask Wallet and used by dozen of dapps.\nIt is great. But it is available only for ETH.\nWe would like to extend the same protocol for other coins\nIt will help to \n\n* connect different coins to existent web 2.0\n* quickly create a list of supported crypto currency for exchanges, multicurrency wallets and help new projects get the existing infrastructure instantly and effortlessly\n* develop the cross-chain interface\n\n#### Copyright\n----\n\nCopyright and related rights waived via CC0.\n\n<p align="center">\n  <img src="https://res.cloudinary.com/nixar-work/image/upload/v1537613131/Screen_Shot_2018-09-22_at_13.45.07.png">\n</p>\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '4e4e9616c60b985aafaf31a38498a033745d274c',
+21 silly publish   _id: 'w3w@0.1.0',
+21 silly publish   _shasum: '4291eecba8da64f0a866a94a8e087c7e12cfce22',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name w3w
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'w3w',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'w3w',
+26 silly mapToRegistry   name: 'w3w',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/w3w
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /root/.npm/w3w/0.1.0/package.tgz
+30 verbose request uri https://registry.npmjs.org/w3w
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 4:30:47 AM
+33 verbose request using bearer token for auth
+34 verbose request id 00ba3f75aa1662dd
+35 http request PUT https://registry.npmjs.org/w3w
+36 http 403 https://registry.npmjs.org/w3w
+37 verbose headers { date: 'Fri, 15 Feb 2019 04:30:48 GMT',
+37 verbose headers   'content-type': 'application/json',
+37 verbose headers   'transfer-encoding': 'chunked',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'set-cookie': [ '__cfduid=dbcdf2aed6aa655745935960072ddf4ce1550205047; expires=Sat, 15-Feb-20 04:30:47 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+37 verbose headers   'cf-ray': '4a950a8d0b957b06-MCI',
+37 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+37 verbose headers   vary: 'Accept-Encoding',
+37 verbose headers   server: 'cloudflare',
+37 verbose headers   'content-encoding': 'gzip' }
+38 verbose request invalidating /root/.npm/registry.npmjs.org/w3w on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: You do not have permission to publish "w3w". Are you logged in as the correct user? : w3w
+40 verbose stack     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+40 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:216:7
+40 verbose stack     at Gunzip.onEnd (zlib.js:227:5)
+40 verbose stack     at emitNone (events.js:91:20)
+40 verbose stack     at Gunzip.emit (events.js:185:7)
+40 verbose stack     at endReadableNT (_stream_readable.js:974:12)
+40 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:80:11)
+40 verbose stack     at process._tickCallback (internal/process/next_tick.js:104:9)
+41 verbose statusCode 403
+42 verbose pkgid w3w
+43 verbose cwd /var/www/ethnamed/web3t
+44 error Linux 4.15.18-5-pve
+45 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "publish"
+46 error node v6.11.4
+47 error npm  v3.10.10
+48 error code E403
+49 error You do not have permission to publish "w3w". Are you logged in as the correct user? : w3w
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]

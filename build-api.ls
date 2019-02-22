@@ -33,7 +33,7 @@ build-send-transaction = ({network, provider})-> ({ account, to, amount, data, f
     calc-fee = build-calc-fee { network, provider }
     err, amount-fee <- calc-fee { account, to, amount, data, fee-type }
     return cb err if err?
-    err, data <- create-transaction { account, recepient: to, amount, data, network, amount-fee, fee-type }
+    err, data <- create-transaction { account, recipient: to, amount, data, network, amount-fee, fee-type }
     return cb err if err?
     err, data <- push-tx { network, data.rawtx }
     return cb err if err?

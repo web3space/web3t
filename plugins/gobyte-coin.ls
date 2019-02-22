@@ -4,6 +4,10 @@ export mainnet =
     tx-fee-options: 
         fast: \0.0005
         cheap: \0.00000226
+        instant-per-input: \0.0001
+        instant-service-price: 0
+        private-per-input: \0.005
+        private-service-price: \0.025
     mask: '1000000000000000000000000000000000'
     api:
         provider: \insight
@@ -21,9 +25,11 @@ export mainnet =
     dust-threshold: 5460
 export testnet =
     tx-fee: \0.0005
-    tx-fee-options: 
+    tx-fee-options:
         fast: \0.0005
         cheap: \0.00000226
+        instant-per-input: \0.0001
+        private-per-input: \0.005
     decimals: 8
     mask: 'n000000000000000000000000000000000'
     api:
@@ -41,6 +47,7 @@ export testnet =
     scriptHash: 0x14 #base58Prefixes[SCRIPT_ADDRESS]
     wif: 0xf0 #base58Prefixes[SECRET_KEY]
     dust-threshold: 5460
+export tx-types = <[ regular instant private ]>
 export color = \#185C9D
 export type = \coin
 export enabled = yes

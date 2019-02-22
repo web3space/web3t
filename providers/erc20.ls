@@ -61,7 +61,8 @@ get-dec = (network)->
 calc-gas-price = ({ web3, fee-type }, cb)->
     return cb null, \3000000000 if fee-type is \cheap
     web3.eth.get-gas-price cb
-export create-transaction = ({ network, account, recepient, amount, amount-fee, fee-type} , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type} , cb)-->
+    #throw "check-amount-fee #{amount-fee} #{fee-type}"
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -69,7 +70,7 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
     contract = get-contract-instance web3, network.address
     to-wei = -> it `times` dec
     to-wei-eth = -> it `times` (10^18)
-    to-eth -> it `div` (10^18)
+    to-eth = -> it `div` (10^18)
     value = to-wei amount
     err, gas-price <- calc-gas-price { web3, fee-type }
     return cb err if err?
@@ -79,9 +80,12 @@ export create-transaction = ({ network, account, recepient, amount, amount-fee, 
     return cb err if err?
     balance-eth = to-eth balance
     return cb "Balance is not enough to send tx" if +balance-eth < +amount-fee
+    err, erc-balance <- get-balance { network, account.address }
+    return cb err if err?
+    return cb "Balance is not enough to send this amount" if +erc-balance < +amount
     data = 
-        | contract.methods? => contract.methods.transfer(recepient, value).encodeABI!
-        | _ => contract.transfer.get-data recepient, value
+        | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
+        | _ => contract.transfer.get-data recipient, value
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -100,6 +104,8 @@ export push-tx = ({ network, rawtx } , cb)-->
     web3 = get-web3 network
     err, txid <- web3.eth.send-signed-transaction rawtx
     cb err, txid
+export check-tx-status = ({ network, tx }, cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address} , cb)->
     web3 = get-web3 network
     contract = get-contract-instance web3, network.address

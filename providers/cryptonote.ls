@@ -37,6 +37,6 @@ export get-balance = ({address, network} , cb)->
     
 export get-transactions = ({ address, network }, cb)->
     
-export create-transaction = ({account, recepient, amount, amount-fee, data} , cb)-->
+export create-transaction = ({account, recipient, amount, amount-fee, data, tx-type} , cb)-->
     
 #get-balance {}

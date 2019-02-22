@@ -14,7 +14,7 @@ interface PushTxRequest {
 interface TransactionRequest {
     network: Network;
     sender: number; 
-    recepient: number;
+    recipient: number;
     amount: number; 
     amountFee: number; 
     data: number;

@@ -9,6 +9,8 @@ export mainnet =
         provider: \insight
         url: \https://insight.bitpay.com
         decimal: 8
+        alternative:
+            balance: \https://blockchain.info/q/addressbalance/:address
     message-prefix: '\x18Bitcoin Signed Message:\n'
     bech32: 'bc'
     bip32:
