@@ -13,6 +13,7 @@ export mainnet =
         provider: \insight
         url: \https://insight.gobyte.network
         api-name: \insight-api-gobyte
+        mixing-list: "https://explorer.gobyte.network:5002/api/masternodelist"
         decimal: 8
     message-prefix: '\x18GoByte Signed Message:\n'
     bech32: 'bc'
@@ -47,8 +48,26 @@ export testnet =
     scriptHash: 0x14 #base58Prefixes[SCRIPT_ADDRESS]
     wif: 0xf0 #base58Prefixes[SECRET_KEY]
     dust-threshold: 5460
-export tx-types = <[ regular instant private ]>
-export color = \#185C9D
+export tx-types = <[ regular instant ]>
+export color = \#545DF1
+export branding =
+    logo: \https://www.gobyte.network/img/logo.svg
+    title: "GoByte Multicurrency Wallet"
+export links =
+    *   image: \https://www.gobyte.network/img/fb.png
+        href: \https://wwww.facebook.com/gobytenetwork
+    *   image: \https://www.gobyte.network/img/twitter.png
+        href: \https://twitter.com/gobytenetwork
+    *   image: \https://www.gobyte.network/img/reddit.png
+        href: \https://www.reddit.com/r/GoByte
+    *   image: \https://www.gobyte.network/img/slack.png
+        href: \https://gobyte.slack.com/
+    *   image: \https://www.gobyte.network/img/discordapp.png
+        href: \https://discord.gobyte.network/
+    *   image: \https://www.gobyte.network/img/telegram.png
+        href: \https://t.me/gobytenetwork
+    *   image: \https://www.gobyte.network/img/github.png
+        href: \https://github.com/gobytecoin/gobyte
 export type = \coin
 export enabled = yes
 export token = \gbx

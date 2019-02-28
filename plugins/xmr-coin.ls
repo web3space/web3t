@@ -4,7 +4,7 @@ export mainnet =
         provider: \cryptonote
         url: \https://xmrchain.com
         api-url: \https://xmrchain.com/api
-        node: \http://node.moneroworld.com:18089/json_rpc
+        node-url: \http://node.moneroworld.com:18089/json_rpc
 export testnet =
     message-prefix: 'Monero'
     api:
@@ -12,7 +12,8 @@ export testnet =
         url: \https://testnet.xmrchain.com
         api-url: \https://testnet.xmrchain.com/api
         node-url: \testnet.xmrchain.net:28081/json_rpc
-export type = \coin    
+export type = \coin
+export color = \#FF6601
 export enabled = no
 export token = \xmr
 export image = \./res/xml-ethnamed.png

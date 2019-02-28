@@ -23,7 +23,6 @@ transform-tx = (network, t)-->
     network = \eth
     tx = t.hash
     amount = t.value `div` dec
-    console.log t.value, dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee = t.cumulative-gas-used `times` t.gas-price `div` dec
@@ -60,7 +59,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
     to-wei = -> it `times` dec
-    to-eth -> it `div` dec
+    to-eth = -> it `div` dec
     value = to-wei amount
     err, gas-price <- calc-gas-price { web3, fee-type }
     return cb err if err?

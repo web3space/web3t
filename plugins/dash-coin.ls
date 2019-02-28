@@ -42,7 +42,7 @@ export testnet =
     script-hash: 0x13
     wif: 0xef
     dust-threshold: 5460
-export tx-types = <[ regular instant private ]>
+export tx-types = <[ regular instant ]>
 export color = \#649BF6
 export type = \coin   
 export enabled = yes 

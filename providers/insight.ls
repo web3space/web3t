@@ -10,6 +10,23 @@ require! {
 }
 #0.25m + 0.05m * numberOfInputs
 #private send https://github.com/DeltaEngine/MyDashWallet/blob/master/Node/DashNode.cs#L18
+#https://github.com/StaminaDev/dash-insight-api/blob/master/lib/index.js#L244
+get-masternode-list = ({ network }, cb)->
+    err, res <- get "#{get-api-url network}/masternodes/list" .end
+    return cb err if err?
+    return cb "expected array" if typeof! res.body isnt \Array
+    list =
+        res.body |> filter (.status is \ENABLED) 
+    cb null, list
+find-max = (first, current)->
+    if current.rank < first.rank then current else first
+get-one-of-masternode = ({ network }, cb)->
+    err, list <- get-masternode-list { network }
+    return cb err if err?
+    item =
+        list |> foldl find-max, list.0
+    return cb "Not Found" if not item?
+    cb null, item
 calc-fee-private = ({ network, tx, tx-type, account, fee-type }, cb)->
     return cb "address cannot be empty" if (account?address ? "") is ""
     o = network?tx-fee-options
@@ -50,11 +67,9 @@ add-value = (network, it)-->
         | _ => 0
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
-    body <- get "#{get-api-url network}/addr/#{address}/utxo" .then
-    err, result <- json-parse body.text
+    err, data <- get "#{get-api-url network}/addr/#{address}/utxo" .end
     return cb err if err?
-    return cb "Result is not an array" if typeof! result isnt \Array
-    result
+    data.body
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
@@ -70,16 +85,25 @@ parse-result = (text, extract, cb)->
     return cb err if err?
     result = extract-val model, extract
     cb null, result
-get-deposit-address = ({ amount, recipient, network }, cb)->
+get-deposit-address-info = ({ amount, recipient, network }, cb)->
     { mixing-info } = network?api ? {}
     return cb "Mixing Pool is not connected" if typeof! mixing-info isnt \String
     { url, extract } = parse-rate-string mixing-info
     err, data <- get url .end
     return cb err if err?
     cb null, parse-result(data.text, extract)
+get-deposit-address-from-list = ({ amount, recipient, network },cb)->
+    err, list <- get-masternode-list { network }
+    return cb err if err?
+    console.log err, list
+    cb "Not Implemented"
+get-deposit-address = ({ amount, recipient, network }, cb)->
+    { mixing-info } = network?api ? {}
+    return get-deposit-address-info { amount, recipient, network }, cb if typeof! mixing-info is \String
+    get-deposit-address-from-list { amount, recipient, network }, cb
 add-outputs-private = (config, cb)->
     { tx-type, rest, total, value, fee, tx, recipient, network } = config
-    return add-outputs-private config, cb if tx-type is \private
+    #return add-outputs-private config, cb if tx-type is \private
     o = network?tx-fee-options
     rest = total `minus` value `minus` fee
     fee2 = o?[fee-type] ? network.tx-fee ? 0
@@ -133,6 +157,9 @@ export push-tx = ({ network, rawtx, tx-type } , cb)-->
     return cb err if err?
     cb null, res.body?txid
 export get-balance = ({ address, network } , cb)->
+    #err, node <- get-one-of-masternode { network }
+    #console.log { err, node }
+    #node.ip
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/addr/#{address}/balance" .timeout { deadline } .end
     return cb err if err? or data.text.length is 0

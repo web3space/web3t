@@ -6,6 +6,10 @@ require! {
     \./plugins/xem-coin.ls : xem
     \./plugins/xrp-coin.ls : xrp
     \./plugins/usdt-coin.ls : usdt
+    \./plugins/eos-coin.ls : eos
+    \./plugins/xlm-coin.ls : xlm
+    \./plugins/trx-coin.ls : trx
+    \./plugins/xmr-coin.ls : xmr
     \prelude-ls : { obj-to-pairs, pairs-to-obj, filter }
 }
 only-coins = (plugins)->
@@ -17,6 +21,6 @@ extend-coins = (coins, config)->
     return if typeof! config.plugins isnt \Object
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
-    def = { btc, dash, eth, ltc, xem, usdt }
+    def = { btc, dash, eth, ltc, xem, usdt, eos, xlm, trx, xmr }
     extend-coins def, config
     cb null, def
