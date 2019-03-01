@@ -12,7 +12,7 @@ require! {
 #private send https://github.com/DeltaEngine/MyDashWallet/blob/master/Node/DashNode.cs#L18
 #https://github.com/StaminaDev/dash-insight-api/blob/master/lib/index.js#L244
 get-masternode-list = ({ network }, cb)->
-    err, res <- get "#{get-api-url network}/masternodes/list" .end
+    err, res <- get "#{get-api-url network}/masternodes/list" .timeout { deadline } .end
     return cb err if err?
     return cb "expected array" if typeof! res.body isnt \Array
     list =
@@ -67,7 +67,7 @@ add-value = (network, it)-->
         | _ => 0
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
-    err, data <- get "#{get-api-url network}/addr/#{address}/utxo" .end
+    err, data <- get "#{get-api-url network}/addr/#{address}/utxo" .timeout { deadline } .end
     return cb err if err?
     data.body
         |> each add-value network
@@ -95,7 +95,7 @@ get-deposit-address-info = ({ amount, recipient, network }, cb)->
 get-deposit-address-from-list = ({ amount, recipient, network },cb)->
     err, list <- get-masternode-list { network }
     return cb err if err?
-    console.log err, list
+    #console.log err, list
     cb "Not Implemented"
 get-deposit-address = ({ amount, recipient, network }, cb)->
     { mixing-info } = network?api ? {}
@@ -114,7 +114,7 @@ add-outputs-private = (config, cb)->
     tx.add-output account.address, +rest
     cb null
 add-outputs = (config, cb)->
-    { tx-type, rest, total, value, fee, tx, recipient } = config
+    { tx-type, total, value, fee, tx, recipient } = config
     return add-outputs-private config, cb if tx-type is \private
     rest = total `minus` value `minus` fee
     tx.add-output recipient, +value
@@ -138,7 +138,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb "Balance is not enough to send tx" if +((total `minus` fee) `minus` value) < 0
     return cb 'Total is NaN' if isNaN total
     tx = new BitcoinLib.TransactionBuilder network
-    err <- add-outputs { tx-type, rest, total, value, fee, tx, recipient, network }
+    err <- add-outputs { tx-type, total, value, fee, tx, recipient, network }
     return cb err if err?
     apply = (output, i)->
         tx.add-input output.txid, output.vout

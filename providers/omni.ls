@@ -159,18 +159,19 @@ export push-tx = ({ network, rawtx } , cb)-->
 #    cb null, data.body.tx
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+str = -> (it ? "").to-string!
 export get-balance = ({ network, address} , cb)->
     { api-url } = network.api
     req =
         addr : address
     err, data <- post("#{api-url}/v1/address/addr/", req).type('form').end
+    #console.log body: data?body
     return cb err if err?
     return cb "expected object" if typeof! data isnt \Object
     return cb "expected balance array. got #{data.text}" if typeof! data.body.balance isnt \Array
     balance =
-        data.body.balance |> find (.id is network.propertyid)
-    #console.log { balance, network.propertyid }
-    return cb null, "0" if not balance?
+        data.body.balance |> find (-> str(it.id) is str(network.propertyid) )
+    return cb "Cannot obtain the balance" if not balance?
     dec = get-dec network
     value = balance.value `div` dec
     cb null, value
