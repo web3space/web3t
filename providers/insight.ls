@@ -27,10 +27,23 @@ get-one-of-masternode = ({ network }, cb)->
         list |> foldl find-max, list.0
     return cb "Not Found" if not item?
     cb null, item
+calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
+    o = network?tx-fee-options
+    tx-fee = o?[fee-type] ? network.tx-fee ? 0
+    return cb null, tx-fee if fee-type isnt \auto
+    err, data <- get "#{get-api-url network}/utils/estimatefee?nbBlocks=6" .timeout { deadline } .end
+    return cb err if err?
+    values = Object.values data.body
+    exists = values.0 ? -1
+    calced-fee = 
+        | values.0 is -1 => network.tx-fee
+        | _ => values.0
+    cb null, calced-fee
 calc-fee-private = ({ network, tx, tx-type, account, fee-type }, cb)->
     return cb "address cannot be empty" if (account?address ? "") is ""
     o = network?tx-fee-options
-    tx-fee = o?[fee-type] ? network.tx-fee ? 0
+    err, tx-fee <- calc-dynamic-fee { network, tx, tx-type, account, fee-type }
+    return cb err if err?
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
     number-of-inputs = if outputs.length > 0 then outputs.length else 1
@@ -40,7 +53,8 @@ calc-fee-private = ({ network, tx, tx-type, account, fee-type }, cb)->
 calc-fee-instantx = ({ network, tx, tx-type, account, fee-type }, cb)->
     return cb "address cannot be empty" if (account?address ? "") is ""
     o = network?tx-fee-options
-    tx-fee = o?[fee-type] ? network.tx-fee ? 0
+    err, tx-fee <- calc-dynamic-fee { network, tx, tx-type, account, fee-type }
+    return cb err if err?
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
     number-of-inputs = if outputs.length > 0 then outputs.length else 1
@@ -51,7 +65,7 @@ export calc-fee = (config, cb)->
     { network, tx, tx-type, account } = config
     return calc-fee-private config, cb if tx-type is \private
     return calc-fee-instantx config, cb if tx-type is \instant
-    cb null
+    calc-dynamic-fee config, cb
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
     cb null, result

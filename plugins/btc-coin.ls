@@ -2,6 +2,7 @@ export mainnet =
     decimals: 8
     tx-fee: \0.0000004
     tx-fee-options: 
+        auto: \0.000001
         fast: \0.000001
         cheap: \0.0000004
     mask: '1000000000000000000000000000000000'

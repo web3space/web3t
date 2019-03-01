@@ -10,8 +10,20 @@ require! {
     \whitebox : { get-fullpair-by-index }
     \../deadline.ls
 }
-export calc-fee = ({ network, tx }, cb)->
-    cb null
+export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
+    return cb null if fee-type isnt \auto
+    web3 = get-web3 network
+    err, gas-price <- calc-gas-price { web3, fee-type }
+    return cb err if err?
+    err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    return cb err if err?
+    from = account.address
+    err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
+    return cb err if err?
+    dec = get-dec network
+    res = gas-price `times` estimate
+    val = res `div` (10^18)
+    cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
     cb null, result

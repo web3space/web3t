@@ -4,6 +4,7 @@ export mainnet =
     tx-fee-options: 
         fast: \0.0002
         cheap: \0.00005546
+        auto: \0.0002
     tx-fee-in: \btc
     mask: '1000000000000000000000000000000000'
     api: 
@@ -26,6 +27,7 @@ export testnet =
     tx-fee-options: 
         fast: \0.0001
         cheap: \0.00005546
+        auto: \0.0002
     tx-fee-in: \btc
     disabled: yes
     decimals: 8

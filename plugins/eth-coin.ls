@@ -2,6 +2,7 @@ export mainnet =
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options: 
+        auto: \0.0014
         fast: \0.0014
         cheap: \0.00014
     message-prefix: 'Ethereum'
@@ -28,6 +29,7 @@ export ropsten =
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options: 
+        auto: \0.0014
         fast: \0.0014
         cheap: \0.00014
     message-prefix: 'Ethereum'

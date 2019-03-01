@@ -1,7 +1,8 @@
 export mainnet = 
     decimals: 8
     tx-fee: \0.0001
-    tx-fee-options: 
+    tx-fee-options:
+        auto: \0.0001
         fast: \0.0001
         cheap: \0.000014
     mask: 'L000000000000000000000000000000000'
@@ -20,6 +21,7 @@ export testnet =
     decimals: 8
     tx-fee: \0.0001
     tx-fee-options: 
+        auto: \0.0001
         fast: \0.0001
         cheap: \0.000014
     topup: \https://litecoin-faucet.com/

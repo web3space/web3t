@@ -6,10 +6,21 @@ require! {
     \../json-parse.ls
     \whitebox : { get-fullpair-by-index }
     \bitcoinjs-lib : BitcoinLib
+    \../deadline.ls
 }
 # https://api.omniexplorer.info/#request-v1-address-addr
-export calc-fee = ({ network, tx }, cb)->
-    cb null
+export calc-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
+    o = network?tx-fee-options
+    tx-fee = o?[fee-type] ? network.tx-fee ? 0
+    return cb null, tx-fee if fee-type isnt \auto
+    err, data <- get "#{get-api-url network}/utils/estimatefee?nbBlocks=6" .timeout { deadline } .end
+    return cb err if err?
+    values = Object.values data.body
+    exists = values.0 ? -1
+    calced-fee = 
+        | values.0 is -1 => network.tx-fee
+        | _ => values.0
+    cb null, calced-fee
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
     cb null, result
@@ -59,11 +70,10 @@ add-value = (network, it)-->
         | _ => 0
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
-    body <- get "#{get-api-url network}/addr/#{address}/utxo" .then
-    err, result <- json-parse body.text
+    err, data <- get "#{get-api-url network}/addr/#{address}/utxo" .timeout { deadline } .end
     return cb err if err?
-    return cb "Result is not an array" if typeof! result isnt \Array
-    result
+    return cb "Result is not an array" if typeof! data.body isnt \Array
+    data.body
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
