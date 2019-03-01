@@ -2,7 +2,7 @@ export mainnet =
     decimals: 8
     tx-fee: \0.0001
     tx-fee-options: 
-        fast: \0.0001
+        fast: \0.0002
         cheap: \0.00005546
     tx-fee-in: \btc
     mask: '1000000000000000000000000000000000'
@@ -12,7 +12,7 @@ export mainnet =
         provider: \omni
         url: \https://omniexplorer.info
         decimal: 8
-    propertyid: 31
+    propertyid: \31
     message-prefix: '\x18Bitcoin Signed Message:\n'
     bech32: 'bc'
     bip32:
@@ -37,7 +37,7 @@ export testnet =
         api-url-btc: \https://testnet.blockexplorer.com
         decimal: 8
     messagePrefix: '\x18Bitcoin Signed Message:\n'
-    propertyid: 31
+    propertyid: \31
     bech32: 'tb'
     bip32:
         public: 0x043587cf

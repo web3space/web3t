@@ -102,7 +102,7 @@ get-deposit-address = ({ amount, recipient, network }, cb)->
     return get-deposit-address-info { amount, recipient, network }, cb if typeof! mixing-info is \String
     get-deposit-address-from-list { amount, recipient, network }, cb
 add-outputs-private = (config, cb)->
-    { tx-type, rest, total, value, fee, tx, recipient, network } = config
+    { tx-type, total, value, fee, tx, recipient, network, account } = config
     #return add-outputs-private config, cb if tx-type is \private
     o = network?tx-fee-options
     rest = total `minus` value `minus` fee
@@ -114,7 +114,7 @@ add-outputs-private = (config, cb)->
     tx.add-output account.address, +rest
     cb null
 add-outputs = (config, cb)->
-    { tx-type, total, value, fee, tx, recipient } = config
+    { tx-type, total, value, fee, tx, recipient, account } = config
     return add-outputs-private config, cb if tx-type is \private
     rest = total `minus` value `minus` fee
     tx.add-output recipient, +value
@@ -138,7 +138,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     return cb "Balance is not enough to send tx" if +((total `minus` fee) `minus` value) < 0
     return cb 'Total is NaN' if isNaN total
     tx = new BitcoinLib.TransactionBuilder network
-    err <- add-outputs { tx-type, total, value, fee, tx, recipient, network }
+    err <- add-outputs { tx-type, total, value, fee, tx, recipient, network, account }
     return cb err if err?
     apply = (output, i)->
         tx.add-input output.txid, output.vout
