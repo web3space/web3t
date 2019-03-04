@@ -10,7 +10,7 @@ calc-fee-options = (network, tx, cb)->
     { fee-type } = tx
     { tx-fee-options } = network
     return cb "Expected object tx-fee-options" if typeof! tx-fee-options isnt \Object
-    return cb "Expected string fast|cheap" if fee-type not in <[ fast cheap ]>
+    return cb "Expected string auto|cheap" if fee-type not in <[ auto cheap ]>
     option = tx-fee-options[fee-type]
     return cb "Option is not defined" if typeof! option isnt \String
     cb null, option
