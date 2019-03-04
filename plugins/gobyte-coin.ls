@@ -3,7 +3,6 @@ export mainnet =
     tx-fee: \0.0005
     tx-fee-options: 
         auto: \0.0005
-        fast: \0.0005
         cheap: \0.00000226
         instant-per-input: \0.0001
         instant-service-price: 0

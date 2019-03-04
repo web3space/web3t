@@ -2,7 +2,6 @@ export mainnet =
     decimals: 8
     tx-fee: \0.0001
     tx-fee-options: 
-        fast: \0.0002
         cheap: \0.00005546
         auto: \0.0002
     tx-fee-in: \btc
@@ -25,7 +24,6 @@ export mainnet =
 export testnet =
     tx-fee: \0.0001
     tx-fee-options: 
-        fast: \0.0001
         cheap: \0.00005546
         auto: \0.0002
     tx-fee-in: \btc

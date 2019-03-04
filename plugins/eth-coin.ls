@@ -3,20 +3,20 @@ export mainnet =
     tx-fee: \0.0014
     tx-fee-options: 
         auto: \0.0014
-        fast: \0.0014
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
     api:
         provider: \eth
         web3Provider : \https://mainnet.infura.io/UoCkF4efTrbEGU8Qpcs0
+        #web3Provider: \https://mainnet.infura.io/v3/6a6c66740e9e4cea9cc8425869e9d106
         url : \https://etherscan.io
         apiUrl : \https://api.etherscan.io/api
 export ethnamed =
     decimals: 18
     tx-fee: \0.0014
     tx-fee-options: 
-        fast: \0.0014
+        auto: \0.0014
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000
@@ -30,7 +30,6 @@ export ropsten =
     tx-fee: \0.0014
     tx-fee-options: 
         auto: \0.0014
-        fast: \0.0014
         cheap: \0.00014
     message-prefix: 'Ethereum'
     mask: \0x0000000000000000000000000000000000000000

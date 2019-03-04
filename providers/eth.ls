@@ -1,28 +1,48 @@
 require! {
     \qs : { stringify }
     \prelude-ls : { filter, map, foldl, each }
-    \../math.ls : { plus, minus, times, div }
-    \superagent : { get }
-    \web3 : \Web3
+    \../math.ls : { plus, minus, times, div, from-hex }
+    \superagent : { get, post }
+    #\web3 : \Web3
     \ethereumjs-tx : \Tx
     \ethereumjs-util : { BN }
     \../json-parse.ls
     \whitebox : { get-fullpair-by-index }
     \../deadline.ls
 }
-export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
+make-query = (network, method, params, cb)->
+    { web3-provider } = network.api
+    query = {
+        jsonrpc : \2.0
+        id : 1
+        method
+        params
+    }
+    err, data <- post web3-provider, query .end
+    return cb "query err: #{err.message ? err}" if err?
+    return cb data.body.error if data.body.error?
+    cb null, data.body.result
+export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     return cb null if fee-type isnt \auto
-    web3 = get-web3 network
-    err, gas-price <- calc-gas-price { web3, fee-type }
-    return cb err if err?
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
-    return cb err if err?
-    from = account.address
-    err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
-    return cb err if err?
     dec = get-dec network
-    res = gas-price `times` estimate
-    val = res `div` (10^18)
+    console.log \p0
+    err, gas-price <- calc-gas-price { fee-type, network }
+    return cb err if err?
+    value =
+        | amount? => amount `times` dec
+        | _ => 0
+    #err, nonce <- get-nonce { account, network }
+    #return cb err if err?
+    data-parsed = 
+        | data? => data
+        | _ => \0x
+    from = account.address
+    query = { from, to, data: data-parsed }
+    err, estimate <- make-query network, \eth_estimateGas , [ query ]
+    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
+    return cb "estimate gas err: #{err.message ? err}" if err?
+    res = gas-price `times` from-hex(estimate)
+    val = res `div` dec
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
@@ -49,37 +69,46 @@ export get-transactions = ({ network, address }, cb)->
     apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
     query = stringify { module, action, apikey, address, sort, startblock, endblock }
     err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
-    return cb err if err?
+    return cb "cannot execute query - err #{err.message ? err }" if err?
     err, result <- json-parse resp.text
-    return cb err if err?
+    return cb "cannot parse json: #{err.message ? err}" if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs = 
         result.result |> map transform-tx network
     cb null, txs
-get-web3 = (network)->
-    { web3-provider } = network.api
-    new Web3(new Web3.providers.HttpProvider(web3-provider))
+#get-web3 = (network)->
+#    { web3-provider } = network.api
+#    new Web3(new Web3.providers.HttpProvider(web3-provider))
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ web3, fee-type }, cb)->
+calc-gas-price = ({ fee-type, network }, cb)->
     return cb null, \3000000000 if fee-type is \cheap
-    web3.eth.get-gas-price cb
+    #err, price <- web3.eth.get-gas-price
+    err, price <- make-query network, \eth_gasPrice , []
+    return cb "calc gas price - err: #{err.message ? err}" if err?
+    cb null, from-hex(price)
+get-nonce = ({ network, account }, cb)->
+    #err, nonce <- web3.eth.get-transaction-count 
+    err, nonce <- make-query network, \eth_getTransactionCount , [ account.address, \pending ]
+    return cb "cannot get nonce - err: #{err.message ? err}" if err?
+    cb null, from-hex(nonce)
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type} , cb)-->
-    web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
-    err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    err, nonce <- get-nonce { account, network }
+    return cb err if err?
     to-wei = -> it `times` dec
     to-eth = -> it `div` dec
     value = to-wei amount
-    err, gas-price <- calc-gas-price { web3, fee-type }
+    err, gas-price <- calc-gas-price { fee-type, network }
     return cb err if err?
     gas-estimate = to-wei(amount-fee) `div` gas-price
-    err, balance <- web3.eth.get-balance account.address
+    err, balance <- make-query network, \eth_getBalance , [ account.address, \latest ]
     return cb err if err?
     balance-eth = to-eth balance
-    return cb "Balance is not enough to send tx" if +balance-eth < +(amount `plus` amount-fee)
+    to-send = amount `plus` amount-fee
+    return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -95,15 +124,18 @@ export check-decoded-data = (decoded-data, data)->
     return no if not (decoded-data ? "").length is 0
     return no if not (data ? "").length is 0
 export push-tx = ({ network, rawtx } , cb)-->
-    web3 = get-web3 network
-    err, txid <- web3.eth.send-signed-transaction rawtx
-    cb err, txid
+    err, txid <- make-query network, \eth_sendRawTransaction , [ rawtx ]
+    #err, txid <- web3.eth.send-signed-transaction rawtx
+    return cb "cannot get signed tx - err: #{err.message ? err}" if err?
+    cb null, txid
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+
 export get-balance = ({ network, address} , cb)->
-    web3 = get-web3 network
-    err, number <- web3.eth.get-balance address
+    err, number <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?
+    #err, number <- web3.eth.get-balance address
+    #return cb "cannot get balance - err: #{err.message ? err}" if err?
     dec = get-dec network
     balance = number `div` dec
     cb null, balance

@@ -13,7 +13,7 @@ require! {
 #https://github.com/StaminaDev/dash-insight-api/blob/master/lib/index.js#L244
 get-masternode-list = ({ network }, cb)->
     err, res <- get "#{get-api-url network}/masternodes/list" .timeout { deadline } .end
-    return cb err if err?
+    return cb "cannot obtain list - err: #{err.message ? err}" if err?
     return cb "expected array" if typeof! res.body isnt \Array
     list =
         res.body |> filter (.status is \ENABLED) 
@@ -82,7 +82,7 @@ add-value = (network, it)-->
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
     err, data <- get "#{get-api-url network}/addr/#{address}/utxo" .timeout { deadline } .end
-    return cb err if err?
+    return cb "cannot get outputs - err #{err.message ? err}" if err?
     data.body
         |> each add-value network
         |> map extend { network, address }
@@ -104,7 +104,7 @@ get-deposit-address-info = ({ amount, recipient, network }, cb)->
     return cb "Mixing Pool is not connected" if typeof! mixing-info isnt \String
     { url, extract } = parse-rate-string mixing-info
     err, data <- get url .end
-    return cb err if err?
+    return cb "cannot get deposit info - err: #{err.message ? err}" if err?
     cb null, parse-result(data.text, extract)
 get-deposit-address-from-list = ({ amount, recipient, network },cb)->
     err, list <- get-masternode-list { network }

@@ -23,7 +23,7 @@ default-calc-fee = (network, tx, cb)->
 
 build-calc-fee = ({ network, provider })-> (tx, cb)->
     return cb null, network.tx-fee if typeof! provider.calc-fee isnt \Function
-    err, tx-fee <- provider.calc-fee { network, tx }
+    err, tx-fee <- provider.calc-fee { network, ...tx }
     return cb err if err?
     return default-calc-fee network, tx, cb if not tx-fee?
     cb null, tx-fee

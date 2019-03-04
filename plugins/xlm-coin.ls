@@ -2,7 +2,7 @@ export mainnet =
     decimals: 1
     tx-fee: \0.0000001
     tx-fee-options:
-        fast: \0.000001
+        auto: \0.000001
         cheap: \0.0000002
     mask: 'username'
     api:
@@ -14,7 +14,7 @@ export mainnet =
 export testnet =
     tx-fee: \0.0000001
     tx-fee-options:
-        fast: \0.000001
+        auto: \0.000001
         cheap: \0.0000002
     decimals: 1
     mask: 'username'

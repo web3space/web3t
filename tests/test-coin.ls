@@ -5,7 +5,7 @@ require! {
 index = 0
 module.exports = (type, coin, cb)->
     console.log type
-    { create-account, get-balance } = coin
+    { create-account, get-balance, calc-fee } = coin
     return cb "Create Account is not a function" if typeof! create-account isnt \Function
     return cb "Get Balance is not a function" if typeof! get-balance isnt \Function
     err, account <- create-account { mnemonic, index }

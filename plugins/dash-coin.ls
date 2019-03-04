@@ -3,7 +3,6 @@ export mainnet =
     decimals: 8
     tx-fee: \0.0001
     tx-fee-options:
-        fast: \0.0001
         cheap: \0.0000004
         auto: \0.0001
         instant-per-input: \0.001
@@ -28,7 +27,6 @@ export testnet =
     tx-fee: \0.0001
     tx-fee-options:
         auto: \0.0001
-        fast: \0.0001
         cheap: \0.0000004
     mask: 'y000000000000000000000000000000000'
     topup: \https://test.faucet.dashninja.pl/

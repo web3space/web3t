@@ -1,6 +1,6 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each, find, sum }
+    \prelude-ls : { filter, map, foldl, each, find, sum, values }
     \../math.ls : { plus, minus, times, div }
     \superagent : { get, post }
     \../json-parse.ls
@@ -15,11 +15,11 @@ export calc-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     return cb null, tx-fee if fee-type isnt \auto
     err, data <- get "#{get-api-url network}/utils/estimatefee?nbBlocks=6" .timeout { deadline } .end
     return cb err if err?
-    values = Object.values data.body
-    exists = values.0 ? -1
+    vals = values data.body
+    exists = vals.0 ? -1
     calced-fee = 
-        | values.0 is -1 => network.tx-fee
-        | _ => values.0
+        | vals.0 is -1 => network.tx-fee
+        | _ => vals.0
     cb null, calced-fee
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network

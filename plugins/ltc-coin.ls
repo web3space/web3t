@@ -3,7 +3,6 @@ export mainnet =
     tx-fee: \0.0001
     tx-fee-options:
         auto: \0.0001
-        fast: \0.0001
         cheap: \0.000014
     mask: 'L000000000000000000000000000000000'
     api: 
@@ -22,7 +21,6 @@ export testnet =
     tx-fee: \0.0001
     tx-fee-options: 
         auto: \0.0001
-        fast: \0.0001
         cheap: \0.000014
     topup: \https://litecoin-faucet.com/
     mask: 'n000000000000000000000000000000000'
