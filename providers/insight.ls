@@ -1,6 +1,6 @@
 require! {
     \moment
-    \prelude-ls : { map, foldl, any, each, find, sum, filter, head }
+    \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values }
     \superagent : { get, post } 
     \../math.ls : { plus, minus, div, times }
     \bitcoinjs-lib : BitcoinLib
@@ -33,11 +33,11 @@ calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     return cb null, tx-fee if fee-type isnt \auto
     err, data <- get "#{get-api-url network}/utils/estimatefee?nbBlocks=6" .timeout { deadline } .end
     return cb err if err?
-    values = Object.values data.body
-    exists = values.0 ? -1
+    vals = values data.body
+    exists = vals.0 ? -1
     calced-fee = 
-        | values.0 is -1 => network.tx-fee
-        | _ => values.0
+        | vals.0 is -1 => network.tx-fee
+        | _ => vals.0
     cb null, calced-fee
 calc-fee-private = ({ network, tx, tx-type, account, fee-type }, cb)->
     return cb "address cannot be empty" if (account?address ? "") is ""
