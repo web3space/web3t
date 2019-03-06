@@ -1,27 +1,35 @@
 {
-  "name": "web3t",
-  "version": "0.2.9",
-  "description": "Unified Open Source Coin Registry (Same interface for all possible coins, tokens)",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "rm -rf ./node_modules/bitcore-message/node_modules"
+  "_from": "web3t",
+  "_id": "web3t@0.3.0",
+  "_inBundle": false,
+  "_integrity": "sha512-OCfQicreRGr4Oc9iExWoHCJOALMS57rMEzOMN5IlAFXZMXQBKIdxINWL1aHu/oDlQ+lz7Jr9wtgku/nw0j1xDA==",
+  "_location": "/web3t",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "web3t",
+    "name": "web3t",
+    "escapedName": "web3t",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ethnamed/web3t.git"
-  },
-  "keywords": [
-    "crypto",
-    "standard",
-    "ethnamed"
+  "_requiredBy": [
+    "#USER",
+    "/"
   ],
-  "author": "Ethnamed Project",
-  "license": "ISC",
+  "_resolved": "https://registry.npmjs.org/web3t/-/web3t-0.3.0.tgz",
+  "_shasum": "cc4e02ff0c42688cf34f0c1eab4342bbf9df7813",
+  "_spec": "web3t",
+  "_where": "/home/ubuntu/workspace",
+  "author": {
+    "name": "Ethnamed Project"
+  },
   "bugs": {
     "url": "https://github.com/ethnamed/web3t/issues"
   },
-  "homepage": "https://github.com/ethnamed/web3t#readme",
+  "bundleDependencies": false,
   "dependencies": {
     "bitcoinjs-lib": "^4.0.2",
     "blockstarter-ripple": "0.0.4",
@@ -40,5 +48,25 @@
     "superagent": "^4.0.0-beta.5",
     "web3": "^1.0.0-beta.36",
     "whitebox": "^0.1.60"
-  }
+  },
+  "deprecated": false,
+  "description": "Unified Open Source Coin Registry (Same interface for all possible coins, tokens)",
+  "homepage": "https://github.com/ethnamed/web3t#readme",
+  "keywords": [
+    "crypto",
+    "standard",
+    "ethnamed"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "web3t",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethnamed/web3t.git"
+  },
+  "scripts": {
+    "postinstall": "rm -rf ./node_modules/bitcore-message/node_modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.3.0"
 }
