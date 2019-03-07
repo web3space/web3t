@@ -170,6 +170,13 @@ export push-tx = ({ network, rawtx } , cb)-->
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 str = -> (it ? "").to-string!
+export get-total-received = ({ address, network }, cb)->
+    err, txs <- get-transactions { address, network }
+    total =
+        txs |> filter (-> it.to is address)
+            |> map (.amount)
+            |> foldl plus, 0
+    cb null, total
 export get-balance = ({ network, address} , cb)->
     { api-url } = network.api
     req =

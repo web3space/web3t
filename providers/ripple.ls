@@ -63,6 +63,8 @@ export get-transactions = ({ address, network }, cb)->
     cb null, txs
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+export get-total-received = ({ address, network }, cb)->
+    cb "Not Implemented"
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, tx-type} , cb)-->
     tx_json =
         Account: account.address

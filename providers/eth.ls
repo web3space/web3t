@@ -130,7 +130,13 @@ export push-tx = ({ network, rawtx } , cb)-->
     cb null, txid
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
-
+export get-total-received = ({ address, network }, cb)->
+    err, txs <- get-transactions { address, network }
+    total =
+        txs |> filter (-> it.to.to-upper-case! is address.to-upper-case!)
+            |> map (.amount)
+            |> foldl plus, 0
+    cb null, total
 export get-balance = ({ network, address} , cb)->
     err, number <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?

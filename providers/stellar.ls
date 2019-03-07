@@ -39,6 +39,8 @@ export push-tx = ({ network, rawtx } , cb)-->
     cb "Not Implemented"
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+export get-total-received = ({ address, network }, cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address }, cb)->
     cb "Not Implemented"
     err, data <- get "#{network.api.api-url}/accounts/{address}" .end

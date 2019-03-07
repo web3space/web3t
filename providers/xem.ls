@@ -2,7 +2,7 @@ require! {
     \nem-sdk : { default: nem }
     \superagent : { get }
     \../json-parse.ls
-    \prelude-ls : { filter, map, head }
+    \prelude-ls : { filter, map, head, foldl }
     \../math.ls : { minus, div, plus }
     \../deadline.ls
 }
@@ -68,6 +68,13 @@ export push-tx = ({ network, rawtx } , cb)-->
     nem.com.requests.transaction.announce endpoint, rawtx .then success, failed
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+export get-total-received = ({ address, network }, cb)->
+    err, txs <- get-transactions { address, network }
+    total =
+        txs |> filter (-> it.to is address)
+            |> map (.amount)
+            |> foldl plus, 0
+    cb null, total
 export get-balance = ({ network, address } , cb)->
     err, data <- get "#{network.api.api-url}/account?address=#{address}" .timeout { deadline } .end
     return cb err if err?

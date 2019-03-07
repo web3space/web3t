@@ -40,6 +40,11 @@ build-send-transaction = ({network, provider})-> ({ account, to, amount, data, f
     return cb err if err?
     cb null, data
 
+build-get-total-received = ({network, provider})-> ({ account }, cb)->
+    { get-total-received } = provider
+    err, data <- get-total-received { account.address, network }
+    return cb err if err?
+    cb null, data
 
 build-get-balance = ({network, provider})-> ({ account }, cb)->
     { get-balance } = provider
@@ -106,9 +111,10 @@ build-pair = ([name, api], providers, config, cb)->
     create-account = build-create-account { network, provider }
     calc-fee = build-calc-fee { network, provider }
     get-balance = build-get-balance { network, provider }
+    get-total-received = build-get-total-received { network, provider }
     get-history = build-get-history { network, provider }
     send-all-funds = build-send-all-funds { network, provider }
-    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds, humanize-amount, is-valid-address, unhumanize-amount }
+    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds, humanize-amount, is-valid-address, unhumanize-amount, get-total-received }
         
 build-pairs = ([pair, ...rest], providers, config, cb)->
     return cb null, [] if not pair?

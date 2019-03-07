@@ -22,5 +22,7 @@ export get-balance = ({ address } , cb)->
     cb null, balance
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+export get-total-received = ({ address, network }, cb)->
+    cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     cb null, []

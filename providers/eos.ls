@@ -1,7 +1,8 @@
 require! {
     \eosjs : Eos
     \superagent : { post, get }
-    \prelude-ls : { map }
+    \prelude-ls : { map, filter, foldl }
+    \../math.ls : { plus }
 }
 #https://developer.eospark.com/api-doc/https/transaction.html#push-transaction
 #https://developers.eos.io/eosio-nodeos/reference
@@ -97,6 +98,13 @@ export push-tx = ({ network, rawtx } , cb)-->
     cb null, data
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
+export get-total-received = ({ address, network }, cb)->
+    err, txs <- get-transactions { address, network }
+    total =
+        txs |> filter (-> it.to is address)
+            |> map (.amount)
+            |> foldl plus, 0
+    cb null, total
 export get-balance = ({ network, address }, cb)->
     #address = \helloworldjs
     return cb null, 0 if address is no-account
