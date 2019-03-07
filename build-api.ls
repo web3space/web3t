@@ -53,7 +53,7 @@ build-humanize-amount = ({network, provider})-> (value, cb)->
     cb null, res
     
 build-is-valid-address = ({network, provider})-> (address, cb)->
-    return cb "address should be string" if typeof! value isnt \String
+    return cb "address should be string" if typeof! address isnt \String
     return cb null, yes if typeof! provider.is-valid-address isnt \Function
     err, valid <- provider.is-valid-address { address, network }
     return cb err if err?
