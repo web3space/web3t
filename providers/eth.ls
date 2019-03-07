@@ -137,6 +137,14 @@ export get-total-received = ({ address, network }, cb)->
             |> map (.amount)
             |> foldl plus, 0
     cb null, total
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    err, number <- make-query network, \eth_getBalance , [ address, \pending ]
+    return cb err if err?
+    #err, number <- web3.eth.get-balance address
+    #return cb "cannot get balance - err: #{err.message ? err}" if err?
+    dec = get-dec network
+    balance = number `div` dec
+    cb null, balance
 export get-balance = ({ network, address} , cb)->
     err, number <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?

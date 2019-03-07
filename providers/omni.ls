@@ -177,6 +177,8 @@ export get-total-received = ({ address, network }, cb)->
             |> map (.amount)
             |> foldl plus, 0
     cb null, total
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address} , cb)->
     { api-url } = network.api
     req =

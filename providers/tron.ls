@@ -29,5 +29,7 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-total-received = ({ address, network }, cb)->
     cb "Not Implemented"
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address }, cb)->
     cb "Not Implemented"

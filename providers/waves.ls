@@ -12,6 +12,8 @@ export create-transaction = ({ account, recipient, amount, amount-fee } , cb)-->
     cb "Not implemented"
 export push-tx = ({ network, rawtx } , cb)-->
     cb "Not implemented"
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    cb "Not Implemented"
 export get-balance = ({ address } , cb)->
     err, res <- get "https://nodes.wavesnodes.com/addresses/balance/#address"  .timeout({ deadline }).end
     return cb err if err?

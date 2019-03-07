@@ -75,6 +75,8 @@ export get-total-received = ({ address, network }, cb)->
             |> map (.amount)
             |> foldl plus, 0
     cb null, total
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    cb "Not Implemented"
 export get-balance = ({ network, address } , cb)->
     err, data <- get "#{network.api.api-url}/account?address=#{address}" .timeout { deadline } .end
     return cb err if err?

@@ -177,10 +177,14 @@ export get-total-received = ({ address, network }, cb)->
     dec = get-dec network
     num = data.text `div` dec
     cb null, num
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    return cb "Url is not defined" if not network?api?url?
+    err, data <- get "#{get-api-url network}/addr/#{address}/unconfirmedBalance" .timeout { deadline } .end
+    return cb err if err? or data.text.length is 0
+    dec = get-dec network
+    num = data.text `div` dec
+    cb null, num
 export get-balance = ({ address, network } , cb)->
-    #err, node <- get-one-of-masternode { network }
-    #console.log { err, node }
-    #node.ip
     return cb "Url is not defined" if not network?api?url?
     err, data <- get "#{get-api-url network}/addr/#{address}/balance" .timeout { deadline } .end
     return cb err if err? or data.text.length is 0

@@ -96,6 +96,8 @@ export push-tx = ({ network, rawtx } , cb)-->
     err, data <- as-callback eos.push-transaction(rawtx)
     return cb err if err?
     cb null, data
+export get-unconfirmed-balance = ({ network, address} , cb)->
+    cb "Not Implemented"
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-total-received = ({ address, network }, cb)->
