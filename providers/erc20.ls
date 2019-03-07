@@ -114,7 +114,8 @@ export check-decoded-data = (decoded-data, data)->
     return no if not (data ? "").length is 0
 export push-tx = ({ network, rawtx } , cb)-->
     web3 = get-web3 network
-    err, txid <- web3.eth.send-signed-transaction rawtx
+    send = web3.eth.send-raw-transaction ? web3.eth.send-signed-transaction
+    err, txid <- send rawtx
     cb err, txid
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
