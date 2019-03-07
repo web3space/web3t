@@ -1,6 +1,6 @@
 require! {
     \prelude-ls : { obj-to-pairs, pairs-to-obj }
-    \./math.ls : { minus, div }
+    \./math.ls : { minus, div, times }
     \./config-parser.ls
 }
 
@@ -51,6 +51,12 @@ build-humanize-amount = ({network, provider})-> (value, cb)->
     return cb "value should be string" if typeof! value isnt \String
     res = value `div` (10 ^ network.decimals)
     cb null, res
+
+build-unhumanize-amount = ({network, provider})-> (value, cb)->
+    return cb "value should be string" if typeof! value isnt \String
+    res = value `times` (10 ^ network.decimals)
+    cb null, res
+
     
 build-is-valid-address = ({network, provider})-> (address, cb)->
     return cb "address should be string" if typeof! address isnt \String
@@ -94,6 +100,7 @@ build-pair = ([name, api], providers, config, cb)->
     provider = providers[network.api.provider]
     return cb "Provider not found for #{name}" if not provider?
     humanize-amount = build-humanize-amount { network, provider }
+    unhumanize-amount = build-unhumanize-amount { network, provider }
     is-valid-address = build-is-valid-address { network, provider }
     send-transaction = build-send-transaction { network, provider }
     create-account = build-create-account { network, provider }
@@ -101,7 +108,7 @@ build-pair = ([name, api], providers, config, cb)->
     get-balance = build-get-balance { network, provider }
     get-history = build-get-history { network, provider }
     send-all-funds = build-send-all-funds { network, provider }
-    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds, humanize-amount, is-valid-address }
+    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds, humanize-amount, is-valid-address, unhumanize-amount }
         
 build-pairs = ([pair, ...rest], providers, config, cb)->
     return cb null, [] if not pair?
