@@ -1,28 +1,4 @@
 {
-  "_from": "web3t",
-  "_id": "web3t@0.3.2",
-  "_inBundle": false,
-  "_integrity": "sha512-OCfQicreRGr4Oc9iExWoHCJOALMS57rMEzOMN5IlAFXZMXQBKIdxINWL1aHu/oDlQ+lz7Jr9wtgku/nw0j1xDA==",
-  "_location": "/web3t",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "web3t",
-    "name": "web3t",
-    "escapedName": "web3t",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/web3t/-/web3t-0.3.0.tgz",
-  "_shasum": "cc4e02ff0c42688cf34f0c1eab4342bbf9df7813",
-  "_spec": "web3t",
-  "_where": "/home/ubuntu/workspace",
   "author": {
     "name": "Ethnamed Project"
   },
