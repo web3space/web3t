@@ -1,6 +1,6 @@
 {
   "_from": "web3t",
-  "_id": "web3t@0.3.0",
+  "_id": "web3t@0.3.1",
   "_inBundle": false,
   "_integrity": "sha512-OCfQicreRGr4Oc9iExWoHCJOALMS57rMEzOMN5IlAFXZMXQBKIdxINWL1aHu/oDlQ+lz7Jr9wtgku/nw0j1xDA==",
   "_location": "/web3t",
@@ -47,7 +47,7 @@
     "stellar-sdk": "^0.13.0",
     "superagent": "^4.0.0-beta.5",
     "web3": "^1.0.0-beta.36",
-    "whitebox": "^0.1.60"
+    "whitebox": "0.1.61"
   },
   "deprecated": false,
   "description": "Unified Open Source Coin Registry (Same interface for all possible coins, tokens)",
@@ -68,5 +68,5 @@
     "postinstall": "rm -rf ./node_modules/bitcore-message/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.3.0"
+  "version": "0.3.1"
 }

@@ -53,6 +53,7 @@ export color = \#545DF1
 export branding =
     logo: \https://www.gobyte.network/img/logo.svg
     title: "GoByte Multicurrency Wallet"
+    important: yes
 export links =
     *   image: \https://www.gobyte.network/img/fb.png
         href: \https://wwww.facebook.com/gobytenetwork
