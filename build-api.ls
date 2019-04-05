@@ -31,7 +31,6 @@ build-calc-fee = ({ network, provider })-> (tx, cb)->
 build-send-transaction = ({network, provider})-> ({ account, to, amount, data, fee-type }, cb)->
     { create-transaction, push-tx } = provider
     calc-fee = build-calc-fee { network, provider }
-    
     err, amount-fee <- calc-fee { account, to, amount, data, fee-type }
     return cb err if err?
     err, data <- create-transaction { account, recipient: to, amount, data, network, amount-fee, fee-type }

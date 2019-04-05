@@ -1,12 +1,13 @@
 #https://github.com/snogcel/bitcore-lib-dash/blob/master/lib/networks.js
 export mainnet =
     decimals: 8
-    tx-fee: \0.0001
+    tx-fee: \0.0004
     tx-fee-options:
-        cheap: \0.0000004
-        auto: \0.0001
+        cheap: \0.0001
+        auto: \0.0004
         instant-per-input: \0.001
         private-per-input: \0.05
+        fee-per-byte: \0.0000001
     mask: 'X000000000000000000000000000000000'
     api: 
         provider: \insight
@@ -26,8 +27,9 @@ export testnet =
     decimals: 8
     tx-fee: \0.0001
     tx-fee-options:
-        auto: \0.0001
-        cheap: \0.0000004
+        auto: \0.0004
+        cheap: \0.0001
+        fee-per-byte: \0.0000001
     mask: 'y000000000000000000000000000000000'
     topup: \https://test.faucet.dashninja.pl/
     api: 

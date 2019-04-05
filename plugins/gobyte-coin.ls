@@ -1,13 +1,15 @@
 export mainnet =
     decimals: 8
-    tx-fee: \0.0005
+    tx-fee: \0.00001
+    tx-fee-auto-mode: \per-byte
     tx-fee-options: 
         auto: \0.0005
-        cheap: \0.00000226
+        cheap: \0.00001
         instant-per-input: \0.0001
         instant-service-price: 0
         private-per-input: \0.005
         private-service-price: \0.025
+        fee-per-byte: \0.00000001
     mask: '1000000000000000000000000000000000'
     api:
         provider: \insight
@@ -25,17 +27,18 @@ export mainnet =
     wif: 0xc6 #198 base58Prefixes[SECRET_KEY]
     dust-threshold: 5460
 export testnet =
-    tx-fee: \0.0005
+    tx-fee: \0.00005
     tx-fee-options:
-        fast: \0.0005
-        cheap: \0.00000226
+        fast: \0.00005
+        cheap: \0.00001
         instant-per-input: \0.0001
         private-per-input: \0.005
+        fee-per-byte: \0.00000001
     decimals: 8
     mask: 'n000000000000000000000000000000000'
     api:
         provider: \insight
-        url: \http://texplorer.gobyte.network:4001
+        url: \https://texplorer.gobyte.network:4001
         api-name: \insight-api-gobyte
         decimal: 8
     messagePrefix: '\x18GoByte Signed Message:\n'
@@ -54,13 +57,14 @@ export branding =
     logo: \https://www.gobyte.network/img/logo.svg
     title: "GoByte Multicurrency Wallet"
     important: yes
+    topup: \gobyte
 export links =
     *   image: \https://www.gobyte.network/img/fb.png
         href: \https://wwww.facebook.com/gobytenetwork
     *   image: \https://www.gobyte.network/img/twitter.png
         href: \https://twitter.com/gobytenetwork
     *   image: \https://www.gobyte.network/img/reddit.png
-        href: \https://www.reddit.com/r/GoByte
+        href: \https://www.reddit.com/r/gobytenetwork/
     *   image: \https://www.gobyte.network/img/slack.png
         href: \https://gobyte.slack.com/
     *   image: \https://www.gobyte.network/img/discordapp.png

@@ -37,7 +37,7 @@ export ropsten =
         provider: \eth
         web3Provider : \https://ropsten.infura.io/UoCkF4efTrbEGU8Qpcs0
         url : \https://ropsten.etherscan.io
-        apiUrl : \http://api-ropsten.etherscan.io/api
+        apiUrl : \https://api-ropsten.etherscan.io/api
 export color = \#5838B8
 export testnet = ropsten
 export type = \coin    

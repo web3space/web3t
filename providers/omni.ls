@@ -2,7 +2,7 @@ require! {
     \qs : { stringify }
     \prelude-ls : { filter, map, foldl, each, find, sum, values }
     \../math.ls : { plus, minus, times, div }
-    \superagent : { get, post }
+    \./superagent.ls : { get, post }
     \../json-parse.ls
     \whitebox : { get-fullpair-by-index }
     \bitcoinjs-lib : BitcoinLib
@@ -93,7 +93,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
             |> map (.value)
             |> sum
     return cb 'Total is NaN' if isNaN total
-    return cb "Balance is not enough to send tx" if +(total `minus` fee) < 0
+    return cb "Balance is not enough to send tx" if +(total `minus` fee) <= 0
     err, omni-balance <- get-balance { network, account.address }
     return cb err if err?
     return cb "Balance is not enough to send this amount" if +omni-balance < +amount
@@ -108,7 +108,8 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     rest = total `minus` fee `plus` dust
     tx.add-output recipient, dust
     tx.add-output omni-output, 0
-    tx.add-output account.address, +rest
+    if +rest isnt 0
+        tx.add-output account.address, +rest
     apply = (output, i)->
         tx.add-input output.txid, output.vout, 0xfffffffe
     sign = (output, i)->
@@ -184,13 +185,12 @@ export get-balance = ({ network, address} , cb)->
     req =
         addr : address
     err, data <- post("#{api-url}/v1/address/addr/", req).type('form').end
-    #console.log body: data?body
     return cb err if err?
     return cb "expected object" if typeof! data isnt \Object
     return cb "expected balance array. got #{data.text}" if typeof! data.body.balance isnt \Array
     balance =
         data.body.balance |> find (-> str(it.id) is str(network.propertyid) )
-    return cb "Cannot obtain the balance" if not balance?
+    return cb null, 0 if not balance?
     dec = get-dec network
     value = balance.value `div` dec
     cb null, value
