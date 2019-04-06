@@ -30,35 +30,40 @@ get-one-of-masternode = ({ network }, cb)->
     cb null, item
 get-enough = ([output, ...outputs], amount, you-have, cb)->
     return cb "Not Enough Funds (Unspent Outputs). You have #{you-have}" if not output?
-    next-amount = amount `minus` output.amount
+    return cb "Expected output amount, got #{output.amount}" if not output.amount?
+    output-amount = output.amount ? 0
+    next-amount = amount `minus` output-amount
     return cb null, [output] if +next-amount <= 0
-    you-have-next = you-have `plus` output.amount
+    you-have-next = you-have `plus` output-amount
     err, other <- get-enough outputs, next-amount, you-have-next
     return cb err if err?
-    all = [output] ++ other
+    current =
+        | +output-amount is 0 => []
+        | _ => [output]
+    all = current ++ other
     cb null, all    
 calc-fee-per-byte = (config, cb)->
     { network, fee-type, account } = config
     o = network?tx-fee-options
     tx-fee = o?[fee-type] ? network.tx-fee ? 0
     return cb null, tx-fee if fee-type isnt \auto
-    err, outputs <- get-outputs { network, account.address }
-    return cb err if err?
     fee-type = \cheap
-    amount-fee = network.tx-fee
+    amount-fee = o.cheap
     recipient = config.account.address
-    #console.log \calc-fee, { fee-type, amount-fee , recipient, ...config }
+    console.log { config.amount, amount-fee }
     err, data <- create-transaction { fee-type, amount-fee , recipient, ...config }
     return cb null, o.cheap if "#{err}".index-of("Not Enough Funds (Unspent Outputs)") > -1
-    return cb err if err?
+    console.log { err }
+    return cb err, o.cheap if err?
     return cb "rawtx is expected" if typeof! data.rawtx isnt \String
     #console.log data.rawtx
     #bytes = decode(data.rawtx).to-string(\hex).length / 2
     bytes = data.rawtx.length / 2
     infelicity = 1
-    calc-fee = (bytes + infelicity) * +o.fee-per-byte
-    final-price = if calc-fee > +o.cheap then calc-fee else o.cheap
-    #console.log final-price
+    calc-fee = (bytes + infelicity) `times` o.fee-per-byte
+    final-price = 
+        | calc-fee > +o.cheap => calc-fee
+        | _ => o.cheap
     cb null, final-price
 calc-dynamic-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     o = network?tx-fee-options
@@ -121,12 +126,16 @@ add-value = (network, it)-->
         | it.satoshis? => it.satoshis
         | it.amount? => it.amount `times` dec
         | _ => 0
+#DEBUG
+#mock = [{"address":"GbyU4HML1rX8gcdVB2dNfE4RszCwKFYuuv","txid":"2b598e790c06e106709ea230b4553e9b867f234aa6e84ad700f81efe68bb563e","vout":0,"scriptPubKey":"76a914c6df968d5d5e5103290559629f966c5efe6cfbfb88ac","amount":1,"satoshis":100000000,"height":275994,"confirmations":598},{"address":"GbyU4HML1rX8gcdVB2dNfE4RszCwKFYuuv","txid":"e815481a072b33390e0a2dad5df7ff1726c39d3542558e933f0aa475613c4145","vout":0,"scriptPubKey":"76a914c6df968d5d5e5103290559629f966c5efe6cfbfb88ac","amount":1,"satoshis":100000000,"height":275988,"confirmations":604},{"address":"GbyU4HML1rX8gcdVB2dNfE4RszCwKFYuuv","txid":"f9897905e569aed3067c532d5a1e11bd018a4b60231caf62c66db4e7ec9234c5","vout":1,"scriptPubKey":"76a914c6df968d5d5e5103290559629f966c5efe6cfbfb88ac","amount":0.00001,"satoshis":1000,"height":275987,"confirmations":605}]
 get-outputs = ({ network, address} , cb)-->
     { url } = network.api
     err, data <- get "#{get-api-url network}/addr/#{address}/utxo" .timeout { deadline } .end
     return cb "cannot get outputs - err #{err.message ? err}" if err?
+    #mock
     data.body
         |> each add-value network
+        |> filter (.amount?)
         |> map extend { network, address }
         |> -> cb null, it
 parse-rate-string = (usd-info)->
@@ -160,6 +169,7 @@ get-deposit-address = ({ amount, recipient, network }, cb)->
 add-outputs-private = (config, cb)->
     { tx-type, total, value, fee, tx, recipient, network, account } = config
     #return add-outputs-private config, cb if tx-type is \private
+    return cb "fee, value, total are required" if not fee? or not value? or not total?
     o = network?tx-fee-options
     rest = total `minus` value `minus` fee
     fee2 = o?[fee-type] ? network.tx-fee ? 0
@@ -172,10 +182,11 @@ add-outputs-private = (config, cb)->
     cb null
 add-outputs = (config, cb)->
     { tx-type, total, value, fee, tx, recipient, account } = config
+    return cb "fee, value, total are required" if not fee? or not value? or not total?
     return add-outputs-private config, cb if tx-type is \private
     rest = total `minus` value `minus` fee
     tx.add-output recipient, +value
-    console.log { rest }
+    #console.log { rest }
     if +rest isnt 0
         tx.add-output account.address, +rest
     cb null
@@ -194,7 +205,8 @@ export create-transaction = (config, cb)->
     { network, account, recipient, amount, amount-fee, fee-type, tx-type} = config
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
-    err, outputs <- get-enough outputs, amount, 0
+    amount-with-fee = amount `plus` amount-fee
+    err, outputs <- get-enough outputs, amount-with-fee, 0
     return cb err if err?
     is-no-value =
         outputs |> find (-> !it.value?)
@@ -206,7 +218,7 @@ export create-transaction = (config, cb)->
         outputs
             |> map (.value)
             |> sum
-    #console.log { total, fee, value }
+    #console.log { total, fee, value, outputs }
     return cb "Balance is not enough to send tx" if +((total `minus` fee) `minus` value) < 0
     return cb 'Total is NaN' if isNaN total
     tx = new BitcoinLib.TransactionBuilder network
@@ -248,6 +260,7 @@ export get-balance = ({ address, network } , cb)->
     return cb err if err? or data.text.length is 0
     dec = get-dec network
     num = data.text `div` dec
+    #return cb null, "2.00001"
     cb null, num
 incoming-vout = (address, vout)-->
     addrs = vout.script-pub-key?addresses

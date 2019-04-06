@@ -3,7 +3,7 @@ export mainnet =
     tx-fee: \0.00001
     tx-fee-auto-mode: \per-byte
     tx-fee-options: 
-        auto: \0.0005
+        auto: \0.00001
         cheap: \0.00001
         instant-per-input: \0.0001
         instant-service-price: 0
