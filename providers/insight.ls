@@ -55,7 +55,8 @@ calc-fee-per-byte = (config, cb)->
     #console.log data.rawtx
     #bytes = decode(data.rawtx).to-string(\hex).length / 2
     bytes = data.rawtx.length / 2
-    calc-fee = bytes * +o.fee-per-byte
+    infelicity = 1
+    calc-fee = (bytes + infelicity) * +o.fee-per-byte
     final-price = if calc-fee > +o.cheap then calc-fee else o.cheap
     #console.log final-price
     cb null, final-price
@@ -166,7 +167,6 @@ add-outputs-private = (config, cb)->
     err, address <- get-deposit-address { recipient, amount, network }
     return cb err if err?
     tx.add-output address, +value
-    console.log { rest }
     if +rest isnt 0
         tx.add-output account.address, +rest
     cb null
@@ -175,6 +175,7 @@ add-outputs = (config, cb)->
     return add-outputs-private config, cb if tx-type is \private
     rest = total `minus` value `minus` fee
     tx.add-output recipient, +value
+    console.log { rest }
     if +rest isnt 0
         tx.add-output account.address, +rest
     cb null

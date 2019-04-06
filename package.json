@@ -1,9 +1,9 @@
 {
   "author": {
-    "name": "Ethnamed Project"
+    "name": "Andrey Stehno <a.stegno@gmail.com>"
   },
   "bugs": {
-    "url": "https://github.com/ethnamed/web3t/issues"
+    "url": "https://github.com/web3space/web3t/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
@@ -47,5 +47,5 @@
     "postinstall": "rm -rf ./node_modules/bitcore-message/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.3.2"
+  "version": "0.3.3"
 }
