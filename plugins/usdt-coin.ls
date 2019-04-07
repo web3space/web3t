@@ -50,4 +50,4 @@ export enabled = yes
 export token = \usdt
 export color = \#26A17B
 export image = \https://res.cloudinary.com/nixar-work/image/upload/v1547940263/download.png
-export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).USDT.USD"
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT,ETC&tsyms=USD).USDT.USD"

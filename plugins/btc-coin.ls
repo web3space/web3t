@@ -43,4 +43,4 @@ export type = \coin
 export enabled = yes
 export token = \btc
 export image = \./res/btc-ethnamed.png
-export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).BTC.USD"
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT,ETC&tsyms=USD).BTC.USD"

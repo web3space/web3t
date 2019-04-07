@@ -35,7 +35,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     #return cb err if err?
     data-parsed = 
         | data? => data
-        | _ => ''
+        | _ => '0x'
     from = account.address
     query = { from, to, data: data-parsed }
     err, estimate <- make-query network, \eth_estimateGas , [ query ]

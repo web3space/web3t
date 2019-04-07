@@ -50,4 +50,4 @@ export type = \coin
 export enabled = yes 
 export token = \dash
 export image = \./res/dash-ethnamed.png
-export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).DASH.USD"
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT,ETC&tsyms=USD).DASH.USD"

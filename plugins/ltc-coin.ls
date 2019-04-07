@@ -40,4 +40,4 @@ export type = \coin
 export enabled = yes
 export token = \ltc
 export image = \./res/litecoin-ethnamed.png
-export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT&tsyms=USD).LTC.USD"
+export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT,ETC&tsyms=USD).LTC.USD"
