@@ -2,6 +2,7 @@ require! {
     \./plugins/btc-coin.ls : btc
     \./plugins/dash-coin.ls : dash
     \./plugins/eth-coin.ls : eth
+    \./plugins/etc-coin.ls : etc
     \./plugins/ltc-coin.ls : ltc
     \./plugins/xem-coin.ls : xem
     \./plugins/xrp-coin.ls : xrp
@@ -21,6 +22,6 @@ extend-coins = (coins, config)->
     return if typeof! config.plugins isnt \Object
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
-    def = { btc, dash, eth, ltc, xem, usdt, eos, xlm, trx, xmr }
+    def = { btc, dash, eth, ltc, xem, usdt, eos, xlm, trx, xmr, etc }
     extend-coins def, config
     cb null, def
