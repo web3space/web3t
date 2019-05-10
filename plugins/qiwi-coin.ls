@@ -1,5 +1,5 @@
 export mainnet =
-    private-key: \170bfcbb41ba03238f6d3b4790b15481
+    private-key: \...
     decimals: 0
     mask: \+30001234567
     currency: 643

@@ -14,6 +14,7 @@
     "eosjs-node-cli": "0.1.1",
     "ethereumjs-tx": "1.3.7",
     "ethereumjs-util": "5.2.0",
+    "liqpay-sdk": "^3.2.0",
     "moment": "2.22.2",
     "nem-sdk": "1.6.7",
     "node-qiwi-api": "^1.1.1",
