@@ -73,20 +73,27 @@ get-dec = (network)->
 calc-gas-price = ({ web3, fee-type }, cb)->
     return cb null, \3000000000 if fee-type is \cheap
     web3.eth.get-gas-price cb
+round = (num)->
+    Math.round +num
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type} , cb)-->
-    #throw "check-amount-fee #{amount-fee} #{fee-type}"
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- web3.eth.get-transaction-count account.address, \pending
+    return cb err if err?
+    return cb "nonce is required" if not nonce?
     contract = get-contract-instance web3, network.address
     to-wei = -> it `times` dec
     to-wei-eth = -> it `times` (10^18)
     to-eth = -> it `div` (10^18)
     value = to-wei amount
-    err, gas-price <- calc-gas-price { web3, fee-type }
+    err, gas-price-bn <- calc-gas-price { web3, fee-type }
+    #gas-price = round (gas-price-bn `plus` ( gas-price-bn `div` 100 ))
+    gas-price = gas-price-bn.to-fixed!
     return cb err if err?
-    gas-estimate = to-wei-eth(amount-fee) `div` gas-price
+    gas-minimal = to-wei-eth(amount-fee) `div` gas-price
+    gas-estimate = round ( gas-minimal `plus` ( gas-minimal `div` 1 ) )
+    #console.log { gas-estimate, amount-fee }, gas-price.to-fixed!
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance account.address
     return cb err if err?
@@ -98,6 +105,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     data = 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
+    console.log \tx-build, { nonce, gas-price, gas-estimate, to: network.address, account.address, data }
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -106,6 +114,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         to: network.address
         from: account.address
         data: data
+    console.log \sign
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -115,7 +124,9 @@ export check-decoded-data = (decoded-data, data)->
 export push-tx = ({ network, rawtx } , cb)-->
     web3 = get-web3 network
     send = web3.eth.send-raw-transaction ? web3.eth.send-signed-transaction
+    console.log \push-tx
     err, txid <- send rawtx
+    console.log { err, txid }
     cb err, txid
 export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"

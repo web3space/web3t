@@ -47,6 +47,8 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-fullpair-by-index mnemonic, index, network
     cb null, result
+round = (num)->
+    Math.round +num
 to-hex = ->
     new BN(it)
 transform-tx = (network, t)-->
@@ -75,6 +77,7 @@ export get-transactions = ({ network, address }, cb)->
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs = 
         result.result |> map transform-tx network
+    #console.log api-url, result.result, txs
     cb null, txs
 #get-web3 = (network)->
 #    { web3-provider } = network.api
@@ -103,7 +106,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     value = to-wei amount
     err, gas-price <- calc-gas-price { fee-type, network }
     return cb err if err?
-    gas-estimate = to-wei(amount-fee) `div` gas-price
+    gas-estimate = round(to-wei(amount-fee) `div` gas-price)
     err, balance <- make-query network, \eth_getBalance , [ account.address, \latest ]
     return cb err if err?
     balance-eth = to-eth balance

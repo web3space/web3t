@@ -30,5 +30,5 @@ export color = \#71DF8F
 export type = \coin    
 export enabled = yes
 export token = \etc
-export image = \https://bitsettle.com/images/sp/1321-dbbd894924b65cc449f43c7bc7e9325e0478bbd4e9723249ac029fc6279cb55e.png
+export image = \https://res.cloudinary.com/nixar-work/image/upload/v1555933362/Ethereum-Classic-ETC-icon.png
 export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,DASH,XEM,USDT,ETC&tsyms=USD).ETC.USD"

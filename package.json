@@ -16,6 +16,7 @@
     "ethereumjs-util": "5.2.0",
     "moment": "2.22.2",
     "nem-sdk": "1.6.7",
+    "node-qiwi-api": "^1.1.1",
     "postinstall": "0.4.2",
     "prelude-ls": "1.1.2",
     "qs": "6.5.2",
@@ -26,7 +27,8 @@
     "superagent": "4.0.0-beta.5",
     "superagent-proxy": "^2.0.0",
     "web3": "0.20.1",
-    "whitebox": "0.1.61"
+    "whitebox": "0.1.61",
+    "yandex-money-sdk": "^0.1.7"
   },
   "deprecated": false,
   "description": "Unified Open Source Coin Registry (Same interface for all possible coins, tokens)",

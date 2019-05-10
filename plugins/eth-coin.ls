@@ -15,7 +15,7 @@ export mainnet =
 export ethnamed =
     decimals: 18
     tx-fee: \0.0014
-    tx-fee-options: 
+    tx-fee-options:
         auto: \0.0014
         cheap: \0.00014
     message-prefix: 'Ethereum'
