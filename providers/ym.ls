@@ -2,6 +2,7 @@ require! {
     \yandex-money-sdk : { Wallet }
     \prelude-ls : { map, find, split, map }
     \../math.ls : { div, times, plus, minus }
+    \moment
 }
 export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     fixed = 50
@@ -13,24 +14,21 @@ export get-keys = ({ network, mnemonic, index }, cb)->
     return cb err if err?
     err, info <- api.account-info
     return cb err if err?
-    console.log info.account
-    address = \+ + info.account?contract-id
+    address = info.account
     cb null, { network.private-key , address }
 transform-tx = (network, t)-->
     { url } = network.api
-    tx = t.txnId
-    amount = t.total.amount
-    time = t.date
-    fee = t.commission.amount
-    from = if t.type is 'OUT' then t.personId else t.account
-    to = if t.type is 'OUT' then t.account else t.personId
-    { network: 'ym', tx, amount, fee, time, url, t.from, t.to }
+    tx = t.operation_id
+    amount = t.amount
+    time = moment.utc(t.date).unix!
+    fee = \n/a
+    type = t.direction.to-upper-case!
+    from = if t.direction is \out then 'my account'
+    to = if t.direction is \out then `recipient`
+    { network: 'ym', tx, amount, fee, time, url, t.from, t.to, type }
 export get-transactions = ({ network, address }, cb)->
     err, api <- get-api network.private-key
     return cb err if err?
-    sources =
-        | network.currency is 643 => <[ QW_RUB ]>
-        | _ => []
     err, info <- api.operation-history { records: 25 }
     return cb err if err?
     return cb "expected array" if typeof! info.operations isnt \Array
@@ -43,17 +41,30 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     rest = balance `minus` (amount `plus` amount-fee)
     return cb "Balance is not enough to send this amount" if +rest < 0
     return cb err if err?
-    rawtx = "#{amount} -> #{recipient}"
+    options =
+        pattern_id : \p2p
+        to : recipient
+        amount_due : amount
+        comment : "Payment"
+        message : "Payment"
+        label : "payment"
+        test_payment : no
+        test_result : \success
+    err, res <- api.request-payment options
+    return cb err if err?
+    return cb res if res.status isnt \success
+    rawtx = data.request_id
     cb null, { rawtx }
 export push-tx = ({ network, rawtx } , cb)-->
     return cb "rawtx should be an string" if typeof! rawtx isnt \String
-    [amount, account] = 
-        rawtx |> split '->'
-            |> map -> it.trim!
     err, api <- get-api network.private-key
     return cb err if err?
-    data = { amount, comment: 'Money Transfer', account }
-    cb "Not Implemented"
+    request_id = rawtx
+    err, data <- api.process-payment { request_id }
+    #console.log err, data
+    return cb err if err?
+    return cb data if data.status isnt \success
+    cb null, data.operation_id
 export get-total-received = ({ address, network }, cb)->
     cb "Not Implemented"
 get-api = (private-key, cb)->
