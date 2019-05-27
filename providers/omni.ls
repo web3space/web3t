@@ -77,7 +77,7 @@ get-outputs = ({ network, address} , cb)-->
         |> each add-value network
         |> map extend { network, address }
         |> -> cb null, it
-export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type}, cb)->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type, spender }, cb)->
     err, outputs <- get-outputs { network, account.address }
     return cb err if err?
     return cb 'Not Enough Funds (Unspent Outputs)' if outputs.length is 0

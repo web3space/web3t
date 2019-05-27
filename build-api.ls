@@ -28,12 +28,12 @@ build-calc-fee = ({ network, provider })-> (tx, cb)->
     return default-calc-fee network, tx, cb if not tx-fee?
     cb null, tx-fee
 
-build-send-transaction = ({network, provider})-> ({ account, to, amount, data, fee-type }, cb)->
+build-send-transaction = ({network, provider})-> ({ account, to, amount, data, fee-type, spender }, cb)->
     { create-transaction, push-tx } = provider
     calc-fee = build-calc-fee { network, provider }
-    err, amount-fee <- calc-fee { account, to, amount, data, fee-type }
+    err, amount-fee <- calc-fee { account, to, amount, data, fee-type, spender }
     return cb err if err?
-    err, data <- create-transaction { account, recipient: to, amount, data, network, amount-fee, fee-type }
+    err, data <- create-transaction { account, recipient: to, amount, data, network, amount-fee, fee-type, spender }
     return cb err if err?
     err, data <- push-tx { network, data.rawtx }
     return cb err if err?
@@ -69,7 +69,7 @@ build-is-valid-address = ({network, provider})-> (address, cb)->
     return cb err if err?
     cb null, valid
 
-build-send-all-funds = ({ network, provider })-> ({ account, to, data, fee-type}, cb)->
+build-send-all-funds = ({ network, provider })-> ({ account, to, data, fee-type, spender }, cb)->
     send-transaction = build-send-transaction { network, provider }
     get-balance = build-get-balance { network, provider }
     calc-fee = build-calc-fee { network, provider }
@@ -78,7 +78,7 @@ build-send-all-funds = ({ network, provider })-> ({ account, to, data, fee-type}
     err, fee <- calc-fee { account, to, amount, data, fee-type }
     return cb err if err?
     all = amount `minus` fee
-    send-transaction { account, to, amount: all, data, fee-type }, cb
+    send-transaction { account, to, amount: all, data, fee-type, spender }, cb
 
 build-create-account = ({network, provider})-> ({ mnemonic, index }, cb)->
     { get-keys } = provider

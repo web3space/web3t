@@ -5,7 +5,7 @@ export mainnet =
     currency: 643
     api:
         provider: \qiwi
-export testnet = 
+export testnet =
     disabled: yes
 export color = \#FF8C00
 export type = \coin   
