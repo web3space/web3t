@@ -7,13 +7,27 @@ require! {
     \ethereumjs-tx : \Tx
     \ethereumjs-util : { BN }
     \../json-parse.ls
-    \whitebox : { get-fullpair-by-index }
     \../deadline.ls
+    \ethereumjs-wallet/hdkey
+    \bip39
 }
+get-ethereum-fullpair-by-index = (mnemonic, index, network)->
+    seed = bip39.mnemonic-to-seed(mnemonic)
+    wallet = hdkey.from-master-seed(seed)
+    w = wallet.derive-path("m0").derive-child(index).get-wallet!
+    address = "0x" + w.get-address!.to-string(\hex)
+    private-key = w.get-private-key-string!
+    public-key = w.get-public-key-string!
+    { address, private-key, public-key }
 abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
 get-contract-instance = (web3, addr)->
     | typeof! web3.eth.contract is \Function => web3.eth.contract(abi).at(addr)
     | _ => new web3.eth.Contract(abi, addr)
+is-address = (address) ->
+    if not //^(0x)?[0-9a-f]{40}$//i.test address
+        false
+    else
+        true
 export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
     return cb null if fee-type isnt \auto
     web3 = get-web3 network
@@ -29,7 +43,7 @@ export calc-fee = ({ network, tx, fee-type, account, amount, to, data }, cb)->
     val = res `div` (10^18)
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
-    result = get-fullpair-by-index mnemonic, index, network
+    result = get-ethereum-fullpair-by-index mnemonic, index, network
     cb null, result
 to-hex = ->
     new BN(it)
@@ -76,6 +90,7 @@ calc-gas-price = ({ web3, fee-type }, cb)->
 round = (num)->
     Math.round +num
 export create-transaction = ({ network, account, recipient, amount, amount-fee, fee-type, tx-type} , cb)-->
+    return cb "address in not correct ethereum address" if not is-address recipient
     web3 = get-web3 network
     dec = get-dec network
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
@@ -92,7 +107,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     gas-price = gas-price-bn.to-fixed!
     return cb err if err?
     gas-minimal = to-wei-eth(amount-fee) `div` gas-price
-    gas-estimate = round ( gas-minimal `plus` ( gas-minimal `div` 1 ) )
+    gas-estimate = round ( gas-minimal `times` 5 )
     #console.log { gas-estimate, amount-fee }, gas-price.to-fixed!
     return cb "getBalance is not a function" if typeof! web3.eth.get-balance isnt \Function
     err, balance <- web3.eth.get-balance account.address

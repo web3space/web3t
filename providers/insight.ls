@@ -5,10 +5,17 @@ require! {
     \../math.ls : { plus, minus, div, times }
     \bitcoinjs-lib : BitcoinLib
     \../json-parse.ls
-    \whitebox : { get-fullpair-by-index }
     \../deadline.ls
     \bs58 : { decode }
+    \bip39
 }
+get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
+    seed = bip39.mnemonic-to-seed-hex mnemonic
+    hdnode = BitcoinLib.HDNode.from-seed-hex(seed, network).derive(index)
+    address = hdnode.get-address!
+    private-key = hdnode.key-pair.toWIF!
+    public-key = hdnode.get-public-key-buffer!.to-string(\hex)
+    { address, private-key, public-key }
 #0.25m + 0.05m * numberOfInputs
 #private send https://github.com/DeltaEngine/MyDashWallet/blob/master/Node/DashNode.cs#L18
 #https://github.com/StaminaDev/dash-insight-api/blob/master/lib/index.js#L244
@@ -114,7 +121,7 @@ export calc-fee = (config, cb)->
     calc-fee = get-calc-fee-func network
     calc-fee config, cb
 export get-keys = ({ network, mnemonic, index }, cb)->
-    result = get-fullpair-by-index mnemonic, index, network
+    result = get-bitcoin-fullpair-by-index mnemonic, index, network
     cb null, result
 extend = (add, json)--> json <<< add
 get-dec = (network)->

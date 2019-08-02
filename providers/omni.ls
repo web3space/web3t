@@ -4,10 +4,17 @@ require! {
     \../math.ls : { plus, minus, times, div }
     \./superagent.ls : { get, post }
     \../json-parse.ls
-    \whitebox : { get-fullpair-by-index }
     \bitcoinjs-lib : BitcoinLib
     \../deadline.ls
+    \bip39
 }
+get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
+    seed = bip39.mnemonic-to-seed-hex mnemonic 
+    hdnode = BitcoinLib.HDNode.from-seed-hex(seed, network).derive(index)
+    address = hdnode.get-address!
+    private-key = hdnode.key-pair.toWIF!
+    public-key = hdnode.get-public-key-buffer!.to-string(\hex)
+    { address, private-key, public-key }
 # https://api.omniexplorer.info/#request-v1-address-addr
 export calc-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
     o = network?tx-fee-options
@@ -22,7 +29,7 @@ export calc-fee = ({ network, tx, tx-type, account, fee-type }, cb)->
         | _ => vals.0
     cb null, calced-fee
 export get-keys = ({ network, mnemonic, index }, cb)->
-    result = get-fullpair-by-index mnemonic, index, network
+    result = get-bitcoin-fullpair-by-index mnemonic, index, network
     cb null, result
 #const simple_send = [
 #    "6f6d6e69", // omni

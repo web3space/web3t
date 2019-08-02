@@ -113,7 +113,9 @@ build-pair = ([name, api], providers, config, cb)->
     get-total-received = build-get-total-received { network, provider }
     get-history = build-get-history { network, provider }
     send-all-funds = build-send-all-funds { network, provider }
-    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds, humanize-amount, is-valid-address, unhumanize-amount, get-total-received }
+    get-network = (cb)->
+        cb null, network
+    cb null, { send-transaction, create-account, calc-fee, get-balance, get-history, send-all-funds, humanize-amount, is-valid-address, unhumanize-amount, get-total-received, get-network }
         
 build-pairs = ([pair, ...rest], providers, config, cb)->
     return cb null, [] if not pair?

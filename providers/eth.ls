@@ -7,9 +7,18 @@ require! {
     \ethereumjs-tx : \Tx
     \ethereumjs-util : { BN }
     \../json-parse.ls
-    \whitebox : { get-fullpair-by-index }
     \../deadline.ls
+    \ethereumjs-wallet/hdkey
+    \bip39
 }
+get-ethereum-fullpair-by-index = (mnemonic, index, network)->
+    seed = bip39.mnemonic-to-seed(mnemonic)
+    wallet = hdkey.from-master-seed(seed)
+    w = wallet.derive-path("m0").derive-child(index).get-wallet!
+    address = "0x" + w.get-address!.to-string(\hex)
+    private-key = w.get-private-key-string!
+    public-key = w.get-public-key-string!
+    { address, private-key, public-key }
 make-query = (network, method, params, cb)->
     { web3-provider } = network.api
     query = {
@@ -25,7 +34,6 @@ make-query = (network, method, params, cb)->
 export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     return cb null if fee-type isnt \auto
     dec = get-dec network
-    console.log \p0
     err, gas-price <- calc-gas-price { fee-type, network }
     return cb err if err?
     value =
@@ -45,7 +53,7 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     val = res `div` dec
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
-    result = get-fullpair-by-index mnemonic, index, network
+    result = get-ethereum-fullpair-by-index mnemonic, index, network
     cb null, result
 round = (num)->
     Math.round +num
@@ -96,8 +104,15 @@ get-nonce = ({ network, account }, cb)->
     err, nonce <- make-query network, \eth_getTransactionCount , [ account.address, \pending ]
     return cb "cannot get nonce - err: #{err.message ? err}" if err?
     cb null, from-hex(nonce)
+is-address = (address) ->
+    if not //^(0x)?[0-9a-f]{40}$//i.test address
+        false
+    else
+        true
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type} , cb)-->
+    #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     dec = get-dec network
+    return cb "address in not correct ethereum address" if not is-address recipient
     private-key = new Buffer account.private-key.replace(/^0x/,''), \hex
     err, nonce <- get-nonce { account, network }
     return cb err if err?
@@ -106,12 +121,15 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     value = to-wei amount
     err, gas-price <- calc-gas-price { fee-type, network }
     return cb err if err?
-    gas-estimate = round(to-wei(amount-fee) `div` gas-price)
+    gas-estimate =
+        |  +gas-price is 0 => 0
+        | _ => round(to-wei(amount-fee) `div` gas-price)
     err, balance <- make-query network, \eth_getBalance , [ account.address, \latest ]
     return cb err if err?
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
+    console.log { nonce, gas-price, value, gas-estimate, recipient, account.address, data }
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
