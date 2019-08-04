@@ -1,15 +1,15 @@
 require! {
-    \./providers/eth.ls
-    \./providers/rst.ls
-    \./providers/insight.ls
-    #\./providers/xem.ls
-    \./providers/ripple.ls
-    \./providers/erc20.ls
-    \./providers/omni.ls
-    #\./providers/eos.ls
-    \./providers/stellar.ls
-    \./providers/tron.ls
-    #\./providers/cryptonote.ls
+    \./providers/eth.js
+    \./providers/rst.js
+    \./providers/insight.js
+    #\./providers/xem.js
+    \./providers/ripple.js
+    \./providers/erc20.js
+    \./providers/omni.js
+    #\./providers/eos.js
+    \./providers/stellar.js
+    \./providers/tron.js
+    #\./providers/cryptonote.js
 }
 extend-providers = (providers, config)->
     return if typeof! config.providers isnt \Object

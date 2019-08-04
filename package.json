@@ -20,7 +20,6 @@
     "moment": "2.22.2",
     "nem-sdk": "1.6.7",
     "node-qiwi-api": "^1.1.1",
-    "postinstall": "0.4.2",
     "prelude-ls": "1.1.2",
     "proof-of-work": "^3.3.2",
     "qs": "6.5.2",
@@ -50,11 +49,10 @@
     "url": "git+https://github.com/ethnamed/web3t.git"
   },
   "scripts": {
-    "postinstall": "rm -rf ./node_modules/bitcore-message/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-setup": "npm i browserify browserify-livescript -g",
     "mobile1": "browserify --s module -d -t browserify-livescript index.ls > ./web3t.js",
     "mobile2": "browserify --s module -d -t browserify-livescript ./mobile/index.ls > ./mobile/web3t.js"
   },
-  "version": "0.4.8"
+  "version": "0.4.9"
 }

@@ -1,7 +1,7 @@
 require! {
     \prelude-ls : { obj-to-pairs, pairs-to-obj }
-    \./math.ls : { minus, div, times }
-    \./config-parser.ls
+    \./math.js : { minus, div, times }
+    \./config-parser.js
 }
 
 #{ calc-fee, get-keys, push-tx, get-balance, get-transactions, create-transaction } = provider

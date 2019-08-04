@@ -1,18 +1,18 @@
 require! {
-    \./plugins/btc-coin.ls : btc
-    \./plugins/dash-coin.ls : dash
-    \./plugins/eth-coin.ls : eth
-    \./plugins/etc-coin.ls : etc
-    \./plugins/ltc-coin.ls : ltc
-    #\./plugins/xem-coin.ls : xem
-    \./plugins/xrp-coin.ls : xrp
-    \./plugins/usdt-coin.ls : usdt
-    #\./plugins/eos-coin.ls : eos
-    \./plugins/xlm-coin.ls : xlm
-    \./plugins/trx-coin.ls : trx
-    \./plugins/xmr-coin.ls : xmr
-    #\./plugins/qiwi-coin.ls : qiwi_token
-    #\./plugins/ym-coin.ls : ym_token
+    \./plugins/btc-coin.js : btc
+    \./plugins/dash-coin.js : dash
+    \./plugins/eth-coin.js : eth
+    \./plugins/etc-coin.js : etc
+    \./plugins/ltc-coin.js : ltc
+    #\./plugins/xem-coin.js : xem
+    \./plugins/xrp-coin.js : xrp
+    \./plugins/usdt-coin.js : usdt
+    #\./plugins/eos-coin.js : eos
+    \./plugins/xlm-coin.js : xlm
+    \./plugins/trx-coin.js : trx
+    \./plugins/xmr-coin.js : xmr
+    #\./plugins/qiwi-coin.js : qiwi_token
+    #\./plugins/ym-coin.js : ym_token
     \prelude-ls : { obj-to-pairs, pairs-to-obj, filter }
 }
 only-coins = (plugins)->

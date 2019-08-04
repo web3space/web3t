@@ -24,8 +24,8 @@ transform-tx = (network, t)-->
     fee = \n/a
     type = t.direction.to-upper-case!
     from = if t.direction is \out then 'my account'
-    to = if t.direction is \out then `recipient`
-    { network: 'ym', tx, amount, fee, time, url, t.from, t.to, type }
+    to2 = if t.direction is \out then 'recipient'
+    { network: 'ym', tx, amount, fee, time, url, t.from, to: to2, type }
 export get-transactions = ({ network, address }, cb)->
     err, api <- get-api network.private-key
     return cb err if err?
