@@ -2,10 +2,10 @@ require! {
     \moment
     \prelude-ls : { map, foldl, any, each, find, sum, filter }
     \superagent : { get, post } 
-    \../math.ls : { plus, minus, div, times }
+    \../math.js : { plus, minus, div, times }
     \bitcoinjs-lib-zcash : BitcoinLib
-    \../json-parse.ls
-    \../deadline.ls
+    \../json-parse.js
+    \../deadline.js
 }
 export calc-fee = ({ network, tx }, cb)->
 export get-keys = ({ network, mnemonic, index }, cb)->

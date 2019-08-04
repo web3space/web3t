@@ -1,10 +1,10 @@
 require! {
     \nem-sdk : { default: nem }
     \superagent : { get }
-    \../json-parse.ls
+    \../json-parse.js
     \prelude-ls : { filter, map, head, foldl }
-    \../math.ls : { minus, div, plus }
-    \../deadline.ls
+    \../math.js : { minus, div, plus }
+    \../deadline.js
 }
 export calc-fee = ({ network, tx }, cb)->
     cb null

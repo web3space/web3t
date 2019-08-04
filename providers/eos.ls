@@ -2,7 +2,7 @@ require! {
     \eosjs : Eos
     \superagent : { post, get }
     \prelude-ls : { map, filter, foldl }
-    \../math.ls : { plus }
+    \../math.js : { plus }
 }
 #https://developer.eospark.com/api-doc/https/transaction.html#push-transaction
 #https://developers.eos.io/eosio-nodeos/reference

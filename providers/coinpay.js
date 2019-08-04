@@ -3,7 +3,7 @@
   var superagent, ref$, map, find, split, div, times, plus, minus, moment, buildRequest, buildCreateUser, buildObtainToken, buildRefreshToken, buildGetBalance, buildAccountInfo, buildWithdrawal, buildCancelWithdrawal, buildRepeatWithdrawal, buildExchange, buildOrderHistory, buildOrderDetails, getApi, calcFee, getKeys, transformTx, getTransactions, getDec, createTransaction, pushTx, getTotalReceived, getBalance, toString$ = {}.toString, out$ = typeof exports != 'undefined' && exports || this;
   superagent = require('superagent');
   ref$ = require('prelude-ls'), map = ref$.map, find = ref$.find, split = ref$.split, map = ref$.map;
-  ref$ = require('../math.ls'), div = ref$.div, times = ref$.times, plus = ref$.plus, minus = ref$.minus;
+  ref$ = require('../math.js'), div = ref$.div, times = ref$.times, plus = ref$.plus, minus = ref$.minus;
   moment = require('moment');
   buildRequest = function(privateKey, cb){
     var baseUrl, post, get;

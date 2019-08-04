@@ -1,8 +1,8 @@
 require! {
     \superagent : { get }
-    \../math.ls : { div }
-    \../json-parse.ls
-    \../deadline.ls
+    \../math.js : { div }
+    \../json-parse.js
+    \../deadline.js
 }
 export calc-fee = ({ network, tx }, cb)->
     cb null

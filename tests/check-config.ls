@@ -1,5 +1,5 @@
 require! {
-    \../config-parser.ls
+    \../config-parser.js
 }
 
 module.exports = (cb)->

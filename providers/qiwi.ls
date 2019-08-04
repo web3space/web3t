@@ -1,7 +1,7 @@
 require! {
     \node-qiwi-api : { Qiwi }
     \prelude-ls : { map, find, split, map }
-    \../math.ls : { div, times, plus, minus }
+    \../math.js : { div, times, plus, minus }
     \moment
 }
 export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->

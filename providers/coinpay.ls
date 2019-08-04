@@ -1,7 +1,7 @@
 require! {
     \superagent
     \prelude-ls : { map, find, split, map }
-    \../math.ls : { div, times, plus, minus }
+    \../math.js : { div, times, plus, minus }
     \moment
 }
 

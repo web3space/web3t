@@ -1,13 +1,13 @@
 require! {
     \qs : { stringify }
     \prelude-ls : { filter, map, foldl, each }
-    \../math.ls : { plus, minus, times, div }
+    \../math.js : { plus, minus, times, div }
     \superagent : { get }
     \web3 : \Web3
     \ethereumjs-tx : \Tx
     \ethereumjs-util : { BN }
-    \../json-parse.ls
-    \../deadline.ls
+    \../json-parse.js
+    \../deadline.js
     \ethereumjs-wallet/hdkey
     \bip39
 }

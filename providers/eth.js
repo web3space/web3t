@@ -3,12 +3,12 @@
   var stringify, ref$, filter, map, foldl, each, plus, minus, times, div, fromHex, get, post, Tx, BN, jsonParse, deadline, hdkey, bip39, getEthereumFullpairByIndex, makeQuery, calcFee, getKeys, round, toHex, transformTx, getTransactions, getDec, calcGasPrice, getNonce, isAddress, createTransaction, checkDecodedData, pushTx, checkTxStatus, getTotalReceived, getUnconfirmedBalance, getBalance, out$ = typeof exports != 'undefined' && exports || this, toString$ = {}.toString;
   stringify = require('qs').stringify;
   ref$ = require('prelude-ls'), filter = ref$.filter, map = ref$.map, foldl = ref$.foldl, each = ref$.each;
-  ref$ = require('../math.ls'), plus = ref$.plus, minus = ref$.minus, times = ref$.times, div = ref$.div, fromHex = ref$.fromHex;
+  ref$ = require('../math.js'), plus = ref$.plus, minus = ref$.minus, times = ref$.times, div = ref$.div, fromHex = ref$.fromHex;
   ref$ = require('superagent'), get = ref$.get, post = ref$.post;
   Tx = require('ethereumjs-tx');
   BN = require('ethereumjs-util').BN;
-  jsonParse = require('../json-parse.ls');
-  deadline = require('../deadline.ls');
+  jsonParse = require('../json-parse.js');
+  deadline = require('../deadline.js');
   hdkey = require('ethereumjs-wallet/hdkey');
   bip39 = require('bip39');
   getEthereumFullpairByIndex = function(mnemonic, index, network){

@@ -2,8 +2,8 @@
 (function(){
   var ref$, objToPairs, pairsToObj, minus, div, times, configParser, calcFeeOptions, defaultCalcFee, buildCalcFee, buildSendTransaction, buildGetTotalReceived, buildGetBalance, buildHumanizeAmount, buildUnhumanizeAmount, buildIsValidAddress, buildSendAllFunds, buildCreateAccount, buildGetHistory, buildPair, buildPairs, buildApi, toString$ = {}.toString, slice$ = [].slice;
   ref$ = require('prelude-ls'), objToPairs = ref$.objToPairs, pairsToObj = ref$.pairsToObj;
-  ref$ = require('./math.ls'), minus = ref$.minus, div = ref$.div, times = ref$.times;
-  configParser = require('./config-parser.ls');
+  ref$ = require('./math.js'), minus = ref$.minus, div = ref$.div, times = ref$.times;
+  configParser = require('./config-parser.js');
   calcFeeOptions = function(network, tx, cb){
     var feeType, txFeeOptions, option;
     feeType = tx.feeType;

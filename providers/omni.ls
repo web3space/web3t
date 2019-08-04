@@ -1,11 +1,11 @@
 require! {
     \qs : { stringify }
     \prelude-ls : { filter, map, foldl, each, find, sum, values }
-    \../math.ls : { plus, minus, times, div }
-    \./superagent.ls : { get, post }
-    \../json-parse.ls
+    \../math.js : { plus, minus, times, div }
+    \./superagent.js : { get, post }
+    \../json-parse.js
     \bitcoinjs-lib : BitcoinLib
-    \../deadline.ls
+    \../deadline.js
     \bip39
 }
 get-bitcoin-fullpair-by-index = (mnemonic, index, network)->

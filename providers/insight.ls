@@ -1,11 +1,11 @@
 require! {
     \moment
     \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join }
-    \./superagent.ls : { get, post } 
-    \../math.ls : { plus, minus, div, times }
+    \./superagent.js : { get, post } 
+    \../math.js : { plus, minus, div, times }
     \bitcoinjs-lib : BitcoinLib
-    \../json-parse.ls
-    \../deadline.ls
+    \../json-parse.js
+    \../deadline.js
     \bs58 : { decode }
     \bip39
 }

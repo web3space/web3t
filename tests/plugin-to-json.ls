@@ -1,5 +1,5 @@
 require! {
-    \../plugins/gobyte-coin.ls
+    \../plugins/gobyte-coin.js
     fs : { read-file-sync, write-file-sync }
 }
 

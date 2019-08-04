@@ -2,9 +2,9 @@
 (function(){
   var get, div, jsonParse, deadline, calcFee, getKeys, createTransaction, pushTx, getUnconfirmedBalance, getBalance, checkTxStatus, getTotalReceived, getTransactions, out$ = typeof exports != 'undefined' && exports || this;
   get = require('superagent').get;
-  div = require('../math.ls').div;
-  jsonParse = require('../json-parse.ls');
-  deadline = require('../deadline.ls');
+  div = require('../math.js').div;
+  jsonParse = require('../json-parse.js');
+  deadline = require('../deadline.js');
   out$.calcFee = calcFee = function(arg$, cb){
     var network, tx;
     network = arg$.network, tx = arg$.tx;

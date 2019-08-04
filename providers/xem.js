@@ -3,10 +3,10 @@
   var nem, get, jsonParse, ref$, filter, map, head, foldl, minus, div, plus, deadline, calcFee, getKeys, transformTransfer, getTransactions, createTransaction, pushTx, checkTxStatus, getTotalReceived, getUnconfirmedBalance, getBalance, out$ = typeof exports != 'undefined' && exports || this;
   nem = require('nem-sdk')['default'];
   get = require('superagent').get;
-  jsonParse = require('../json-parse.ls');
+  jsonParse = require('../json-parse.js');
   ref$ = require('prelude-ls'), filter = ref$.filter, map = ref$.map, head = ref$.head, foldl = ref$.foldl;
-  ref$ = require('../math.ls'), minus = ref$.minus, div = ref$.div, plus = ref$.plus;
-  deadline = require('../deadline.ls');
+  ref$ = require('../math.js'), minus = ref$.minus, div = ref$.div, plus = ref$.plus;
+  deadline = require('../deadline.js');
   out$.calcFee = calcFee = function(arg$, cb){
     var network, tx;
     network = arg$.network, tx = arg$.tx;

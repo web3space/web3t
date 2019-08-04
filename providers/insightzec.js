@@ -4,10 +4,10 @@
   moment = require('moment');
   ref$ = require('prelude-ls'), map = ref$.map, foldl = ref$.foldl, any = ref$.any, each = ref$.each, find = ref$.find, sum = ref$.sum, filter = ref$.filter;
   ref$ = require('superagent'), get = ref$.get, post = ref$.post;
-  ref$ = require('../math.ls'), plus = ref$.plus, minus = ref$.minus, div = ref$.div, times = ref$.times;
+  ref$ = require('../math.js'), plus = ref$.plus, minus = ref$.minus, div = ref$.div, times = ref$.times;
   BitcoinLib = require('bitcoinjs-lib-zcash');
-  jsonParse = require('../json-parse.ls');
-  deadline = require('../deadline.ls');
+  jsonParse = require('../json-parse.js');
+  deadline = require('../deadline.js');
   out$.calcFee = calcFee = function(arg$, cb){
     var network, tx;
     network = arg$.network, tx = arg$.tx;

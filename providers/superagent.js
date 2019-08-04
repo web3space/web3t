@@ -3,7 +3,7 @@
   var superagent, extendProxy, powSolve, ref$, keys, each, corsService, proxyServers, makeRandom, tryProxy, addSets, tryWithPow, buildRequest, post, put, get, out$ = typeof exports != 'undefined' && exports || this;
   superagent = require('superagent');
   extendProxy = require('superagent-proxy');
-  powSolve = require('../pow/pow-solve.ls');
+  powSolve = require('../pow/pow-solve.js');
   ref$ = require('prelude-ls'), keys = ref$.keys, each = ref$.each;
   extendProxy(superagent);
   corsService = {

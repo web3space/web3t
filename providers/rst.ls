@@ -1,6 +1,6 @@
 require! {
-    \./eth.ls
-    \../math.ls : { plus, minus, times, div, from-hex }
+    \./eth.js
+    \../math.js : { plus, minus, times, div, from-hex }
     \ethers : { utils } 
 }
 is-address = (address) ->

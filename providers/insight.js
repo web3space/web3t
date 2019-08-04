@@ -3,11 +3,11 @@
   var moment, ref$, map, foldl, any, each, find, sum, filter, head, values, join, get, post, plus, minus, div, times, BitcoinLib, jsonParse, deadline, decode, bip39, getBitcoinFullpairByIndex, getMasternodeList, findMax, getOneOfMasternode, getEnough, calcFeePerByte, calcDynamicFee, getCalcFeeFunc, calcFeePrivate, calcFeeInstantx, calcFee, getKeys, extend, getDec, addValue, getOutputs, parseRateString, extractVal, parseResult, getDepositAddressInfo, getDepositAddressFromList, getDepositAddress, addOutputsPrivate, addOutputs, getError, createTransaction, pushTx, getTotalReceived, getUnconfirmedBalance, getBalance, incomingVout, outcomingVouts, transformIn, transformOut, transformTx, getApiUrl, checkTxStatus, getTransactions, toString$ = {}.toString, slice$ = [].slice, out$ = typeof exports != 'undefined' && exports || this;
   moment = require('moment');
   ref$ = require('prelude-ls'), map = ref$.map, foldl = ref$.foldl, any = ref$.any, each = ref$.each, find = ref$.find, sum = ref$.sum, filter = ref$.filter, head = ref$.head, values = ref$.values, join = ref$.join;
-  ref$ = require('./superagent.ls'), get = ref$.get, post = ref$.post;
-  ref$ = require('../math.ls'), plus = ref$.plus, minus = ref$.minus, div = ref$.div, times = ref$.times;
+  ref$ = require('./superagent.js'), get = ref$.get, post = ref$.post;
+  ref$ = require('../math.js'), plus = ref$.plus, minus = ref$.minus, div = ref$.div, times = ref$.times;
   BitcoinLib = require('bitcoinjs-lib');
-  jsonParse = require('../json-parse.ls');
-  deadline = require('../deadline.ls');
+  jsonParse = require('../json-parse.js');
+  deadline = require('../deadline.js');
   decode = require('bs58').decode;
   bip39 = require('bip39');
   getBitcoinFullpairByIndex = function(mnemonic, index, network){

@@ -1,6 +1,6 @@
 require! {
-    \../index.ls : build-web3t
-    \./mnemonic.ls
+    \../index.js : build-web3t
+    \./mnemonic.js
 }
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 err, web3t <- build-web3t \mainnet

@@ -1,7 +1,7 @@
 require! {
     \superagent
     \superagent-proxy : extend-proxy
-    \../pow/pow-solve.ls
+    \../pow/pow-solve.js
     \prelude-ls : { keys, each }
 }
 extend-proxy(superagent)

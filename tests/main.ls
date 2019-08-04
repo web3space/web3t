@@ -1,8 +1,8 @@
 require! {
-    \../index.ls : build-web3t
-    \./check-fields.ls
-    \./test-coins.ls
-    \./check-config.ls
+    \../index.js : build-web3t
+    \./check-fields.js
+    \./test-coins.js
+    \./check-config.js
 }
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 main = (network, cb)->

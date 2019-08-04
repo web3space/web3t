@@ -1,7 +1,7 @@
 require! {
-    \./pow-verify.ls
-    \./pow-solve.ls
-    \./pow-gen.ls
+    \./pow-verify.js
+    \./pow-solve.js
+    \./pow-gen.js
 }
 
 task = pow-gen 19

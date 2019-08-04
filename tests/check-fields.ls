@@ -1,5 +1,5 @@
 require! {
-    \./types.ls
+    \./types.js
 }
 
 fields = <[ sendTransaction createAccount calcFee getBalance getHistory sendAllFunds ]>

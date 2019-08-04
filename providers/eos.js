@@ -4,7 +4,7 @@
   Eos = require('eosjs');
   ref$ = require('superagent'), post = ref$.post, get = ref$.get;
   ref$ = require('prelude-ls'), map = ref$.map, filter = ref$.filter, foldl = ref$.foldl;
-  plus = require('../math.ls').plus;
+  plus = require('../math.js').plus;
   asCallback = function(promise, cb){
     var state;
     state = {

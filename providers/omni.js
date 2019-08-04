@@ -3,11 +3,11 @@
   var stringify, ref$, filter, map, foldl, each, find, sum, values, plus, minus, times, div, get, post, jsonParse, BitcoinLib, deadline, bip39, getBitcoinFullpairByIndex, calcFee, getKeys, extendNum, extend, toHex, getApiUrl, addValue, getOutputs, createTransaction, transformTx, getTransactions, getDec, checkDecodedData, pushTx, checkTxStatus, str, getTotalReceived, getUnconfirmedBalance, getBalance, out$ = typeof exports != 'undefined' && exports || this, toString$ = {}.toString;
   stringify = require('qs').stringify;
   ref$ = require('prelude-ls'), filter = ref$.filter, map = ref$.map, foldl = ref$.foldl, each = ref$.each, find = ref$.find, sum = ref$.sum, values = ref$.values;
-  ref$ = require('../math.ls'), plus = ref$.plus, minus = ref$.minus, times = ref$.times, div = ref$.div;
-  ref$ = require('./superagent.ls'), get = ref$.get, post = ref$.post;
-  jsonParse = require('../json-parse.ls');
+  ref$ = require('../math.js'), plus = ref$.plus, minus = ref$.minus, times = ref$.times, div = ref$.div;
+  ref$ = require('./superagent.js'), get = ref$.get, post = ref$.post;
+  jsonParse = require('../json-parse.js');
   BitcoinLib = require('bitcoinjs-lib');
-  deadline = require('../deadline.ls');
+  deadline = require('../deadline.js');
   bip39 = require('bip39');
   getBitcoinFullpairByIndex = function(mnemonic, index, network){
     var seed, hdnode, address, privateKey, publicKey;
