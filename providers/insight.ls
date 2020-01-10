@@ -10,6 +10,7 @@ require! {
     \bip39
 }
 get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
+    #console.log \get-bitcoin-fullpair-by-index , mnemonic, index, network
     seed = bip39.mnemonic-to-seed-hex mnemonic
     hdnode = BitcoinLib.HDNode.from-seed-hex(seed, network).derive(index)
     address = hdnode.get-address!

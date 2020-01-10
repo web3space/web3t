@@ -5,7 +5,7 @@ require! {
     \./plugins/etc-coin.js : etc
     \./plugins/ltc-coin.js : ltc
     #\./plugins/xem-coin.js : xem
-    \./plugins/xrp-coin.js : xrp
+    #\./plugins/xrp-coin.js : xrp
     \./plugins/usdt-coin.js : usdt
     #\./plugins/eos-coin.js : eos
     \./plugins/xlm-coin.js : xlm

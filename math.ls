@@ -3,6 +3,7 @@ require! {
     \prelude-ls : { map, pairs-to-obj }
 }
 math = ($)-> (x, y)->
+    return '..' if x is '..' or y is '..'
     try 
         new bignumber(x)[$](y).to-fixed!
     catch err

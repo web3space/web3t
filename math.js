@@ -6,6 +6,9 @@
   math = function($){
     return function(x, y){
       var err;
+      if (x === '..' || y === '..') {
+        return '..';
+      }
       try {
         return new bignumber(x)[$](y).toFixed();
       } catch (e$) {

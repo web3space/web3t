@@ -1,20 +1,20 @@
 require! {
-    \superagent
-    \superagent-proxy : extend-proxy
+    \./superagent-adapter.js : superagent
+    \cross-fetch
     \../pow/pow-solve.js
     \prelude-ls : { keys, each }
 }
-extend-proxy(superagent)
+#extend-proxy(superagent)
 cors-service =
     get: ({ args, type}, cb)->
         instance = superagent.get("https://cors-anywhere.herokuapp.com/#{args.0}", args.1)
         instance.type(type) if type?
         instance.timeout({ deadline: 5000 }).end cb
-proxy-servers =
-    * \http://207.176.218.185:1321
-    * \http://207.176.218.193:1321
-    * \http://168.63.43.102:3128
-    ...
+#proxy-servers =
+#    * \http://207.176.218.185:1321
+#    * \http://207.176.218.193:1321
+#    * \http://168.63.43.102:3128
+#    ...
 make-random = (length)->
     return 0 if length is 0
     max = length - 1
@@ -62,7 +62,7 @@ build-request = (method)-> (...args)->
         add-sets instance, $._set
         err, data <- instance.end
         #console.log { err, data }
-        return try-proxy({ method, args, type: $._type, err, set: $._set }, cb) if err? data?status is 504
+        #return try-proxy({ method, args, type: $._type, err, set: $._set }, cb) if err? data?status is 504
         return try-with-pow instance, data, cb if data?status is 401 and data.headers[\www-authenticate] is \pow
         return cb err, data if data?status >= 400
         cb err, data
