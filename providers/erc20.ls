@@ -3,13 +3,9 @@ require! {
     \prelude-ls : { filter, map, foldl, each }
     \../math.js : { plus, minus, times, div }
     \./superagent.js : { get }
-    \web3 : \Web3
-    \ethereumjs-tx : \Tx
-    \ethereumjs-util : { BN }
+    \./deps.js : { Web3, Tx, BN, hdkey, bip39 }
     \../json-parse.js
     \../deadline.js
-    \ethereumjs-wallet/hdkey
-    \bip39
 }
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)

@@ -2,7 +2,7 @@
 (function(){
   var Eos, ref$, post, get, map, filter, foldl, plus, asCallback, apikey, listAccounts, calcFee, noAccount, getKeys, transformTx, getTransactions, getRandomInt, getRandomUrl, getNodeUrl, getEos, createTransaction, pushTx, getUnconfirmedBalance, checkTxStatus, getTotalReceived, getBalance, out$ = typeof exports != 'undefined' && exports || this, toString$ = {}.toString;
   Eos = require('eosjs');
-  ref$ = require('superagent'), post = ref$.post, get = ref$.get;
+  ref$ = require('./superagent.js'), post = ref$.post, get = ref$.get;
   ref$ = require('prelude-ls'), map = ref$.map, filter = ref$.filter, foldl = ref$.foldl;
   plus = require('../math.js').plus;
   asCallback = function(promise, cb){

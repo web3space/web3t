@@ -3,7 +3,7 @@
   var moment, ref$, map, foldl, any, each, find, sum, filter, get, post, plus, minus, div, times, BitcoinLib, jsonParse, deadline, calcFee, getKeys, extend, getDec, addValue, getOutputs, createTransaction, pushTx, getBalance, transformTx, getTransactions, out$ = typeof exports != 'undefined' && exports || this, toString$ = {}.toString;
   moment = require('moment');
   ref$ = require('prelude-ls'), map = ref$.map, foldl = ref$.foldl, any = ref$.any, each = ref$.each, find = ref$.find, sum = ref$.sum, filter = ref$.filter;
-  ref$ = require('superagent'), get = ref$.get, post = ref$.post;
+  ref$ = require('./superagent.js'), get = ref$.get, post = ref$.post;
   ref$ = require('../math.js'), plus = ref$.plus, minus = ref$.minus, div = ref$.div, times = ref$.times;
   BitcoinLib = require('bitcoinjs-lib-zcash');
   jsonParse = require('../json-parse.js');

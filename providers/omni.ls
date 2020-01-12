@@ -4,9 +4,8 @@ require! {
     \../math.js : { plus, minus, times, div }
     \./superagent.js : { get, post }
     \../json-parse.js
-    \bitcoinjs-lib : BitcoinLib
     \../deadline.js
-    \bip39
+    \./deps.js : { BitcoinLib, bip39 }
 }
 get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed-hex mnemonic 

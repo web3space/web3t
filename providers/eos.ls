@@ -1,6 +1,6 @@
 require! {
     \eosjs : Eos
-    \superagent : { post, get }
+    \./superagent.js : { post, get }
     \prelude-ls : { map, filter, foldl }
     \../math.js : { plus }
 }

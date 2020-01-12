@@ -2,7 +2,7 @@
 (function(){
   var nem, get, jsonParse, ref$, filter, map, head, foldl, minus, div, plus, deadline, calcFee, getKeys, transformTransfer, getTransactions, createTransaction, pushTx, checkTxStatus, getTotalReceived, getUnconfirmedBalance, getBalance, out$ = typeof exports != 'undefined' && exports || this;
   nem = require('nem-sdk')['default'];
-  get = require('superagent').get;
+  get = require('./superagent.js').get;
   jsonParse = require('../json-parse.js');
   ref$ = require('prelude-ls'), filter = ref$.filter, map = ref$.map, head = ref$.head, foldl = ref$.foldl;
   ref$ = require('../math.js'), minus = ref$.minus, div = ref$.div, plus = ref$.plus;

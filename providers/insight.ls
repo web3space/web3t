@@ -3,11 +3,10 @@ require! {
     \prelude-ls : { map, foldl, any, each, find, sum, filter, head, values, join }
     \./superagent.js : { get, post } 
     \../math.js : { plus, minus, div, times }
-    \bitcoinjs-lib : BitcoinLib
+    \./deps.js : { BitcoinLib, bip39 }
     \../json-parse.js
     \../deadline.js
     \bs58 : { decode }
-    \bip39
 }
 get-bitcoin-fullpair-by-index = (mnemonic, index, network)->
     #console.log \get-bitcoin-fullpair-by-index , mnemonic, index, network
