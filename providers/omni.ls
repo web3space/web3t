@@ -153,7 +153,7 @@ export get-transactions = ({ network, address }, cb)->
     return cb "expected array" if typeof! data.body?transactions isnt \Array
     txs =
         data.body.transactions
-            |> filter (.propertyid is network.propertyid)
+            |> filter (-> +it.propertyid is +network.propertyid)
             |> map transform-tx { network, address }
     cb null, txs
 get-dec = (network)->

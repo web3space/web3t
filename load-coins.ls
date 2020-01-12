@@ -8,9 +8,9 @@ require! {
     #\./plugins/xrp-coin.js : xrp
     \./plugins/usdt-coin.js : usdt
     #\./plugins/eos-coin.js : eos
-    \./plugins/xlm-coin.js : xlm
-    \./plugins/trx-coin.js : trx
-    \./plugins/xmr-coin.js : xmr
+    #\./plugins/xlm-coin.js : xlm
+    #\./plugins/trx-coin.js : trx
+    #\./plugins/xmr-coin.js : xmr
     #\./plugins/qiwi-coin.js : qiwi_token
     #\./plugins/ym-coin.js : ym_token
     \prelude-ls : { obj-to-pairs, pairs-to-obj, filter }
@@ -25,6 +25,6 @@ extend-coins = (coins, config)->
     coins <<<< only-coins config.plugins
 module.exports = (config, cb)->
     #eos
-    def = { btc, dash, eth, ltc, usdt, xlm, trx, xmr, etc }
+    def = { btc, dash, eth, ltc, usdt, etc, /*xlm, trx, xmr, */  }
     extend-coins def, config
     cb null, def

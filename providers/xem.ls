@@ -1,6 +1,6 @@
 require! {
     \nem-sdk : { default: nem }
-    \superagent : { get }
+    \./superagent.js : { get }
     \../json-parse.js
     \prelude-ls : { filter, map, head, foldl }
     \../math.js : { minus, div, plus }

@@ -1,5 +1,5 @@
 require! {
-    \superagent
+    \./superagent.js
     \ripple-keypairs : { derive-keypair, derive-address, generate-seed }
     \big.js : big
     \hash.js : hashjs

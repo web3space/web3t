@@ -1,5 +1,6 @@
 require! {
     \cross-fetch : fetch
+    \qs : { stringify }
 }
 
 json-parse = (text, cb)->
@@ -21,15 +22,25 @@ as-callback = (p, cb)->
     p.then (data)->
         cb null, data
 
+form-encoded = (data, cb)->
+    res = stringify data
+    cb null, res
+
+get-body = (headers, data, cb)->
+    return json-stringify data, cb if headers["Content-Type"] is "application/json"
+    return form-encoded data, cb if headers["Content-Type"] is "application/x-www-form-urlencoded"
+    cb "header #{headers['Content-Type']} is not supported"
+
 make-body = (method, headers, data, cb)->
     return cb null if method not in <[ POST PUT ]>
-    err, body <- json-stringify data
+    err, body <- get-body headers, data
     return cb err if err?
     cb null, { method, body, headers }
 
 get-type = (type)->
     | type is "application/json" => "application/json"
     | type is "json" => "application/json"
+    | type is "form" => "application/x-www-form-urlencoded"
     | _ => type
     
 make-api = (method)-> (url, data)->

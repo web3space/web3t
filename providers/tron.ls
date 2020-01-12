@@ -1,5 +1,5 @@
 require! {
-    \superagent : { post, get }
+    \./superagent.js : { post, get }
     \prelude-ls : { map }
 }
 export calc-fee = ({ network, tx }, cb)->

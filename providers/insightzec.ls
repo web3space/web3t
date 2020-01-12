@@ -1,7 +1,7 @@
 require! {
     \moment
     \prelude-ls : { map, foldl, any, each, find, sum, filter }
-    \superagent : { get, post } 
+    \./superagent.js : { get, post } 
     \../math.js : { plus, minus, div, times }
     \bitcoinjs-lib-zcash : BitcoinLib
     \../json-parse.js

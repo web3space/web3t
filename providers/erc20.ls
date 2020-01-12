@@ -2,7 +2,7 @@ require! {
     \qs : { stringify }
     \prelude-ls : { filter, map, foldl, each }
     \../math.js : { plus, minus, times, div }
-    \superagent : { get }
+    \./superagent.js : { get }
     \web3 : \Web3
     \ethereumjs-tx : \Tx
     \ethereumjs-util : { BN }
@@ -120,7 +120,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     data = 
         | contract.methods? => contract.methods.transfer(recipient, value).encodeABI!
         | _ => contract.transfer.get-data recipient, value
-    console.log \tx-build, { nonce, gas-price, gas-estimate, to: network.address, account.address, data }
+    #console.log \tx-build, { nonce, gas-price, gas-estimate, to: network.address, account.address, data }
     tx = new Tx do
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -129,7 +129,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         to: network.address
         from: account.address
         data: data
-    console.log \sign
+    #console.log \sign
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
     cb null, { rawtx }
@@ -139,7 +139,7 @@ export check-decoded-data = (decoded-data, data)->
 export push-tx = ({ network, rawtx } , cb)-->
     web3 = get-web3 network
     send = web3.eth.send-raw-transaction ? web3.eth.send-signed-transaction
-    console.log \push-tx
+    #console.log \push-tx
     err, txid <- send rawtx
     console.log { err, txid }
     cb err, txid

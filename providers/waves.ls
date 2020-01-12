@@ -1,5 +1,5 @@
 require! {
-    \superagent : { get }
+    \./superagent.js : { get }
     \../math.js : { div }
     \../json-parse.js
     \../deadline.js
