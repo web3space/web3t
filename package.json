@@ -17,7 +17,6 @@
     "prelude-ls": "1.1.2",
     "proof-of-work": "3.3.2",
     "qs": "6.5.2",
-    "sha3": "2.0.4",
     "web3": "0.20.1"
   },
   "deprecated": false,
