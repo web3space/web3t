@@ -1,5 +1,6 @@
 require! {
     \rn-bitcoinjs-lib : BitcoinLib
+    \node-libs-browser
     \web3 : \Web3
     \ethereumjs-tx : Tx
     \ethereumjs-util : { BN }
@@ -8,6 +9,10 @@ require! {
     \ethereumjs-wallet-react-native/hdkey.js
     \react-native-bip39 : bip39
 }
+
+# for web3 according to https://github.com/ethereum/web3.js/issues/1022#issuecomment-330825219
+#node-libs-browser
+
 # https://github.com/WoeOm/ethereumjs-wallet-react-native requirement
 window.randomBytes = asyncRandomBytes
 window.scryptsy = safeCrypto.scrypt
