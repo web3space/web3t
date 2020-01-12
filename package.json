@@ -7,6 +7,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
+    "bip39": "^3.0.2",
     "bitcoinjs-lib": "3.3.2",
     "bs58": "4.0.1",
     "cross-fetch": "3.0.4",
@@ -40,5 +41,5 @@
     "mobile1": "browserify --s module -d -t browserify-livescript index.ls > ./web3t.js",
     "mobile2": "browserify --s module -d -t browserify-livescript ./mobile/index.ls > ./mobile/web3t.js"
   },
-  "version": "0.5.9"
+  "version": "0.6.0"
 }
