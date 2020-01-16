@@ -7,6 +7,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
+    "big-integer": "^1.6.45",
     "bip39": "^2.5.0",
     "bitcoinjs-lib": "3.3.2",
     "bs58": "4.0.1",
@@ -16,7 +17,6 @@
     "ethereumjs-wallet": "0.6.3",
     "moment": "2.22.2",
     "prelude-ls": "1.1.2",
-    "proof-of-work": "3.3.2",
     "qs": "6.5.2",
     "web3": "0.20.1"
   },

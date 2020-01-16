@@ -1,18 +1,21 @@
 #const baseUrl = 'https://api.velas.website/api/testnet'
 export mainnet =
-    decimals: 5
-    tx-fee: \1000000
+    decimals: 8
+    tx-fee: \0.001
     api:
         provider: \velas
-        apiUrl : \https://api.velas.website/api/testnet
-        historyUrl : \http://web3.space:8085/wallet/:address/txs
+        apiUrl : \https://explorer.velas.com/api/v1
+        url: \https://explorer.velas.com
+        historyUrl : \https://api.velas.com/api/mainnet/history/:address?limit=289&offset=0
+#https://api.velas.website/api/mainnet/history/VLUrkcckaXNDHYqSb9vzqUKdbsoqovfWzNh
 export testnet =
-    decimals: 5
-    tx-fee: \1000000
+    decimals: 8
+    tx-fee: \0.001
     api:
         provider: \velas
-        apiUrl : \https://api.velas.website/api/testnet
-        historyUrl : \http://web3.space:8085/wallet/:address/txs
+        apiUrl : \https://testnet.velas.website/api/v1
+        url: \https://testnet.velas.website
+        historyUrl : \https://api.velas.website/api/testnet/history_pg/:address?limit=289&offset=0
 export color = \#9E4FEB
 export type = \coin  
 export enabled = yes

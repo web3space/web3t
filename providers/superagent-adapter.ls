@@ -68,7 +68,7 @@ make-api = (method)-> (url, data)->
         return cb err if err?
         err, body <- json-parse text
         #return cb err if err?
-        cb null, { body, text } 
+        cb null, { body, text }
         $
     $
 
@@ -82,6 +82,6 @@ module.exports = { get, post, put }
 
 cb = console.log
 #
-err, data <- post "http://web3.space:8085/wallet/VLcEHRJwhBZPRVQHV1vTGLsypcwgcaKFYVc/txs", {} .end
-return cb err if err?
-cb null, data
+#err, data <- post "http://web3.space:8085/wallet/VLcEHRJwhBZPRVQHV1vTGLsypcwgcaKFYVc/txs", {} .end
+#return cb err if err?
+#cb null, data

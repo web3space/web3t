@@ -133,10 +133,4 @@
     put: put
   };
   cb = console.log;
-  post("http://web3.space:8085/wallet/VLcEHRJwhBZPRVQHV1vTGLsypcwgcaKFYVc/txs", {}).end(function(err, data){
-    if (err != null) {
-      return cb(err);
-    }
-    return cb(null, data);
-  });
 }).call(this);

@@ -1,3 +1,5 @@
+# add "proof-of-work": "3.3.2" to package.json
+
 require! {
     \proof-of-work : pow
 }

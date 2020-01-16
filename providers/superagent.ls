@@ -1,7 +1,7 @@
 require! {
     \./superagent-adapter.js : superagent
     \cross-fetch
-    \../pow/pow-solve.js
+    #\../pow/pow-solve.js
     \prelude-ls : { keys, each }
 }
 #extend-proxy(superagent)
@@ -38,8 +38,8 @@ add-sets = (instance, sets)->
 try-with-pow = (instance, data, cb)->
     nonce = data.headers[\pow-nonce]
     complexity = data.headers[\pow-complexity]
-    err, result <- pow-solve { nonce, complexity }
-    console.log { result }
+    return cb "Not Implemented"
+    #err, result <- pow-solve { nonce, complexity }
     return cb err if err?
     instance.set(\pow-result, result).end cb
 build-request = (method)-> (...args)->
