@@ -264,7 +264,7 @@
     };
   };
   buildPair = function(arg$, providers, config, cb){
-    var name, api, getModeFor, mode, network, provider, humanizeAmount, unhumanizeAmount, isValidAddress, sendTransaction, createAccount, calcFee, getBalance, getTotalReceived, getHistory, sendAllFunds, getNetwork;
+    var name, api, getModeFor, mode, network, provider, humanizeAmount, unhumanizeAmount, isValidAddress, sendTransaction, createAccount, calcFee, getBalance, getTotalReceived, getHistory, sendAllFunds, getNetwork, getConfig;
     name = arg$[0], api = arg$[1];
     if (api.enabled !== true || api.type !== 'coin') {
       return cb(null, {});
@@ -322,7 +322,11 @@
     getNetwork = function(cb){
       return cb(null, network);
     };
+    getConfig = function(){
+      return config;
+    };
     return cb(null, {
+      getConfig: getConfig,
       sendTransaction: sendTransaction,
       createAccount: createAccount,
       calcFee: calcFee,

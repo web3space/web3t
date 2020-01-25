@@ -6,8 +6,7 @@ export mainnet =
         provider: \velas
         apiUrl : \https://explorer.velas.com/api/v1
         url: \https://explorer.velas.com
-        historyUrl : \https://api.velas.com/api/mainnet/history/:address?limit=289&offset=0
-#https://api.velas.website/api/mainnet/history/VLUrkcckaXNDHYqSb9vzqUKdbsoqovfWzNh
+        historyUrl : \https://api.velas.website/api/mainnet/history_pg/:address?limit=289&offset=0
 export testnet =
     decimals: 8
     tx-fee: \0.001
