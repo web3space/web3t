@@ -201,22 +201,8 @@
     time = t.blocktime;
     url = url + "/tx/" + tx;
     fee = t.fee;
-    from = (function(){
-      switch (false) {
-      case t.ismine !== true:
-        return address;
-      default:
-        return t.sendingaddress;
-      }
-    }());
-    to = (function(){
-      switch (false) {
-      case t.ismine !== false:
-        return t.sendingaddress;
-      default:
-        return address;
-      }
-    }());
+    from = t.sendingaddress;
+    to = t.referenceaddress;
     return {
       network: network,
       tx: tx,
@@ -224,8 +210,8 @@
       fee: fee,
       time: time,
       url: url,
-      from: t.from,
-      to: t.to
+      from: from,
+      to: to
     };
   });
   out$.getTransactions = getTransactions = function(arg$, cb){

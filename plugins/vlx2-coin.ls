@@ -1,27 +1,34 @@
-#const baseUrl = 'https://api.velas.website/api/testnet'
 export mainnet =
-    decimals: 8
-    tx-fee: \0.001
+    decimals: 18
+    tx-fee: \0.0014
+    tx-fee-options: 
+        auto: \0.0020
+        cheap: \0.00014
+    message-prefix: 'Ethereum'
+    mask: \0x0000000000000000000000000000000000000000
     api:
-        provider: \velas
-        apiUrl : \https://explorer.velas.com/api/v1
-        #apiUrl : \https://mainnet.velas.website/api/v1
-        #apiUrl: \http://174.138.46.174:8088/api/v1
-        url: \https://explorer.velas.com
-        historyUrl : \https://explorer.velas.com/history-api/:address/txs
-##
+        provider: \velas2
+        web3Provider : \https://mainnet-v2.velas.com/rpc
+        #web3Provider: \https://mainnet.infura.io/v3/6a6c66740e9e4cea9cc8425869e9d106
+        url : \https://mainnet-v2.velas.com
+        apiUrl : \https://mainnet-v2.velas.com/api
 export testnet =
-    decimals: 8
-    tx-fee: \0.001
+    decimals: 18
+    tx-fee: \0.0014
+    tx-fee-options: 
+        auto: \0.0014
+        cheap: \0.00014
+    message-prefix: 'Ethereum'
+    mask: \0x0000000000000000000000000000000000000000
     api:
-        provider: \velas
-        apiUrl : \https://testnet.velas.website/api/v1
-        url: \https://testnet.velas.website
-        historyUrl : \https://api.velas.website/api/testnet/history_pg/:address?limit=289&offset=0
+        provider: \velas2
+        web3Provider : \https://ropsten.infura.io/UoCkF4efTrbEGU8Qpcs0
+        url : \https://ropsten.etherscan.io
+        apiUrl : \https://api-ropsten.etherscan.io/api
 export color = \#9E4FEB
 export type = \coin  
 export enabled = yes
 export name = 'Velas'
-export token = \vlx
+export token = \vlx2
 export image = "data:image/png;base64,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"
 export usd-info = "url(https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice).datas.usd.vlx"

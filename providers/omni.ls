@@ -135,13 +135,10 @@ transform-tx = ({ network, address }, t)-->
     time = t.blocktime
     url = "#{url}/tx/#{tx}"
     fee = t.fee
-    from = 
-        | t.ismine is yes => address
-        | _ => t.sendingaddress
-    to =
-        | t.ismine is no => t.sendingaddress
-        | _ => address
-    { network, tx, amount, fee, time, url, t.from, t.to }
+    from =  t.sendingaddress
+    to = t.referenceaddress
+    #console.log { t }
+    { network, tx, amount, fee, time, url, from, to }
 export get-transactions = ({ network, address }, cb)->
     { api-url } = network.api
     req =

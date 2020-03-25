@@ -16,7 +16,6 @@ Implementation of web3 protocol
 
 ```
 npm i web3t
-rm -rf ./node_modules/bitcore-message/node_modules
 ```
 
 #### Benefits

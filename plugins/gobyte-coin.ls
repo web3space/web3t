@@ -75,6 +75,7 @@ export links =
         href: \https://github.com/gobytecoin/gobyte
 export type = \coin
 export enabled = yes
+export name = 'Gobyte'
 export token = \gbx
 export image = \https://res.cloudinary.com/nixar-work/image/upload/v1548537659/gobyte.png
 export usd-info = "url(https://min-api.cryptocompare.com/data/pricemulti?fsyms=GBX&tsyms=USD).GBX.USD"

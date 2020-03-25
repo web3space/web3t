@@ -57,10 +57,10 @@ calc-fee-per-byte = (config, cb)->
     fee-type = \cheap
     amount-fee = o.cheap
     recipient = config.account.address
-    console.log { config.amount, amount-fee }
+    #console.log { config.amount, amount-fee }
     err, data <- create-transaction { fee-type, amount-fee , recipient, ...config }
     return cb null, o.cheap if "#{err}".index-of("Not Enough Funds (Unspent Outputs)") > -1
-    console.log { err }
+    #console.log { err }
     return cb err, o.cheap if err?
     return cb "rawtx is expected" if typeof! data.rawtx isnt \String
     #console.log data.rawtx
@@ -290,8 +290,10 @@ transform-in = ({ net, address }, t)->
             |> head
     amount = unspend?value
     to = address
+    from = t.vin.addr
     url = "#{net.api.url}/tx/#{tx}"
-    { network, tx, amount, fee, time, url, to, pending }
+    #console.log(\insight-in, t)
+    { network, tx, amount, fee, time, url, to, from, pending }
 transform-out = ({ net, address }, t)->
     network = net.token
     tx = t.txid
@@ -308,8 +310,10 @@ transform-out = ({ net, address }, t)->
             |> map (.value)
             |> foldl plus, 0
     to = outcoming.map(-> it.address).join(",")
+    from = address
     url = "#{net.api.url}/tx/#{tx}"
-    { network, tx, amount, fee, time, url, to, pending }
+    console.log(\insight-out, t)
+    { network, tx, amount, fee, time, url, to, pending, from }
 transform-tx = (config, t)-->
     self-sender =
         t.vin ? []
