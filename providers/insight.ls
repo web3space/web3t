@@ -312,7 +312,7 @@ transform-out = ({ net, address }, t)->
     to = outcoming.map(-> it.address).join(",")
     from = address
     url = "#{net.api.url}/tx/#{tx}"
-    console.log(\insight-out, t)
+    #console.log(\insight-out, t)
     { network, tx, amount, fee, time, url, to, pending, from }
 transform-tx = (config, t)-->
     self-sender =

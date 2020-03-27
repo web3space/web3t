@@ -151,12 +151,12 @@ get-dec = (network)->
     { decimals } = network
     10^decimals
 calc-gas-price = ({ fee-type, network }, cb)->
-    return cb null, 21644 if fee-type is \cheap
+    return cb null, 22000 if fee-type is \cheap
     #err, price <- web3.eth.get-gas-price
     err, price <- make-query network, \eth_gasPrice , []
     return cb "calc gas price - err: #{err.message ? err}" if err?
     price = from-hex(price)
-    return cb null, 21644 if +price is 0
+    return cb null, 22000 if +price is 0
     cb null, price
 try-get-lateest = ({ network, account }, cb)->
     err, address <- to-eth-address account.address
@@ -210,6 +210,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     common = Common.forCustomChain 'mainnet', { networkId }
     #gas-estimate = 1600000
     #gas-price  = 1000000
+    console.log { gas-price, gas-estimate }
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
