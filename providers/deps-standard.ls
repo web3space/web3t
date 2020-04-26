@@ -1,12 +1,12 @@
 require! {
-    \bitgo-utxo-lib : BitcoinLib
+    #\bitgo-utxo-lib : BitcoinLib
+    \bitcoinjs-lib : BitcoinLib
     \web3 : \Web3
-    \ethereumjs-tx : Tx
-    \ethereumjs-util : { BN }
-    \ethereumjs-wallet/hdkey
+    \../node_modules_embed/ethereumjs-tx/index.js : Tx
+    \bignumber.js : BN
+    \../node_modules_embed/ethereumjs-wallet/hdkey.js
     \bip39
 }
-#bitgo-utxo-lib
 
 # performance optimization start
 mnemonic-to-seed = bip39.mnemonic-to-seed

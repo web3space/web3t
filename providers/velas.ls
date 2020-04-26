@@ -62,7 +62,7 @@ export get-transactions = ({ network, address }, cb)->
     #    data.body |> filter only-my |> map transform-tx
     #return cb null, txs
 export get-transactions = ({ network, address }, cb)->
-    err, data <- get "https://explorer.velas.com/history-api/#{address}/txs" .end
+    err, data <- get "https://oldexplorer.velas.com/history-api/#{address}/txs" .end
     return cb err if err?
     txs = data.body
     return cb "expected array" if typeof! txs isnt \Array
@@ -124,9 +124,15 @@ export get-total-received = ({ address, network }, cb)->
 export get-unconfirmed-balance = ({ network, address} , cb)->
     return cb "Given address is not valid Velas address" if not Wallet.Is-valid-address address
     cb null, 0
+try-parse-amount = (data, cb)->
+    return cb null, data.body.amount if typeof! data.body is \Object
+    amount = data.text.match(/[0-9]+/)?0
+    cb null, amount
 export get-balance = ({ network, address} , cb)->
     return cb "Given address is not valid Velas address" if not Wallet.Is-valid-address address
-    err, data <- get "https://explorer.velas.com/api/v1/wallet/balance/#{address}" .end
+    err, data <- get "https://oldexplorer.velas.com/api/v1/wallet/balance/#{address}" .end
+    return cb err if err?
+    err, amount <- try-parse-amount data
     return cb err if err?
     #err, unspents-native <- get-unspents { network, address }
     #return cb err if err?
@@ -134,5 +140,5 @@ export get-balance = ({ network, address} , cb)->
     decimals = (10^network.decimals)
     #balance =
     #    unspents-native |> map (.value) |> map (-> it `div` decimals ) |> foldl plus, 0
-    balance = data.body.amount `div` decimals
+    balance = amount `div` decimals
     cb null, balance

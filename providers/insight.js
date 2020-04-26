@@ -121,9 +121,6 @@
       if ((err + "").indexOf("Not Enough Funds (Unspent Outputs)") > -1) {
         return cb(null, o.cheap);
       }
-      console.log({
-        err: err
-      });
       if (err != null) {
         return cb(err, o.cheap);
       }
@@ -677,7 +674,6 @@
     }).join(",");
     from = address;
     url = net.api.url + "/tx/" + tx;
-    console.log('insight-out', t);
     return {
       network: network,
       tx: tx,
@@ -686,7 +682,8 @@
       time: time,
       url: url,
       to: to,
-      pending: pending
+      pending: pending,
+      from: from
     };
   };
   transformTx = curry$(function(config, t){

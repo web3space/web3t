@@ -8,19 +8,8 @@ require! {
     \../deadline.js
     \bs58 : { decode, encode }
     \ethereumjs-common : { default: Common }
+    \../addresses.js : { vlxToEth, ethToVlx }
 }
-is-velas-v2-address = (address)->
-    return no if typeof! address isnt \String
-    return no if address.0 isnt \V
-    bs58str = address.substr(1, address.length)
-    try 
-        bytes = decode bs58str
-        hex = bytes.toString('hex')
-        eth-address = \0x + hex.substr(2, hex.length)
-        return isAddress eth-address
-    catch err
-        retur no
-    no
 isChecksumAddress = (address) ->
     address = address.replace '0x', ''
     addressHash = sha3 address.toLowerCase!
@@ -34,7 +23,7 @@ isAddress = (address) ->
         false
     else
         if (//^(0x)?[0-9a-f]{40}$//.test address) or //^(0x)?[0-9A-F]{40}$//.test address then true else isChecksumAddress address
-to-velas-address = (eth-address-buffer, cb)->
+to-velas-address = (eth-address-buffer)->
     #return cb "eth-address is not correct" if isAddress eth-address
     s1 = encode eth-address-buffer
     "V#{s1}"
@@ -42,6 +31,8 @@ to-eth-address = (velas-address, cb)->
     return cb "required velas-address as a string" if typeof! velas-address isnt \String
     return cb null, velas-address if isAddress velas-address
     return cb "velas address can be started with V" if velas-address.0 isnt \V
+    #NEW_ADDRESS
+    return cb null, vlxToEth(velas-address)
     bs58str = velas-address.substr(1, velas-address.length)
     try 
         bytes = decode bs58str
@@ -51,11 +42,15 @@ to-eth-address = (velas-address, cb)->
         cb null, eth-address
     catch err
         cb err
+window.to-eth-address = vlxToEth if window?
+window.to-velas-address = ethToVlx if window?
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
     w = wallet.derive-path("m0").derive-child(index).get-wallet!
-    address = to-velas-address w.get-address! #.to-string(\hex)
+    #NEW_ADDRESS
+    address = ethToVlx w.get-address!.to-string(\hex)
+    #address = to-velas-address w.get-address! #.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
     { address, private-key, public-key }
@@ -83,12 +78,30 @@ make-query = (network, method, params, cb)->
     return cb "expected object" if typeof! data.body isnt \Object
     return cb data.body.error if data.body?error?
     cb null, data.body.result
-export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
+export get-transaction-info = (config, cb)->
+    { network, tx } = config
+    query = [tx]
+    err, info <- make-query network, \eth_getTransactionReceipt , query
+    return cb err if err?
+    tx = info?result
+    return cb "expected result" if typeof! tx isnt \Object
+    status = 
+        | tx.status is \0x1 => \confirmed
+        | _ => \pending
+    result = { tx.from, tx.to, status, info: tx }
+    cb null, result
+get-gas-estimate = ({ network, query, gas }, cb)->
+    return cb null, gas if gas?
+    err, estimate <- make-query network, \eth_estimateGas , [ query ]
+    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
+    return cb null, 1000000 if err?
+    cb null, from-hex(estimate)
+export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
     #console.log \calc-fee, { network, fee-type, account, amount, to, data }
-    return cb "to is required" if typeof! to isnt \String or to.length is 0
+    return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
     dec = get-dec network
-    err, gas-price <- calc-gas-price { fee-type, network }
+    err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     data-parsed = 
         | data? => data
@@ -98,14 +111,15 @@ export calc-fee = ({ network, fee-type, account, amount, to, data }, cb)->
     err, to <- to-eth-address to
     return cb err if err?
     query = { from, to, data: data-parsed }
-    err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
-    estimate := 1000000 if err?
+    err, estimate <- get-gas-estimate { network, query, gas }
+    return cb err if err?
     #return cb "estimate gas err: #{err.message ? err}" if err?
-    res = gas-price `times` from-hex(estimate)
+    res = gas-price `times` estimate
     #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
-    console.log { gas-price, res, val }
+    #console.log { gas-price, res, val }
+    #min = 0.002
+    #return cb null, min if +val < min
     cb null, val
 export get-keys = ({ network, mnemonic, index }, cb)->
     result = get-ethereum-fullpair-by-index mnemonic, index, network
@@ -150,7 +164,8 @@ export get-transactions = ({ network, address }, cb)->
 get-dec = (network)->
     { decimals } = network
     10^decimals
-calc-gas-price = ({ fee-type, network }, cb)->
+calc-gas-price = ({ fee-type, network, gas-price }, cb)->
+    return cb null, gas-price if gas-price?
     return cb null, 22000 if fee-type is \cheap
     #err, price <- web3.eth.get-gas-price
     err, price <- make-query network, \eth_gasPrice , []
@@ -178,8 +193,9 @@ is-address = (address) ->
         false
     else
         true
-export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, } , cb)-->
+export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
+    console.log \tx, gas, gas-price
     dec = get-dec network
     err, recipient <- to-eth-address recipient
     return cb err if err?
@@ -190,7 +206,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei = -> it `times` dec
     to-eth = -> it `div` dec
     value = to-wei amount
-    err, gas-price <- calc-gas-price { fee-type, network }
+    err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     err, address <- to-eth-address account.address
     return cb err if err?
@@ -199,18 +215,13 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-    #gas-estimate = 21000
     gas-estimate =
-        |  +gas-price is 0 => 0
+        |  gas? => gas
+        |  +gas-price is 0 => 21000
         | _ => round(to-wei(amount-fee) `div` gas-price)
-    #nonce = 0
-    #console.log { nonce, gas-price, value, gas-estimate, recipient, account.address, data }
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
-    #gas-estimate = 1600000
-    #gas-price  = 1000000
-    console.log { gas-price, gas-estimate }
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -220,7 +231,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         from: address
         data: data ? ""
     }
-    console.log { tx-obj }
     tx = new Tx tx-obj, { common }
     tx.sign private-key
     rawtx = \0x + tx.serialize!.to-string \hex
@@ -256,9 +266,9 @@ export get-unconfirmed-balance = ({ network, address} , cb)->
     cb null, balance
 export get-balance = ({ network, address} , cb)->
     #return cb null, 0
-    console.log \address, address
+    #console.log \address, address
     err, address <- to-eth-address address
-    console.log \address, address, err
+    #console.log \address, address, err
     return cb err if err?
     err, number <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?
@@ -268,4 +278,21 @@ export get-balance = ({ network, address} , cb)->
     balance = number `div` dec
     cb null, balance
 #console.log \test
-#to-eth-address "V3g8wap4PHKdNdHJ7zXHfNW3eePxo", console.log
+#to-eth-address "VADyNxJR9PjWrQzJVmoaKxqaS8Mk", console.log
+#console.log to-velas-address Buffer.from("0b6a35fafb76e0786db539633652a8553ac28d67", 'hex')
+#
+#
+#
+# SERVICE
+#
+#
+#
+#
+export get-sync-status = ({ network }, cb)->
+    err, estimate <- make-query network, \eth_getSyncing , [ ]
+    return cb err if err?
+    return cb null, estimate
+export get-peer-count = ({ network }, cb)->
+    err, estimate <- make-query network, \net_getPeerCount , [ ]
+    return cb err if err?
+    return cb null, estimate

@@ -183,14 +183,22 @@ export get-total-received = ({ address, network }, cb)->
     cb null, total
 export get-unconfirmed-balance = ({ network, address} , cb)->
     cb "Not Implemented"
+get-data = (data, cb)->
+    #return cb null, data.body if typeof! data.body is \Object
+    try 
+        res = JSON.parse data.text
+        cb null, res
+    catch err
+        cb err
 export get-balance = ({ network, address} , cb)->
     { api-url } = network.api
     req =
         addr : address
     err, data <- post("#{api-url}/v1/address/addr/", req).type('form').end
     return cb err if err?
-    return cb "expected object" if typeof! data isnt \Object
-    return cb "expected balance array. got #{data.text}" if typeof! data.body.balance isnt \Array
+    err, body <- get-data data
+    return cb err if err?
+    return cb "expected balance array. got #{data.text}" if typeof! body?balance isnt \Array
     balance =
         data.body.balance |> find (-> str(it.id) is str(network.propertyid) )
     return cb null, 0 if not balance?
