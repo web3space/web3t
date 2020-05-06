@@ -4,7 +4,7 @@
   BitcoinLib = require('bitcoinjs-lib');
   Web3 = require('web3');
   Tx = require('../node_modules_embed/ethereumjs-tx/index.js');
-  BN = require('bignumber.js');
+  BN = require('ethereumjs-util').BN;
   hdkey = require('../node_modules_embed/ethereumjs-wallet/hdkey.js');
   bip39 = require('bip39');
   mnemonicToSeed = bip39.mnemonicToSeed;

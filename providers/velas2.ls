@@ -42,8 +42,8 @@ to-eth-address = (velas-address, cb)->
         cb null, eth-address
     catch err
         cb err
-window.to-eth-address = vlxToEth if window?
-window.to-velas-address = ethToVlx if window?
+window?to-eth-address = vlxToEth if window?
+window?to-velas-address = ethToVlx if window?
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
@@ -55,13 +55,16 @@ get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     public-key = w.get-public-key-string!
     { address, private-key, public-key }
 try-parse = (data, cb)->
+    <- set-immediate
     return cb null, data if typeof! data.body is \Object
-    try 
-        console.log \try-parse, data.text, JSON.parse
+    console.log data if typeof! data?text isnt \String
+    return cb "expected text" if typeof! data?text isnt \String
+    try
+        сonsole.log \try-parse, data.text, JSON.parse
         data.body = JSON.parse data.text
         cb null, data
     catch err
-        console.log \parse-err, err
+        #console.log \parse-err, err, data.text
         cb err
 make-query = (network, method, params, cb)->
     { web3-provider } = network.api
@@ -93,30 +96,41 @@ export get-transaction-info = (config, cb)->
 get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, gas if gas?
     err, estimate <- make-query network, \eth_estimateGas , [ query ]
-    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
     return cb null, 1000000 if err?
-    cb null, from-hex(estimate)
+    #err, estimate <- web3.eth.estimate-gas { from, nonce, to, data }
+    estimate-normal = from-hex(estimate)
+    return cb null, 1000000 if +estimate-normal < 1000000
+    cb null, estimate-normal
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
+    console.log \calc-fee, 1
     #console.log \calc-fee, { network, fee-type, account, amount, to, data }
     return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
+    console.log \calc-fee, 2
     data-parsed = 
         | data? => data
         | _ => '0x'
+    console.log \calc-fee, 3
     err, from <- to-eth-address account.address
+    console.log \calc-fee, 4
     return cb err if err?
+    console.log \calc-fee, 5
     err, to <- to-eth-address to
     return cb err if err?
+    console.log \calc-fee, 6
     query = { from, to, data: data-parsed }
+    console.log \calc-fee, 7
     err, estimate <- get-gas-estimate { network, query, gas }
     return cb err if err?
     #return cb "estimate gas err: #{err.message ? err}" if err?
+    console.log \calc-fee, 2
     res = gas-price `times` estimate
     #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
+    console.log \calc-fee, 3, val
     #console.log { gas-price, res, val }
     #min = 0.002
     #return cb null, min if +val < min
@@ -137,7 +151,8 @@ transform-tx = (network, t)-->
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
     fee = t.cumulative-gas-used `times` t.gas-price `div` dec
-    { network, tx, amount, fee, time, url, t.from, t.to }
+    recipient-type = if (t.input ? "").length > 3 then \contract else \regular
+    { network, tx, amount, fee, time, url, t.from, t.to, recipient-type }
 export get-transactions = ({ network, address }, cb)->
     err, address <- to-eth-address address
     return cb err if err?
@@ -171,7 +186,8 @@ calc-gas-price = ({ fee-type, network, gas-price }, cb)->
     err, price <- make-query network, \eth_gasPrice , []
     return cb "calc gas price - err: #{err.message ? err}" if err?
     price = from-hex(price)
-    return cb null, 22000 if +price is 0
+    #console.log \price, price
+    return cb null, 22000 if +price < 22000
     cb null, price
 try-get-lateest = ({ network, account }, cb)->
     err, address <- to-eth-address account.address
@@ -195,7 +211,8 @@ is-address = (address) ->
         true
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
-    console.log \tx, gas, gas-price
+    #console.log \tx, gas, gas-price
+    console.log \create-transaction, 1
     dec = get-dec network
     err, recipient <- to-eth-address recipient
     return cb err if err?
@@ -206,6 +223,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei = -> it `times` dec
     to-eth = -> it `div` dec
     value = to-wei amount
+    console.log \create-transaction, 2
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     err, address <- to-eth-address account.address
@@ -213,6 +231,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, balance <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?
     balance-eth = to-eth balance
+    console.log \create-transaction, 3, balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
     gas-estimate =
@@ -247,6 +266,7 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-total-received = ({ address, network }, cb)->
     err, txs <- get-transactions { address, network }
+    return cb err if err?
     err, address <- to-eth-address account.address
     return cb err if err?
     total =
