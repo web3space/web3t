@@ -47,7 +47,7 @@
     "mobile1": "browserify --s module -d -t browserify-livescript index.ls > ./web3t.js",
     "mobile2": "browserify --s module -d -t browserify-livescript ./mobile/index.ls > ./mobile/web3t.js"
   },
-  "version": "0.6.7",
+  "version": "0.6.8",
   "devDependencies": {
     "browserify-livescript": "^0.2.4"
   }
