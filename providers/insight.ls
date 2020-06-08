@@ -290,7 +290,9 @@ transform-in = ({ net, address }, t)->
             |> head
     amount = unspend?value
     to = address
-    from = t.vin.addr
+    from =
+        | typeof! t.vin is \Array => t.vin.map(-> it.addr).0
+        | _ => t.vin.addr 
     url = "#{net.api.url}/tx/#{tx}"
     #console.log(\insight-in, t)
     { network, tx, amount, fee, time, url, to, from, pending }
@@ -327,7 +329,7 @@ export check-tx-status = ({ network, tx }, cb)->
     cb "Not Implemented"
 export get-transactions = ({ network, address}, cb)->
     return cb "Url is not defined" if not network?api?url?
-    err, data <- get "#{get-api-url network}/txs/?address=#{address}" .timeout { deadline: 5000 } .end
+    err, data <- get "#{get-api-url network}/txs/?address=#{address}" .timeout { deadline: 15000 } .end
     return cb err if err?   
     err, result <- json-parse data.text
     return cb err if err?

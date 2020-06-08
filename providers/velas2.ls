@@ -1,6 +1,6 @@
 require! {
     \qs : { stringify }
-    \prelude-ls : { filter, map, foldl, each }
+    \prelude-ls : { filter, map, foldl, each, sort-by, reverse }
     \../math.js : { plus, minus, times, div, from-hex }
     \./superagent.js : { get, post }
     \./deps.js : { Web3, Tx, BN, hdkey, bip39 }
@@ -84,14 +84,13 @@ make-query = (network, method, params, cb)->
 export get-transaction-info = (config, cb)->
     { network, tx } = config
     query = [tx]
-    err, info <- make-query network, \eth_getTransactionReceipt , query
+    err, tx <- make-query network, \eth_getTransactionReceipt , query
     return cb err if err?
-    tx = info?result
-    return cb "expected result" if typeof! tx isnt \Object
     status = 
+        | typeof! tx isnt \Object => \pending
         | tx.status is \0x1 => \confirmed
         | _ => \pending
-    result = { tx.from, tx.to, status, info: tx }
+    result = { tx?from, tx?to, status, info: tx }
     cb null, result
 get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, gas if gas?
@@ -142,18 +141,42 @@ round = (num)->
     Math.round +num
 to-hex = ->
     new BN(it)
-transform-tx = (network, t)-->
+transform-tx = (network, description, t)-->
     { url } = network.api
     dec = get-dec network
     network = \eth
-    tx = t.hash
+    tx = 
+        | t.hash? => t.hash
+        | t.transactionHash? => t.transactionHash
+        | _ => "unknown"
     amount = t.value `div` dec
     time = t.time-stamp
     url = "#{url}/tx/#{tx}"
-    fee = t.cumulative-gas-used `times` t.gas-price `div` dec
+    cumulative-gas-used = t.cumulative-gas-used ? 0
+    gas-price = t.gas-price ? 0
+    fee = cumulative-gas-used `times` gas-price `div` dec
     recipient-type = if (t.input ? "").length > 3 then \contract else \regular
-    { network, tx, amount, fee, time, url, t.from, t.to, recipient-type }
-export get-transactions = ({ network, address }, cb)->
+    { network, tx, amount, fee, time, url, t.from, t.to, recipient-type, description }
+get-internal-transactions = ({ network, address }, cb)->
+    err, address <- to-eth-address address
+    return cb err if err?
+    { api-url } = network.api
+    module = \account
+    action = \txlistinternal
+    startblock = 0
+    endblock = 99999999
+    sort = \asc
+    apikey = \4TNDAGS373T78YJDYBFH32ADXPVRMXZEIG
+    query = stringify { module, action, apikey, address, sort, startblock, endblock }
+    err, resp <- get "#{api-url}?#{query}" .timeout { deadline } .end
+    return cb "cannot execute query - err #{err.message ? err }" if err?
+    err, result <- json-parse resp.text
+    return cb "cannot parse json: #{err.message ? err}" if err?
+    return cb "Unexpected result" if typeof! result?result isnt \Array
+    txs = 
+        result.result |> map transform-tx network, 'internal'
+    cb null, txs
+get-external-transactions = ({ network, address }, cb)->
     err, address <- to-eth-address address
     return cb err if err?
     { api-url } = network.api
@@ -170,9 +193,20 @@ export get-transactions = ({ network, address }, cb)->
     return cb "cannot parse json: #{err.message ? err}" if err?
     return cb "Unexpected result" if typeof! result?result isnt \Array
     txs = 
-        result.result |> map transform-tx network
+        result.result |> map transform-tx network, 'external'
     #console.log api-url, result.result, txs
     cb null, txs
+export get-transactions = ({ network, address }, cb)->
+    err, external <- get-external-transactions { network, address }
+    return cb err if err?
+    err, internal <- get-internal-transactions { network, address }
+    return cb err if err?
+    all = external ++ internal
+    ordered =
+        all
+            |> sort-by (.time)
+            |> reverse
+    cb null, ordered
 #get-web3 = (network)->
 #    { web3-provider } = network.api
 #    new Web3(new Web3.providers.HttpProvider(web3-provider))
@@ -212,7 +246,6 @@ is-address = (address) ->
 export create-transaction = ({ network, account, recipient, amount, amount-fee, data, fee-type, tx-type, gas-price, gas } , cb)-->
     #console.log \tx, { network, account, recipient, amount, amount-fee, data, fee-type, tx-type}
     #console.log \tx, gas, gas-price
-    console.log \create-transaction, 1
     dec = get-dec network
     err, recipient <- to-eth-address recipient
     return cb err if err?
@@ -223,7 +256,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei = -> it `times` dec
     to-eth = -> it `div` dec
     value = to-wei amount
-    console.log \create-transaction, 2
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
     err, address <- to-eth-address account.address
@@ -231,7 +263,6 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, balance <- make-query network, \eth_getBalance , [ address, \latest ]
     return cb err if err?
     balance-eth = to-eth balance
-    console.log \create-transaction, 3, balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
     gas-estimate =

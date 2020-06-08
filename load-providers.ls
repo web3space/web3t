@@ -3,7 +3,6 @@ require! {
     \./providers/insight.js
     \./providers/erc20.js
     \./providers/omni.js
-    #\./providers/velas.js
     \./providers/velas2.js
     #\./providers/eos.js
     #\./providers/stellar.js
