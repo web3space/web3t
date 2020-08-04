@@ -1,6 +1,6 @@
 require! {
-    #\bitgo-utxo-lib : BitcoinLib
-    \bitcoinjs-lib : BitcoinLib
+    \bitgo-utxo-lib : BitcoinLib
+    #\bitcoinjs-lib : BitcoinLib
     \web3 : \Web3
     \../node_modules_embed/ethereumjs-tx/index.js : Tx
     #\bignumber.js : BN

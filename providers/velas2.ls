@@ -32,28 +32,39 @@ to-eth-address = (velas-address, cb)->
     return cb null, velas-address if isAddress velas-address
     return cb "velas address can be started with V" if velas-address.0 isnt \V
     #NEW_ADDRESS
-    return cb null, vlxToEth(velas-address)
-    bs58str = velas-address.substr(1, velas-address.length)
-    try 
-        bytes = decode bs58str
-        hex = bytes.toString('hex')
-        eth-address = \0x + hex
-        #return cb "incorrect velas address" if not isAddress eth-address
-        cb null, eth-address
+    res = null
+    try
+        res = vlxToEth(velas-address)
     catch err
-        cb err
+        return cb err
+    return cb null, res
+    # return cb null, vlxToEth(velas-address)
+    # bs58str = velas-address.substr(1, velas-address.length)
+    # try 
+    #     bytes = decode bs58str
+    #     hex = bytes.toString('hex')
+    #     eth-address = \0x + hex
+    #     #return cb "incorrect velas address" if not isAddress eth-address
+    #     cb null, eth-address
+    # catch err
+    #     cb err
 window?to-eth-address = vlxToEth if window?
 window?to-velas-address = ethToVlx if window?
+export isValidAddress =  ({ address }, cb)->
+    err <- to-eth-address address
+    return cb "Given address is not valid Velas address" if err?
+    cb null, yes
 get-ethereum-fullpair-by-index = (mnemonic, index, network)->
     seed = bip39.mnemonic-to-seed(mnemonic)
     wallet = hdkey.from-master-seed(seed)
     w = wallet.derive-path("m0").derive-child(index).get-wallet!
     #NEW_ADDRESS
     address = ethToVlx w.get-address!.to-string(\hex)
+    address2 = \0x + w.get-address!.to-string(\hex)
     #address = to-velas-address w.get-address! #.to-string(\hex)
     private-key = w.get-private-key-string!
     public-key = w.get-public-key-string!
-    { address, private-key, public-key }
+    { address, private-key, public-key, address2 }
 try-parse = (data, cb)->
     <- set-immediate
     return cb null, data if typeof! data.body is \Object
@@ -101,35 +112,28 @@ get-gas-estimate = ({ network, query, gas }, cb)->
     return cb null, 1000000 if +estimate-normal < 1000000
     cb null, estimate-normal
 export calc-fee = ({ network, fee-type, account, amount, to, data, gas-price, gas }, cb)->
-    console.log \calc-fee, 1
-    #console.log \calc-fee, { network, fee-type, account, amount, to, data }
     return cb null if typeof! to isnt \String or to.length is 0
     return cb null if fee-type isnt \auto
     dec = get-dec network
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
-    console.log \calc-fee, 2
     data-parsed = 
         | data? => data
         | _ => '0x'
-    console.log \calc-fee, 3
     err, from <- to-eth-address account.address
-    console.log \calc-fee, 4
-    return cb err if err?
-    console.log \calc-fee, 5
+    console.error "calc-fee from address #{err}" if err?
+    return cb "Given address is not valid Velas address" if err?
     err, to <- to-eth-address to
-    return cb err if err?
-    console.log \calc-fee, 6
+    console.error "calc-fee from address #{err}" if err?
+    return cb "Given address is not valid Velas address" if err?
     query = { from, to, data: data-parsed }
-    console.log \calc-fee, 7
     err, estimate <- get-gas-estimate { network, query, gas }
     return cb err if err?
     #return cb "estimate gas err: #{err.message ? err}" if err?
-    console.log \calc-fee, 2
+    #console.log \calc-fee, 2
     res = gas-price `times` estimate
     #res = if +res1 is 0 then 21000 * 8 else res1
     val = res `div` dec
-    console.log \calc-fee, 3, val
     #console.log { gas-price, res, val }
     #min = 0.002
     #return cb null, min if +val < min
@@ -265,13 +269,21 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     balance-eth = to-eth balance
     to-send = amount `plus` amount-fee
     return cb "Balance #{balance-eth} is not enough to send tx #{to-send}" if +balance-eth < +to-send
-    gas-estimate =
-        |  gas? => gas
-        |  +gas-price is 0 => 21000
-        | _ => round(to-wei(amount-fee) `div` gas-price)
+    # gas-estimate =
+    #     |  gas? => gas
+    #     |  +gas-price is 0 => 21000
+    #     | _ => round(to-wei(amount-fee) `div` gas-price)
+    data-parsed = 
+        | data? => data
+        | _ => '0x'
+    query = { from: address, to: recipient, data: data-parsed }
+    err, gas-estimate <- get-gas-estimate { network, query, gas }
+    return cb err if err?
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
+    if fee-type is \custom
+        gas-price = (amount-fee `times` dec) `div` gas-estimate
     tx-obj = {
         nonce: to-hex nonce
         gas-price: to-hex gas-price
@@ -279,7 +291,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
         gas: to-hex gas-estimate
         to: recipient
         from: address
-        data: data ? ""
+        data: data ? "0x"
     }
     tx = new Tx tx-obj, { common }
     tx.sign private-key

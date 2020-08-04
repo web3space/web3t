@@ -32,7 +32,6 @@
         res$.push(arguments[i$]);
       }
       args = res$;
-      //console.log('superagent.type', superagent.type);
       originalRequest = superagent[superagent.type][method];
       $ = {};
       $.timeout = function(timeout){
