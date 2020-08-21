@@ -260,8 +260,10 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     to-wei = -> it `times` dec
     to-eth = -> it `div` dec
     value = to-wei amount
+    buffer = {}
     err, gas-price <- calc-gas-price { fee-type, network, gas-price }
     return cb err if err?
+    buffer.gas-price = gas-price
     err, address <- to-eth-address account.address
     return cb err if err?
     err, balance <- make-query network, \eth_getBalance , [ address, \latest ]
@@ -282,6 +284,7 @@ export create-transaction = ({ network, account, recipient, amount, amount-fee, 
     err, networkId <- make-query network, \net_version , []
     return cb err if err?
     common = Common.forCustomChain 'mainnet', { networkId }
+    gas-price = buffer.gas-price
     if fee-type is \custom
         gas-price = (amount-fee `times` dec) `div` gas-estimate
     tx-obj = {
