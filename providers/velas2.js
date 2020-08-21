@@ -41,7 +41,7 @@
     return "V" + s1;
   };
   toEthAddress = function(velasAddress, cb){
-    var bs58str, bytes, hex, ethAddress, err;
+    var res, err;
     if (toString$.call(velasAddress).slice(8, -1) !== 'String') {
       return cb("required velas-address as a string");
     }
@@ -51,17 +51,14 @@
     if (velasAddress[0] !== 'V') {
       return cb("velas address can be started with V");
     }
-    return cb(null, vlxToEth(velasAddress));
-    bs58str = velasAddress.substr(1, velasAddress.length);
+    res = null;
     try {
-      bytes = decode(bs58str);
-      hex = bytes.toString('hex');
-      ethAddress = '0x' + hex;
-      return cb(null, ethAddress);
+      res = vlxToEth(velasAddress);
     } catch (e$) {
       err = e$;
       return cb(err);
     }
+    return cb(null, res);
   };
   if (typeof window != 'undefined' && window !== null) {
     if (typeof window != 'undefined' && window !== null) {
@@ -225,12 +222,18 @@
       }());
       return toEthAddress(account.address, function(err, from){
         if (err != null) {
-          return cb(err);
+          console.error("calc-fee from address " + err);
+        }
+        if (err != null) {
+          return cb("Given address is not valid Velas address");
         }
         return toEthAddress(to, function(err, to){
           var query;
           if (err != null) {
-            return cb(err);
+            console.error("calc-fee from address " + err);
+          }
+          if (err != null) {
+            return cb("Given address is not valid Velas address");
           }
           query = {
             from: from,
@@ -248,7 +251,6 @@
             }
             res = times(gasPrice, estimate);
             val = div(res, dec);
-            console.log('calc-fee', 3, val);
             return cb(null, val);
           });
         });
@@ -495,7 +497,6 @@
     }
   };
   out$.createTransaction = createTransaction = curry$(function(arg$, cb){
-    debugger;
     var network, account, recipient, amount, amountFee, data, feeType, txType, gasPrice, gas, dec;
     network = arg$.network, account = arg$.account, recipient = arg$.recipient, amount = arg$.amount, amountFee = arg$.amountFee, data = arg$.data, feeType = arg$.feeType, txType = arg$.txType, gasPrice = arg$.gasPrice, gas = arg$.gas;
     dec = getDec(network);
@@ -512,7 +513,7 @@
         account: account,
         network: network
       }, function(err, nonce){
-        var toWei, toEth, value;
+        var toWei, toEth, value, buffer;
         if (err != null) {
           return cb(err);
         }
@@ -523,6 +524,7 @@
           return div(it, dec);
         };
         value = toWei(amount);
+        buffer = {};
         return calcGasPrice({
           feeType: feeType,
           network: network,
@@ -531,12 +533,13 @@
           if (err != null) {
             return cb(err);
           }
+          buffer.gasPrice = gasPrice;
           return toEthAddress(account.address, function(err, address){
             if (err != null) {
               return cb(err);
             }
             return makeQuery(network, 'eth_getBalance', [address, 'latest'], function(err, balance){
-              var balanceEth, toSend, gasEstimate;
+              var balanceEth, toSend, dataParsed, query;
               if (err != null) {
                 return cb(err);
               }
@@ -545,40 +548,56 @@
               if (+balanceEth < +toSend) {
                 return cb("Balance " + balanceEth + " is not enough to send tx " + toSend);
               }
-              gasEstimate = (function(){
+              dataParsed = (function(){
                 switch (false) {
-                case gas == null:
-                  return gas;
-                case +gasPrice !== 0:
-                  return 21000;
+                case data == null:
+                  return data;
                 default:
-                  return round(div(toWei(amountFee), gasPrice));
+                  return '0x';
                 }
               }());
-              return makeQuery(network, 'net_version', [], function(err, networkId){
-                var common, txObj, tx, rawtx;
+              query = {
+                from: address,
+                to: recipient,
+                data: dataParsed
+              };
+              return getGasEstimate({
+                network: network,
+                query: query,
+                gas: gas
+              }, function(err, gasEstimate){
                 if (err != null) {
                   return cb(err);
                 }
-                common = Common.forCustomChain('mainnet', {
-                  networkId: networkId
-                });
-                txObj = {
-                  nonce: toHex(nonce),
-                  gasPrice: toHex(gasPrice),
-                  value: toHex(value),
-                  gas: toHex(gasEstimate),
-                  to: recipient,
-                  from: address,
-                  data: data != null ? data : "0x"
-                };
-                tx = new Tx(txObj, {
-                  common: common
-                });
-                tx.sign(privateKey);
-                rawtx = '0x' + tx.serialize().toString('hex');
-                return cb(null, {
-                  rawtx: rawtx
+                return makeQuery(network, 'net_version', [], function(err, networkId){
+                  var common, gasPrice, txObj, tx, rawtx;
+                  if (err != null) {
+                    return cb(err);
+                  }
+                  common = Common.forCustomChain('mainnet', {
+                    networkId: networkId
+                  });
+                  gasPrice = buffer.gasPrice;
+                  if (feeType === 'custom') {
+                    gasPrice = div(times(amountFee, dec), gasEstimate);
+                  }
+                  txObj = {
+                    nonce: toHex(nonce),
+                    gasPrice: toHex(gasPrice),
+                    value: toHex(value),
+                    gas: toHex(gasEstimate),
+                    to: recipient,
+                    from: address,
+                    data: data != null ? data : "0x"
+                  };
+                  tx = new Tx(txObj, {
+                    common: common
+                  });
+                  tx.sign(privateKey);
+                  rawtx = '0x' + tx.serialize().toString('hex');
+                  return cb(null, {
+                    rawtx: rawtx
+                  });
                 });
               });
             });
